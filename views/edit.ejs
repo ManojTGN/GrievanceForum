@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrievanceForum</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/08c3f952c9.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
+        body{
+            background-color:white;
+            font-family: 'Montserrat', sans-serif;
+            font-family: 'Quicksand', sans-serif;
+        }
+        @media (min-width:100px)  { }
+        @media (min-width:600px)  { }
+        @media (min-width:1281px) { }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">GrievanceForum</a>
+            <div>
+                <div class="spinner-grow text-secondary" style="position:relative;left:45px;top:7px;" id="ProfilePicSpinner"role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <a class="btn btn-link" href="../manage" role="button"> < Back </a>
+                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="opacity:0;width: 50px;border:2px solid black;transition: opacity 0.5s;" alt="Avatar" id="ProfilePic" onload="setTimeout(()=>{document.getElementById('ProfilePicSpinner').style.visibility='hidden';document.getElementById('ProfilePic').style.opacity='1';}, 10);"/>
+            </div>
+        </div>
+    </nav><br>
+    <div class="Create">
+
+        <p class="fs-5">
+            Manage Your Post
+        </p>
+        <div class="mb-3">
+            <label class="form-label">Post ID</label>
+            <input type="text" class="form-control" placeholder="Post ID" value="<%=postInfo['id']%>" disabled>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Title<span style="color:red;">*</span></label>
+            <input type="text" class="form-control" placeholder="Title" id="title" value="<%=postInfo['title'];%>" required>
+        </div>
+        <div class="form-group">
+            <label for="Description">Description<span style="color:red;">*</span></label>
+            <textarea class="form-control" placeholder="Description" id="description" rows="3" style="resize: none;" required><%=postInfo['description']%></textarea>
+          </div>
+        <div>
+            <label class="form-label">Report<span style="color:red;">*</span></label>
+            <textarea id="my-text-area" required></textarea>
+        </div><br>
+        <script>
+        const easyMDE = new EasyMDE({toolbar: ["bold", "italic", "strikethrough", "heading", "|", "code", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
+        easyMDE.value("<%=postInfo['report']%>");
+        </script>
+        <button type="button" class="btn btn-link" onclick="if(easyMDE.value() == '') return;this.remove();previewMarkdown()">Preview (Report)</button>
+        <div id="PreviewBox" style="visibility:hidden">
+            <label class="form-label">Report Preview</label> <button type="button" class="btn btn-link" id="Preview">Preview (Report)</button>
+            <div class="spinner-border text-primary" role="status" id="PreviewBoxSpinner">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div><br>
+        <p class="fs-5">Post Settings</p>
+        <div>
+            <label class="form-label">Post Category</label>
+            <div class="card">
+                <div class="card-body">
+                    <select class="form-select" id="categorySelect" aria-label="Default select example">
+                        <option value="0" <%if(postInfo['category']== 0){%>selected<%}%>>General Category</option>
+                        <option value="1" <%if(postInfo['category']== 1){%>selected<%}%>>Hostel Food</option>
+                      </select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="form-label">Post visibility</label>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="PostVisibilityRadio" id="PostVisibilityRadio1" onclick="ChangeIncognito('all');" <%if(postInfo['visibility']== 0){%>checked<%}%>>
+                        <label class="form-check-label" for="PostVisibilityRadio1">All</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="PostVisibilityRadio" id="PostVisibilityRadio2" onclick="ChangeIncognito('admin');" <%if(postInfo['visibility']== 1){%>checked<%}%>>
+                        <label class="form-check-label" for="PostVisibilityRadio2">Admins (Only)</label>
+                    </div>
+                </div>
+              </div>
+        </div>
+        <div>
+            <label class="form-label">Incognito & Comments</label>
+            <div class="card">
+                <div class="card-body" id="anonymousCard">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="anonymousCheck" <%if(postInfo['anonymous']== 1){%>checked<%}%>>
+                        <label class="form-check-label" for="anonymousCheck">
+                        Post as anonymous
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="CommentOthersCheck" <%if(postInfo['comment']== 1){%>checked<%}%>>
+                        <label class="form-check-label" for="CommentOthersCheck">
+                        Allow Others To Comment
+                        </label>
+                    </div>
+                    <p class="text-muted" id="anonymousInfo"><i class="fa-regular fa-circle-question"></i>This Section Has No Effect When Post Visibility Is Set To <span class="font-monospace">Admin(Only)</span>!</p>
+                </div>
+            </div>
+            <script>
+                function  ChangeIncognito(checkbox){
+                    if(checkbox == 'admin'){
+                        document.getElementById("anonymousCheck").checked = false;
+                        document.getElementById("CommentOthersCheck").checked = false;
+                        document.getElementById("anonymousCheck").setAttribute("disabled", "disabled");
+                        document.getElementById("CommentOthersCheck").setAttribute("disabled", "disabled");
+                        if(document.getElementById("anonymousInfo") == undefined)document.getElementById("anonymousCard").insertAdjacentHTML( 'beforeend', '<p class="text-muted" id="anonymousInfo"><i class="fa-regular fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Tooltip on right"></i>This Section Has No Effect When Post Visibility Is Set To <span class="font-monospace">Admin(Only)</span>!</p>' );
+                    }else{
+                        document.getElementById("anonymousCheck").removeAttribute("disabled");
+                        document.getElementById("CommentOthersCheck").removeAttribute("disabled");
+                        if(document.getElementById("anonymousInfo") != undefined)document.getElementById("anonymousInfo").remove();
+                    }
+                }
+            </script>
+        </div>
+        <div>
+            <label class="form-label">Post</label>
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary">
+                    Post
+                    </button>
+                    <button type="button" class="btn btn-success" id="SaveDraft">Save Draft</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast align-items-center text-bg-success border-0" style="position: fixed;left: 1%;bottom: 3%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
+        <div class="d-flex">
+          <div class="toast-body" id="saveToastPara"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+$("#Preview").click(previewMarkdown);
+$("#SaveDraft").click(SaveDraft);
+$(document).ready(function() {
+    if(document.getElementById("PostVisibilityRadio2").checked==true){
+        document.getElementById("anonymousCheck").setAttribute("disabled", "disabled");
+        document.getElementById("CommentOthersCheck").setAttribute("disabled", "disabled");
+    }
+});
+
+function previewMarkdown(){
+    if(easyMDE.value() == "") return;
+    document.getElementById("PreviewBox").style.visibility = "visible";
+
+    $.post("/edit",{
+    preview:true,
+    report: easyMDE.value()
+    },
+    function(data, status){
+        if(document.getElementById("PreviewBoxInfo") != undefined) document.getElementById("PreviewBoxInfo").remove();
+        document.getElementById("PreviewBox").insertAdjacentHTML( 'beforeend', '<div class="card" id="PreviewBoxInfo"><div class="card-body">'+data+'</div></div>');
+        document.getElementById("PreviewBoxSpinner").style.visibility = "hidden";
+    });
+}
+
+function SaveDraft(isAutoSave=false){
+    $.post("/edit",{
+        save:true,
+        id:"<%=postInfo['id']%>",
+        mail:"<%=postInfo['mail']%>",
+        title:$("#title").val() || "",
+        description:$("#description").val() || "",
+        report:easyMDE.value() || "",
+        category:document.getElementById("categorySelect").value,
+        visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
+        anonymous:document.getElementById("anonymousCheck").checked?1:0,
+        comment:document.getElementById("CommentOthersCheck").checked?1:0,
+        draft:1
+    },
+    function(data, status){
+        if(isAutoSave==true){ $("#saveToastPara").html(`AutoSave Successfull ${(new Date())}`); }
+        else{$("#saveToastPara").html(`Save Successfull`);}
+        $("#saveToast").toast("show");
+    });
+}
+
+setInterval(SaveDraft(true), 30*1000);
+</script>
+</body>
+</html>

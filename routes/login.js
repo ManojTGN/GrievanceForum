@@ -1,10 +1,10 @@
 const express = require('express');
 const jsonwebtoken = require('jsonwebtoken');
-const router = express.Router()
+const router = express.Router();
 require('dotenv').config();
 
 const connection = require('../routes/database');
-let LoggedInUsers = {}
+const cookie = require('../routes/cookie');
 
 router.get("/",(request,response) => {
     response.render("login",{client_id:process.env.CLIENT_ID})
@@ -19,11 +19,9 @@ router.post("/",(request,response) => {
         if(result.length < 1)
             connection.query("INSERT INTO `users`(`username`, `mail`) VALUES ('"+user['name']+"','"+user['email']+"')", (err, result, fields) => { if (err) throw err; });
         
-        LoggedInUsers[request.socket.remoteAddress]=user['email'];
+        cookie[request.socket.remoteAddress]={'mail':user['email'],'name':user['name'],'picture':user['picture']};
+        response.redirect("../");
     });
-    
-    response.redirect("../");
 });
-
-module.exports = {'router':router,'LoggedInUsers':LoggedInUsers};
-//module.exports = router;
+ 
+module.exports = router;
