@@ -29,18 +29,39 @@
 </head>
 <body>
 <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg bg-light">
+
+    <nav class="navbar bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">GrievanceForum</a>
-            <div>
-                <div class="spinner-grow text-secondary" style="position:relative;left:45px;top:7px;" id="ProfilePicSpinner"role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <a class="btn btn-link" href="../manage" role="button"> < Back </a>
-                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="opacity:0;width: 50px;border:2px solid black;transition: opacity 0.5s;" alt="Avatar" id="ProfilePic" onload="setTimeout(()=>{document.getElementById('ProfilePicSpinner').style.visibility='hidden';document.getElementById('ProfilePic').style.opacity='1';}, 10);"/>
-            </div>
+            <a class="navbar-brand" href="../">
+                <i class="fa-regular fa-snowflake d-inline-block "></i>
+                GrievanceForum
+            </a>
+            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:110px">
+                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
+                <%=userInfo["name"]%>
+            </button>
         </div>
     </nav><br>
+    <nav class="navbar fixed-bottom bg-light">
+        <div class="container-fluid">
+            <div class="row w-100 text-center">
+                <div class="col">
+                    <a href="dashboard" type="button" class="btn btn-primary"> <i class="fa-solid fa-house"></i></a>
+                </div>
+                <div class="col">
+                    <a href="manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
+                </div>
+                <div class="col">
+                    <a href="notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
+                </div>
+                <div class="col">
+                    <a href="profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+
     <div class="Create">
 
         <p class="fs-5">
@@ -120,7 +141,7 @@
                 </div>
             </div>
             <script>
-                function  ChangeIncognito(checkbox){
+                function ChangeIncognito(checkbox){
                     if(checkbox == 'admin'){
                         document.getElementById("anonymousCheck").checked = false;
                         document.getElementById("CommentOthersCheck").checked = false;
@@ -139,25 +160,90 @@
             <label class="form-label">Post</label>
             <div class="card">
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary">
-                    Post
-                    </button>
+                    <a href="../manage" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
+                    <div class="vr"></div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop" id="PostConfirmDraft">Post</button>
                     <button type="button" class="btn btn-success" id="SaveDraft">Save Draft</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteBackdrop">Delete Draft</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="toast align-items-center text-bg-success border-0" style="position: fixed;left: 1%;bottom: 3%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
+    <br><br><br>
+    <div class="toast align-items-center text-bg-success border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
         <div class="d-flex">
-          <div class="toast-body" id="saveToastPara"></div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <div class="toast-body" id="saveToastPara"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
+    </div>
+</div>
+<div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticDeleteBackdropLabel"><i class="fa-regular fa-trash-can"></i> Delete Post</h1>
+        </div>
+        <div class="modal-body">
+            <div id="DeleteLoaderText" style="opacity: 1;transition: opacity 0.3s linear;">
+                Once The Post Is Deleted, The Post Can't Be Recovered. To Delete This Post Click The <code>Delete</code> Button Below.
+            </div>
+            <div id="DeleteLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
+                <form method="POST" action="../edit">
+                    <button type="submit" class="btn btn-success" name="redirect" data-bs-dismiss="modal">Ok</button>
+                </form>
+            </div>
+            <div id="DeleteTwoBtnContainer">
+                <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-danger" id="DeletePost">Delete</button>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="staticPostConfirmBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticPostConfirmBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticPostConfirmBackdropLabel"><i class="fa-solid fa-file-circle-check"></i> Post Confirmation</h1>
+        </div>
+        <div class="modal-body">
+            <div id="postText" style="opacity: 1;transition: opacity 0.3s linear;">
+            We Recommand To Review Your Post & Post Settings Before Posting.
+            Remember Admin Can View Your Post Even After Deletion.
+            By Posting You Are Accepting Our Terms And Condition.
+            </div>
+            <div id="PostLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="position:relative;left:155px;visibility:hidden;" id="PostOkContainer">
+                <a href="../dashboard" type="submit" class="btn btn-success">Ok</a>
+            </div>
+            <div id="TwoPostButton">
+                <button type="button" class="btn btn-secondary" id="PostDismiss" data-bs-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-success" id="PostDraft">Post</button>
+            </div>
+        </div>
+      </div>
     </div>
 </div>
 
 <script>
 $("#Preview").click(previewMarkdown);
+$("#DeletePost").click(DeletePost);
 $("#SaveDraft").click(SaveDraft);
+$("#PostDraft").click(PostDraft);
+
 $(document).ready(function() {
     if(document.getElementById("PostVisibilityRadio2").checked==true){
         document.getElementById("anonymousCheck").setAttribute("disabled", "disabled");
@@ -177,6 +263,32 @@ function previewMarkdown(){
         if(document.getElementById("PreviewBoxInfo") != undefined) document.getElementById("PreviewBoxInfo").remove();
         document.getElementById("PreviewBox").insertAdjacentHTML( 'beforeend', '<div class="card" id="PreviewBoxInfo"><div class="card-body">'+data+'</div></div>');
         document.getElementById("PreviewBoxSpinner").style.visibility = "hidden";
+    });
+}
+
+function PostDraft(){
+    $("#PostDismiss").prop('disabled', true);
+    $("#postText").css("opacity","0");
+    $("#PostLoader").css("opacity","1");
+    $.post("/edit",{
+        post:true,
+        id:"<%=postInfo['id']%>",
+        mail:"<%=postInfo['mail']%>",
+        title:$("#title").val() || "",
+        description:$("#description").val() || "",
+        report:easyMDE.value() || "",
+        category:document.getElementById("categorySelect").value,
+        visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
+        anonymous:document.getElementById("anonymousCheck").checked?1:0,
+        comment:document.getElementById("CommentOthersCheck").checked?1:0,
+        draft:1
+    },
+    function(data, status){
+        $("#postText").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
+        $("#postText").css("opacity","1");
+        $("#PostLoader").css("opacity","0");
+        $("#TwoPostButton").css("visibility","hidden");
+        $("#PostOkContainer").css("visibility","visible");
     });
 }
 
@@ -201,7 +313,25 @@ function SaveDraft(isAutoSave=false){
     });
 }
 
-setInterval(SaveDraft(true), 30*1000);
+function DeletePost(){
+    $("#DeleteDismiss").prop('disabled', true);
+    $("#DeleteLoaderText").css("opacity","0");
+    $("#DeleteLoader").css("opacity","1");
+
+    $.post("/edit",{
+        delete:true,
+        id:"<%=postInfo['id']%>"
+    },
+    function(data, status){
+        $("#DeleteLoaderText").html("<i class='fa-regular fa-circle-check'></i> Post Deleted Successfully!");
+        $("#DeleteLoaderText").css("opacity","1");
+        $("#DeleteLoader").css("opacity","0");
+        $("#DeleteTwoBtnContainer").css("visibility","hidden");
+        $("#DeleteOkContainer").css("visibility","visible");
+    });
+}
+
+setInterval(SaveDraft.bind(null,true), 30*1000);
 </script>
 </body>
 </html>

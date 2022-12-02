@@ -12,8 +12,6 @@ router.get("/",(request,response) => {
 
 router.post("/",(request,response) => {
     let user = jsonwebtoken.decode(request.body["credential"]);
-    //console.log(user);
-    
     connection.query("SELECT * FROM `users` WHERE `mail`='"+user['email']+"'",(err, result, fields) => { 
         if (err) throw err;
         if(result.length < 1)
