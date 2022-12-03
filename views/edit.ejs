@@ -36,7 +36,7 @@
                 <i class="fa-regular fa-snowflake d-inline-block "></i>
                 GrievanceForum
             </a>
-            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:110px">
+            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:140px">
                 <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
                 <%=userInfo["name"]%>
             </button>
@@ -137,6 +137,12 @@
                         Allow Others To Comment
                         </label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="SupportPostCheck" <%if(postInfo['support']== 1){%>checked<%}%>>
+                        <label class="form-check-label" for="SupportPostCheck">
+                        Others Can Support Your Post
+                        </label>
+                    </div>
                     <p class="text-muted" id="anonymousInfo"><i class="fa-regular fa-circle-question"></i>This Section Has No Effect When Post Visibility Is Set To <span class="font-monospace">Admin(Only)</span>!</p>
                 </div>
             </div>
@@ -145,12 +151,15 @@
                     if(checkbox == 'admin'){
                         document.getElementById("anonymousCheck").checked = false;
                         document.getElementById("CommentOthersCheck").checked = false;
+                        document.getElementById("SupportPostCheck").checked = false;
                         document.getElementById("anonymousCheck").setAttribute("disabled", "disabled");
                         document.getElementById("CommentOthersCheck").setAttribute("disabled", "disabled");
+                        document.getElementById("SupportPostCheck").setAttribute("disabled", "disabled");
                         if(document.getElementById("anonymousInfo") == undefined)document.getElementById("anonymousCard").insertAdjacentHTML( 'beforeend', '<p class="text-muted" id="anonymousInfo"><i class="fa-regular fa-circle-question" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Tooltip on right"></i>This Section Has No Effect When Post Visibility Is Set To <span class="font-monospace">Admin(Only)</span>!</p>' );
                     }else{
                         document.getElementById("anonymousCheck").removeAttribute("disabled");
                         document.getElementById("CommentOthersCheck").removeAttribute("disabled");
+                        document.getElementById("SupportPostCheck").removeAttribute("disabled");
                         if(document.getElementById("anonymousInfo") != undefined)document.getElementById("anonymousInfo").remove();
                     }
                 }
@@ -195,9 +204,7 @@
         </div>
         <div class="modal-footer">
             <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
-                <form method="POST" action="../edit">
-                    <button type="submit" class="btn btn-success" name="redirect" data-bs-dismiss="modal">Ok</button>
-                </form>
+                <a href="../manage" class="btn btn-success">Ok</a>
             </div>
             <div id="DeleteTwoBtnContainer">
                 <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
@@ -227,7 +234,7 @@
         </div>
         <div class="modal-footer">
             <div style="position:relative;left:155px;visibility:hidden;" id="PostOkContainer">
-                <a href="../dashboard" type="submit" class="btn btn-success">Ok</a>
+                <a href="../dashboard"  class="btn btn-success">Ok</a>
             </div>
             <div id="TwoPostButton">
                 <button type="button" class="btn btn-secondary" id="PostDismiss" data-bs-dismiss="modal">Dismiss</button>
@@ -248,6 +255,7 @@ $(document).ready(function() {
     if(document.getElementById("PostVisibilityRadio2").checked==true){
         document.getElementById("anonymousCheck").setAttribute("disabled", "disabled");
         document.getElementById("CommentOthersCheck").setAttribute("disabled", "disabled");
+        document.getElementById("SupportPostCheck").setAttribute("disabled", "disabled");
     }
 });
 
@@ -281,6 +289,7 @@ function PostDraft(){
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
         anonymous:document.getElementById("anonymousCheck").checked?1:0,
         comment:document.getElementById("CommentOthersCheck").checked?1:0,
+        support:document.getElementById("SupportPostCheck").checked?1:0,
         draft:1
     },
     function(data, status){
@@ -304,6 +313,7 @@ function SaveDraft(isAutoSave=false){
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
         anonymous:document.getElementById("anonymousCheck").checked?1:0,
         comment:document.getElementById("CommentOthersCheck").checked?1:0,
+        support:document.getElementById("SupportPostCheck").checked?1:0,
         draft:1
     },
     function(data, status){

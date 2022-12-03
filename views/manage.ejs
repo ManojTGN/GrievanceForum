@@ -33,7 +33,7 @@
                 <i class="fa-regular fa-snowflake d-inline-block "></i>
                 GrievanceForum
             </a>
-            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:110px">
+            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:140px">
                 <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
                 <%=userInfo["name"]%>
             </button>
@@ -77,8 +77,8 @@
 
     <label class="form-label">Your Draft Posts</label>
     <% let i =0;drafts.forEach(function(draft) { i+=1;%>
-        <div class="card border-secondary mb-3">
-            <div class="card-header bg-transparent border-secondary text-secondary">
+        <div class="card bg-light border-secondary mb-3">
+            <div class="card-header border-secondary text-secondary">
                 <div class="row">
                     <div class="col">
                         <%=i%>. <%if(draft.title == ""){%>No Title Choosen<%}else{%><%=draft.title%><%}%>
@@ -91,7 +91,7 @@
             <div class="card-body text-muted">
                 <p class="card-text"><%if(draft.title == ""){%>No Description<%}else{%><%=draft.description%><%}%></p>
             </div>
-            <div class="card-footer bg-transparent border-secondary">
+            <div class="card-footer border-secondary">
                 <a type="button" class="btn btn-sm btn-outline-primary" href="edit/<%=draft.id%>">Edit</a> 
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="deletePost('<%=draft.id%>','<%=draft.title%>','<%=draft.description%>')">Delete</button>
             </div>
@@ -146,9 +146,7 @@
         </div>
         <div class="modal-footer">
             <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
-                <form method="POST" action="../edit">
-                    <button type="submit" class="btn btn-success" name="redirect" data-bs-dismiss="modal">Ok</button>
-                </form>
+                <a href="../manage" type="submit" class="btn btn-success" >Ok</a>
             </div>
             <div id="DeleteTwoBtnContainer">
                 <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
