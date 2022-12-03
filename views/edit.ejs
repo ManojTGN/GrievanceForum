@@ -84,7 +84,7 @@
             <textarea id="my-text-area" required></textarea>
         </div><br>
         <script>
-        const easyMDE = new EasyMDE({toolbar: ["bold", "italic", "strikethrough", "heading", "|", "code", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
+        const easyMDE = new EasyMDE({autosave:{enabled: false},placeholder:"Report",spellChecker: false,tabSize:4,toolbar: ["bold", "italic", "strikethrough", "heading", "|", "code", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
         easyMDE.value("<%=postInfo['report']%>");
         </script>
         <button type="button" class="btn btn-link" onclick="if(easyMDE.value() == '') return;this.remove();previewMarkdown()">Preview (Report)</button>
