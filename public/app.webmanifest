@@ -4,12 +4,12 @@
     "description": "Progressive Web App where you can post your grievance and feedbacks of the BIT Community.",
     "icons": [
       {
-        "src": "icons/icon-32.png",
+        "src": "https://www.kindpng.com/picc/m/107-1076351_snowflakes-png-blue-snowflake-png-clipart-transparent-png.png",
         "sizes": "32x32",
         "type": "image/png"
       },
       {
-        "src": "icons/icon-512.png",
+        "src": "https://www.kindpng.com/picc/m/107-1076351_snowflakes-png-blue-snowflake-png-clipart-transparent-png.png",
         "sizes": "512x512",
         "type": "image/png"
       }
