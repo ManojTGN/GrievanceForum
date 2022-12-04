@@ -20,6 +20,10 @@
             font-family: 'Montserrat', sans-serif;
             font-family: 'Quicksand', sans-serif;
         }
+        .form-check-input:checked+.card{
+            border: 2px solid var(--bs-primary);
+            transition: border .2s;
+        }
         @media (min-width:100px)  { }
         @media (min-width:600px)  { }
         @media (min-width:1281px) { }
@@ -68,7 +72,7 @@
                     </div>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-primary">Search</button>
+                    <button class="btn btn-primary" onclick="getPostFeed(0)">Search</button>
                 </div>
             </div>
             <button class="btn btn-sm" data-bs-toggle="collapse" href="#collapsePostInfo" role="button" aria-expanded="false" aria-controls="collapsePostInfo">
@@ -85,8 +89,9 @@
                         <label class="form-label">Post Category</label><br>
                         <select id="categorySelect" class="form-select" aria-label="Default select example">
                             <option value="0" selected>All Category</option>
-                            <option value="1">General Category</option>
-                            <option value="2">Hostel Food Category</option>
+                            <%for(let i = 0; i < category.length;i++){%>
+                            <option value="<%=i%>"><%=category[i]['title']%></option>
+                            <%}%>
                         </select>
                     </div><br>
                     <div>
@@ -94,12 +99,12 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="0">
-                                    <label class="form-check-label" for="inlineRadio2">Top</label>
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SortPostRadio1" value="0">
+                                    <label class="form-check-label" for="SortPostRadio1">Top</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="1" checked>
-                                    <label class="form-check-label" for="inlineRadio3">New</label>
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SortPostRadio2" value="1" checked>
+                                    <label class="form-check-label" for="SortPostRadio2">New</label>
                                 </div>
                             </div>
                             <div class="col-5">
@@ -113,16 +118,79 @@
                             </div>
                         </div>
                     </div><br>
+                    <div>
+                        <label class="form-label">Post Comment & Support</label><br>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="CanComment">
+                                    <label class="form-check-label" for="CanComment">
+                                    Can Comment
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="CanSupport">
+                                    <label class="form-check-label" for="CanSupport">
+                                    Can Support
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
                 </div>
             </div>
         </div>
     </div>
-    
-    <br>
-    <div id="postFeed">
 
+    <br>
+    <div id="category">
+        <p class="fs-3">Categories</p>
+        <div class="row row-cols-2">
+            <%for(let i = 0; i < category.length;i++){%>
+                <div class="col">
+                    <label class="form-check-label" for="<%=category[i]['title']%>Radio">
+                    <input class="form-check-input" onclick="getPostFeed(2,<%=category[i]['sno']%>)" style="visibility: hidden;" type="radio" name="CategoryRadio" id="<%=category[i]['title']%>Radio">
+                    <div class="card mb-3">
+                        <div class="row" style="margin-left:2px;">
+                            <div class="col-4 d-flex align-items-center justify-content-center">
+                                <img src="/images/<%=category[i]['image']%>" class="img-fluid rounded-start" alt="...">
+                            </div>
+                            <div class="col-8">
+                                <div class="card-body">
+                                <h5 class="card-title" style="color:var(--bs-primary)"><i class="<%=category[i]['icon']%>"></i> <%=category[i]['title']%></h5>
+                                <p class="card-text"><%=category[i]['description']%></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </label>
+                </div>
+            <%}%>
+        </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center" id="PostLoader" style="margin-top:50%">
+
+    <hr>
+    <div>
+        <div class="row">
+            <div class="col-4 d-flex align-items-center justify-content-center">
+                <p class="fs-3">Your Feed</p>
+            </div>
+            <div class="col-8">
+                <div id="searchResultTextBox" style="visibility:hidden" class="alert alert-primary" role="alert">
+                    <div class="row">
+                    <div class="col-7" id="searchResultText">From Search Result</div>
+                    <div class="col-5"><button class="btn btn-sm btn-outline-primary" onclick="getPostFeed(0)" style="width:100%">Reset</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="postFeed">
+
+        </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center" id="PostLoader" style="margin-top:20%">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
@@ -130,15 +198,28 @@
 
 </div>
 <script>
-    function getPostFeed(filterSearch=false){
-        $.post("",{
-            loadPost:true,
-            filter:filterSearch,
-            search:'',//document.getElementById("SearchBox").value,
-            category:document.getElementById("categorySelect").value,
-            sort:document.getElementById("inlineRadio2").checked?0:1,
-            date:document.getElementById("sortDate").value,
-        },function(data, status){
+
+    function getPostFeed(PostLoadMode,categoryid=0){
+
+        function postRes(data, status){
+            if(data.length == 0){
+                document.getElementById("postFeed").insertAdjacentHTML('beforeend', `
+                <div class="card mb-3" style="border:0;">
+                    <div class="row g-0">
+                        <div class="col-4">
+                        <img  src="images/searchQuery/${parseInt(Math.random()*15)}.png" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-8 d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <h5 class="card-title">❌ No Post Found</h5>
+                                <p class="card-text">Click <code>Reset</code> To Reset Your Post Feed!.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `);
+            }
+
             for(let i = 0; i < data.length; i++){
                 document.getElementById("postFeed").insertAdjacentHTML( 'beforeend', `
                 <a href="../post/:id" style="color:black;text-decoration: none !important;">
@@ -163,15 +244,42 @@
                             + ((data[i]['comment'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-message"></i> ${data[i]['comments']}</button>`:``)
                             + ((data[i]['support'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-hand-sparkles"></i> ${data[i]['likes']}</button>`:``)+
                         `</div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['category']+`</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['cat_name']+`</button>
                     </div>
                 </a><br>`
                 );
             }
+
             $("#PostLoader").css("visibility","hidden");
-        });
+            if(PostLoadMode == 0){//ON LOAD
+                $("#searchResultTextBox").css("visibility","hidden");
+            }else if(PostLoadMode == 1){//NORMAL SEARCH
+                $("#searchResultText").html("From Search Result");
+                $("#searchResultTextBox").css("visibility","visible");
+            }else if(PostLoadMode == 2){//CATEGORY
+                $("#searchResultText").html("From The Category "+cat_name);
+                $("#searchResultTextBox").css("visibility","visible");
+            }
+        }
+
+        $("#postFeed").empty();
+        $("#PostLoader").css("visibility","visible");
+        let cat_name = document.getElementById("categorySelect")[categoryid].text;
+
+        $.post("",{
+            loadPost:true,
+            onload:PostLoadMode,
+            filter:document.getElementById("FilterCheckBox").checked?1:0,
+            search:document.getElementById("SearchBox").value,
+            category:(PostLoadMode == 2)?categoryid:document.getElementById("categorySelect").value,
+            sort:document.getElementById("SortPostRadio1").checked?0:1,
+            date:document.getElementById("sortDate").value,
+            canComment:document.getElementById("CanComment").checked?1:0,
+            canSupport:document.getElementById("CanSupport").checked?1:0
+        },postRes);
     }
-    $(document).ready(getPostFeed(false));
+
+    $(document).ready(getPostFeed(0));
 </script>
 </body>
 </html>

@@ -14,7 +14,7 @@
         "type": "image/png"
       }
     ],
-    "start_url": "http://10.10.87.208:3000/",
+    "start_url": "http://10.10.84.204:3000/",
     "display": "fullscreen",
     "theme_color": "#B12A34",
     "background_color": "#B12A34"

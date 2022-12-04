@@ -100,8 +100,9 @@
             <div class="card">
                 <div class="card-body">
                     <select class="form-select" id="categorySelect" aria-label="Default select example">
-                        <option value="0" <%if(postInfo['category']== 0){%>selected<%}%>>General Category</option>
-                        <option value="1" <%if(postInfo['category']== 1){%>selected<%}%>>Hostel Food</option>
+                        <%for(let i = 0; i < category.length;i++){%>
+                        <option name="<%=category[i]['title']%>" value="<%=category[i]['sno']%>" <%if(postInfo['category']== category[i]['sno']){%>selected<%}%>><%=category[i]['title']%> Category</option>
+                        <%}%>
                       </select>
                 </div>
             </div>
@@ -286,6 +287,7 @@ function PostDraft(){
         description:$("#description").val() || "",
         report:easyMDE.value() || "",
         category:document.getElementById("categorySelect").value,
+        categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
         anonymous:document.getElementById("anonymousCheck").checked?1:0,
         comment:document.getElementById("CommentOthersCheck").checked?1:0,
@@ -310,6 +312,7 @@ function SaveDraft(isAutoSave=false){
         description:$("#description").val() || "",
         report:easyMDE.value() || "",
         category:document.getElementById("categorySelect").value,
+        categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
         anonymous:document.getElementById("anonymousCheck").checked?1:0,
         comment:document.getElementById("CommentOthersCheck").checked?1:0,
