@@ -25,7 +25,7 @@ router.get("/:id",(request,response) => {
 
             let post = result;
             connection.query("SELECT * FROM `category`",(err, result, fields) => {
-                response.render("edit",{userInfo:cookie[request.socket.remoteAddress],postInfo:{'id':request.params.id,'title':post[0]['title'], 'description':post[0]['description'], 'report':post[0]['report'], 'category':post[0]['category'], 'visibility':post[0]['visibility'], 'anonymous':post[0]['anonymous'], 'comment':post[0]['comment']},category:result});
+                response.render("edit",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],category:result});
             });
         });
         return;

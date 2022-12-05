@@ -27,12 +27,14 @@ app.use("/profile",profileRouter);
 app.use("/post",postRouter);
 
 //Only For Testing
-cookie[process.env.PH_LOGIN_IP]={'mail':'manoj.ig20@bitsathy.ac.in','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu2I6ZF4fmjt38CgaQxL1YNL7jmvk-cHCwxzOy94=s96-c'};
-cookie[process.env.PC_LOGIN_IP]={'mail':'manoj.thunderviz@gmail.com','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
-cookie["127.0.0.1"]={'mail': 'manoj.thunderviz@gmail.com','name': 'Manoj A','picture': 'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
+//cookie[process.env.PH_LOGIN_IP]={'mail':'manoj.ig20@bitsathy.ac.in','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu2I6ZF4fmjt38CgaQxL1YNL7jmvk-cHCwxzOy94=s96-c'};
+//cookie[process.env.PC_LOGIN_IP]={'mail':'manoj.thunderviz@gmail.com','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
+//cookie["0"]={'mail': 'manoj.thunderviz@gmail.com','name': 'Manoj A','picture': 'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
+//cookie["0"]={'mail': 'srinivash.ig20@bitsathy.ac.in','name': 'SRINIVASH','picture': 'https://lh3.googleusercontent.com/a/AEdFTp74i81Tehh0u4KaAzsLLFTgIss4C-WNQbj-G-qu5g=s96-c'};
 
 app.get('/', (request, response) => {
     if(!(request.socket.remoteAddress in cookie)){
+        console.log(request.socket.remoteAddress," Connected To The Server!")
         response.redirect("/login");
         return;
     }
@@ -96,4 +98,4 @@ app.post('/', (request, response) => {
 
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(process.env.PORT || 8080, "localhost" || process.env.WIFI_HOST || process.env.HOST ,() => console.log(`GrievanceForum Server Started Successfully!`));
+app.listen(process.env.PORT || 8080, process.env.HOST || "localhost"  || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!`));

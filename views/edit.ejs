@@ -46,16 +46,16 @@
         <div class="container-fluid">
             <div class="row w-100 text-center">
                 <div class="col">
-                    <a href="dashboard" type="button" class="btn btn-primary"> <i class="fa-solid fa-house"></i></a>
+                    <a href="../dashboard" type="button" class="btn btn-primary"> <i class="fa-solid fa-house"></i></a>
                 </div>
                 <div class="col">
-                    <a href="manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
+                    <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
                 </div>
                 <div class="col">
-                    <a href="notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
+                    <a href="../notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
                 </div>
                 <div class="col">
-                    <a href="profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
+                    <a href="../profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
                 </div>
             </div>
         </div>
@@ -84,12 +84,12 @@
             <textarea id="my-text-area" required></textarea>
         </div><br>
         <script>
-        const easyMDE = new EasyMDE({autosave:{enabled: false},placeholder:"Report",spellChecker: false,tabSize:4,toolbar: ["bold", "italic", "strikethrough", "heading", "|", "code", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
-        easyMDE.value("<%=postInfo['report']%>");
+        const easyMDE = new EasyMDE({autosave:{enabled: false},placeholder:"Report",spellChecker: false,tabSize:4,toolbar: ["bold", "italic", "strikethrough", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
+        easyMDE.value(`<%=postInfo["report"]%>`);
         </script>
-        <button type="button" class="btn btn-link" onclick="if(easyMDE.value() == '') return;this.remove();previewMarkdown()">Preview (Report)</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="if(easyMDE.value().trim() == '') return;this.remove();previewMarkdown()"><i class="fa-regular fa-eye"></i> Preview Your Report</button>
         <div id="PreviewBox" style="visibility:hidden">
-            <label class="form-label">Report Preview</label> <button type="button" class="btn btn-link" id="Preview">Preview (Report)</button>
+            <label class="form-label">Report Preview</label> <button type="button" class="btn btn-primary btn-sm" id="Preview"><i class="fa-regular fa-eye"></i> Preview Your Report</button>
             <div class="spinner-border text-primary" role="status" id="PreviewBoxSpinner">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -101,7 +101,7 @@
                 <div class="card-body">
                     <select class="form-select" id="categorySelect" aria-label="Default select example">
                         <%for(let i = 0; i < category.length;i++){%>
-                        <option name="<%=category[i]['title']%>" value="<%=category[i]['sno']%>" <%if(postInfo['category']== category[i]['sno']){%>selected<%}%>><%=category[i]['title']%> Category</option>
+                        <option name="<%=category[i]['title']%>" value="<%=category[i]['sno']%>" <%if(postInfo['category']== category[i]['sno']){%>selected<%}%>><%=category[i]['title']%></option>
                         <%}%>
                       </select>
                 </div>
@@ -170,11 +170,13 @@
             <label class="form-label">Post</label>
             <div class="card">
                 <div class="card-body">
-                    <a href="../manage" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
+                    <a href="<%if(postInfo.draft == 1){%>../manage<%}else{%>../post/<%=postInfo.id%><%}%>" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
                     <div class="vr"></div>
+                    <%if(postInfo.draft == 1){%>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop" id="PostConfirmDraft">Post</button>
-                    <button type="button" class="btn btn-success" id="SaveDraft">Save Draft</button>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteBackdrop">Delete Draft</button>
+                    <%}%>
+                    <button type="button" class="btn btn-success" id="SaveDraft">Save <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%></button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteBackdrop">Delete <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%></button>
                 </div>
             </div>
         </div>
@@ -185,6 +187,12 @@
             <div class="toast-body" id="saveToastPara"></div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
+    </div>
+</div>
+<div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
+    <div class="d-flex">
+        <div class="toast-body">Invalid Post Details ( Title | Description | Report )</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
 <div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
@@ -266,7 +274,7 @@ function previewMarkdown(){
 
     $.post("/edit",{
     preview:true,
-    report: easyMDE.value()
+    report: easyMDE.value().replaceAll("`","")
     },
     function(data, status){
         if(document.getElementById("PreviewBoxInfo") != undefined) document.getElementById("PreviewBoxInfo").remove();
@@ -276,6 +284,16 @@ function previewMarkdown(){
 }
 
 function PostDraft(){
+    if(
+        $("#title").val().trim() == "" ||
+        $("#description").val().trim() == "" ||
+        easyMDE.value().trim() == ""
+    ){
+        $('#staticPostConfirmBackdrop').modal('hide');
+        $("#ErrorPostToast").toast("show");
+        return;
+    }
+
     $("#PostDismiss").prop('disabled', true);
     $("#postText").css("opacity","0");
     $("#PostLoader").css("opacity","1");
@@ -285,7 +303,7 @@ function PostDraft(){
         mail:"<%=postInfo['mail']%>",
         title:$("#title").val() || "",
         description:$("#description").val() || "",
-        report:easyMDE.value() || "",
+        report:easyMDE.value().replaceAll("`","") || "",
         category:document.getElementById("categorySelect").value,
         categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
@@ -310,7 +328,7 @@ function SaveDraft(isAutoSave=false){
         mail:"<%=postInfo['mail']%>",
         title:$("#title").val() || "",
         description:$("#description").val() || "",
-        report:easyMDE.value() || "",
+        report:easyMDE.value().replaceAll("`","") || "",
         category:document.getElementById("categorySelect").value,
         categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
         visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
@@ -343,8 +361,7 @@ function DeletePost(){
         $("#DeleteOkContainer").css("visibility","visible");
     });
 }
-
-setInterval(SaveDraft.bind(null,true), 30*1000);
+<%if(postInfo.draft == 1){%>setInterval(SaveDraft.bind(null,true), 30*1000);<%}%>
 </script>
 </body>
 </html>
