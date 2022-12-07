@@ -38,6 +38,11 @@ app.get('/', (request, response) => {
         response.redirect("/login");
         return;
     }
+    console.log(cookie)
+    if(cookie[request.socket.remoteAddress]['isadmin'] == 1){
+        response.render("admin",{userInfo:cookie[request.socket.remoteAddress]});
+        return;
+    }
 
     connection.query("SELECT * FROM `category`",(err, result, fields) => {
         response.render("dashboard",{userInfo:cookie[request.socket.remoteAddress],category:result});
@@ -47,21 +52,21 @@ app.get('/', (request, response) => {
 app.post('/', (request, response) => {
     if("loadPost" in request.body){
         if(request.body.onload == 0){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `anonymous`='0' ORDER BY `sno` DESC",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE `draft`='0' ORDER BY `sno` DESC",(err, result, fields) => {
                 response.send(result);
             });
             return;
         }
 
         if(request.body.onload == 2){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `anonymous`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
                 response.send(result);
             });
             return;
         }
 
         if(request.body.filter == 0){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `anonymous`='0' AND (`title` LIKE '%"+request.body.search+"%' OR `description` LIKE '%"+request.body.search+"%')",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND (`title` LIKE '%"+request.body.search+"%' OR `description` LIKE '%"+request.body.search+"%')",(err, result, fields) => {
                 response.send(result);
             });
             return
@@ -70,7 +75,7 @@ app.post('/', (request, response) => {
         if(request.body.filter == 1){
             
             let query = `
-            SELECT * FROM posts WHERE draft='0' AND anonymous='0'`
+            SELECT * FROM posts WHERE draft='0'`
             + ((request.body.search == '')?``:` AND (title LIKE '%${request.body.search}%' OR description LIKE '%${request.body.search}%')`)
             + ((request.body.category == 0)?``:` AND category='${request.body.category}'`)
             + ((request.body.canComment == 0)?``:` AND comment='${request.body.canComment}'`)
@@ -98,4 +103,4 @@ app.post('/', (request, response) => {
 
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(process.env.PORT || 8080, process.env.HOST || "localhost"  || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!`));
+app.listen(process.env.PORT || 8080, "localhost"  || process.env.HOST || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!`));

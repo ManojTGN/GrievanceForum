@@ -235,9 +235,9 @@
                         <a href="" class="btn btn-sm btn-outline-secondary">
                             <div class="row">
                                 <div class="col-1">
-                                    <img src="`+data[i]['picture']+`" class="rounded-circle" style="width:20px"/>
+                                    <img src="`+((data[i].anonymous==1)?"images/anonymous.webp":data[i]['picture'])+`" class="rounded-circle" style="width:20px"/>
                                 </div>
-                                <div class="col-9 text-align-start">`+data[i]['name']+`</div>
+                                <div class="col-9 text-align-start">`+((data[i].anonymous==1)?"Anonymous":data[i]['name'])+`</div>
                             </div>
                         </a>
                         <div class="btn-group" role="group">

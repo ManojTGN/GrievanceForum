@@ -14,7 +14,7 @@
         "type": "image/png"
       }
     ],
-    "start_url": "http://192.168.227.148:3000/",
+    "start_url": "0",
     "display": "fullscreen",
     "theme_color": "#B12A34",
     "background_color": "#B12A34"

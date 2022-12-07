@@ -14,10 +14,14 @@ router.post("/",(request,response) => {
     let user = jsonwebtoken.decode(request.body["credential"]);
     connection.query("SELECT * FROM `users` WHERE `mail`='"+user['email']+"'",(err, result, fields) => { 
         if (err) throw err;
+        
+        let isadmin = 0;
         if(result.length < 1)
             connection.query("INSERT INTO `users`(`username`, `mail`) VALUES ('"+user['name']+"','"+user['email']+"')", (err, result, fields) => { if (err) throw err; });
+        else
+            isadmin = result[0].isadmin;
         
-        cookie[request.socket.remoteAddress]={'mail':user['email'],'name':user['name'],'picture':user['picture']};
+        cookie[request.socket.remoteAddress]={'mail':user['email'],'name':user['name'],'picture':user['picture'],'isadmin':isadmin};
         response.redirect("../");
     });
 });

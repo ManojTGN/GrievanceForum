@@ -8,7 +8,10 @@ const cookie = require('./cookie');
 router.get("/",(request,response) => {
     if(request.socket.remoteAddress in cookie){
         connection.query("SELECT * FROM `users` WHERE `mail`='"+cookie[request.socket.remoteAddress]['mail'],(err,result,fields) => {
-            response.render("profile",{userInfo:cookie[request.socket.remoteAddress],MainUserInfo:result});
+            connection.query("SELECT * FROM `posts` WHERE `mail`='"+cookie[request.socket.remoteAddress]['mail']+"'",(err,res,fields) => {
+                response.render("profile",{userInfo:cookie[request.socket.remoteAddress],MainUserInfo:result,posts:res,bookmarks:{}});
+            });
+            
         });
         return;
     }

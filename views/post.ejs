@@ -87,24 +87,58 @@
                 <a href="" class="btn btn-sm btn-outline-secondary">
                     <div class="row">
                         <div class="col-1">
-                            <img src="<%=postInfo.picture%>" class="rounded-circle" style="width:20px"/>
+                            <img src="<%if(postInfo.anonymous == 1){%>../images/anonymous.webp<%}else{%><%=postInfo.picture%><%}%>" class="rounded-circle" style="width:20px"/>
                         </div>
-                        <div class="col-9 text-align-start"><%=postInfo.name%></div>
+                        <div class="col-9 text-align-start"><%if(postInfo.anonymous == 1){%>Anonymous<%}else{%><%=postInfo.name%><%}%></div>
                     </div>
                 </a>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
                 </div>
-            </div><br>
+                <%if(userInfo.mail == postInfo.mail){%>
+                <a href="../edit/<%=postInfo.id%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
+                <%}%>
+            </div><br><br>
             <div class="comment">
                 <p class="fs-3 text-muted">Comments</p>
+                <% if(postInfo.comment == 1){%>
                 <div class="mb-3">
                     <label for="CommentArea" class="form-label">Post Your Comment</label>
                     <textarea class="form-control" id="CommentArea" rows="2"></textarea>
+                    <br>
+                    <div class="d-flex align-items-end justify-content-end">
+                        <button class="btn btn-sm btn-primary" id="postComment">Post Comment</button>
+                    </div>
                 </div>
+                <br>
+                <%for(let i = 0; i < comments.length; i++){%>
+                    <div class="card" style="margin-top:5px;">
+                        <div class="card-body">
+                            <div class="d-flex text-muted">
+                                <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
+                                        </div>
+                                        <div class="col-9 text-align-start"><%=comments[i].name%></div>
+                                    </div>
+                                </a>• <%=comments[i].datetime%>
+                            </div>
+
+                            <p class="card-text"><%=comments[i].message%></p>
+                            <% if(comments[i].mail == userInfo['mail']){ %>
+                                <hr>
+                                <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                            <%}%>
+                        </div>
+                    </div>
+                <%}%>
+                <%}else{%><p class="text-muted text-align-center"><i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!</p><%}%>
             </div>
         </div>
+        <br><br><br>
     </div>
 
     <div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
@@ -147,7 +181,6 @@
                             <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
                                 <i class="fa-brands fa-blogger text-muted"></i>
                             </a>
-                            
                         </div>
                     </div>
                 </div>
@@ -155,7 +188,109 @@
             </div>
         </div>
     </div>
+    
+    <div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
+        <div class="d-flex">
+            <div class="toast-body">Invalid Comment ( Write Something... )</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticDeleteBackdropLabel"><i class="fa-regular fa-trash-can"></i> Delete Comment</h1>
+            </div>
+            <div class="modal-body">
+                <div id="DeleteLoaderText" style="opacity: 1;transition: opacity 0.3s linear;">
+                    Once The Comment Is Deleted, The Comment Can't Be Recovered. To Delete This Comment Click The <code>Delete</code> Button Below.
+                </div>
+    
+                <input type="text" class="form-control" id="DeleteId" style="visibility:hidden;" disabled>
+                
+                <div id="ExtraTitleDesc" style="overflow:hidden;height:100px;transition: all ease-in-out 0.2s;">
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input type="text" name="description" class="form-control" id="Deletedescription" disabled>
+                    </div>
+                </div>
+                <div id="DeleteLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
+                    <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
+                </div>
+                <div id="DeleteTwoBtnContainer">
+                    <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
+                    <button type="button" class="btn btn-danger" id="DeletePost">Delete</button>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticEditBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticEditBackdropLabel"><i class="fa-regular fa-trash-can"></i> Edit Comment</h1>
+            </div>
+            <div class="modal-body">
+                <div id="EditLoaderText" style="opacity: 1;transition: opacity 0.3s linear;"></div>
+                <input type="text" class="form-control" id="EditId" style="visibility:hidden;position:absolute" disabled>
+                <div id="ExtraEditTitleDesc" style="overflow:hidden;transition: all ease-in-out 0.2s;">
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" id="Editdescription" rows="2"></textarea>
+                    </div>
+                </div>
+                <div id="EditLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="position:relative;left:155px;visibility:hidden;" id="EditOkContainer">
+                    <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
+                </div>
+                <div id="EditTwoBtnContainer">
+                    <button type="button" class="btn btn-secondary" id="EditDismiss" data-bs-dismiss="modal">Dismiss</button>
+                    <button type="button" class="btn btn-primary" id="EditPost">Edit</button>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
 <script>
+    $("#postComment").click(function(){
+        if($("#CommentArea").val().trim().replace('`','') == ""){
+            $("#ErrorPostToast").toast("show");
+            return;
+        }
+
+        document.getElementById("CommentArea").setAttribute("disabled","disabled");
+        document.getElementById("postComment").setAttribute("disabled","disabled");
+
+        $.post("/post",{
+            postComment:true,
+            id:"<%=postInfo.id%>",
+            message:$("#CommentArea").val().replace('`','')
+        },
+        function (data, status){
+            document.getElementById("CommentArea").removeAttribute("disabled");
+            document.getElementById("postComment").removeAttribute("disabled");
+            $("#CommentArea").val("");
+            location.reload();
+        });
+    });
+
     function supportPost(){
         document.getElementById("supportBtn").setAttribute("disabled", "disabled");
         $("#supportBtn").html('<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>');
@@ -175,6 +310,61 @@
             }
         });
     }
+
+    function editComment(CommentId,message){
+        $("#EditId").val(CommentId);
+        $("#Editdescription").val(message);
+        $('#staticEditBackdrop').modal('show');
+    }
+
+    $("#EditPost").click(function(){
+        if($("#Editdescription").val().trim().replace('`','') == ""){
+            $("#ErrorPostToast").toast("show");
+            $('#staticEditBackdrop').modal('hide');
+            return;
+        }
+
+        $("#EditDismiss").prop('disabled', true);
+        $("#ExtraEditTitleDesc").css("opacity","0");
+        $("#EditLoader").css("opacity","1");
+        $.post("/post",{
+            editComment:true,
+            id:$("#EditId").val(),
+            message:$("#Editdescription").val().replace('`','')
+        },
+        function(data, status){
+            $("#EditLoaderText").html("<i class='fa-regular fa-circle-check'></i> Comment Changed Successfully!");
+            $("#EditLoaderText").css("opacity","1");
+            $("#EditLoader").css("opacity","0");
+            $("#EditTwoBtnContainer").css("visibility","hidden");
+            $("#EditOkContainer").css("visibility","visible");
+        });
+    });
+
+    function deleteComment(CommentId,message){
+        $("#DeleteId").val(CommentId);
+        $("#Deletedescription").val(message);
+        $('#staticDeleteBackdrop').modal('show');
+    }
+
+    $("#DeletePost").click(function(){
+        $("#DeleteDismiss").prop('disabled', true);
+        $("#DeleteLoaderText").css("opacity","0");
+        $("#DeleteLoader").css("opacity","1");
+        $.post("/post",{
+            deleteComment:true,
+            id:$("#DeleteId").val(),
+            Postid:"<%=postInfo.id%>"
+        },
+        function(data, status){
+            $("#ExtraTitleDesc").css("height","0px");
+            $("#DeleteLoaderText").html("<i class='fa-regular fa-circle-check'></i> Comment Deleted Successfully!");
+            $("#DeleteLoaderText").css("opacity","1");
+            $("#DeleteLoader").css("opacity","0");
+            $("#DeleteTwoBtnContainer").css("visibility","hidden");
+            $("#DeleteOkContainer").css("visibility","visible");
+        });
+    });
 </script>
 </body>
 </html>

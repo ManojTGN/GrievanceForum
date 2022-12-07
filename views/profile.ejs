@@ -76,7 +76,36 @@
         <div class="card-body">
             <h5 class="card-title">Your Posts</h5>
             <hr>
+            <%if(posts.length == 0){%>
             <p class="card-text">Haven't Posted Anything Yet</p>
+            <%}%>
+            <%for(let i = 0; i < posts.length; i++){%>
+                <div class="card" style="border:0px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8"><%=i+1%>.<%=posts[i].title%></div>
+                            <div class="col-4">
+                                <a href="../post/<%=posts[i].id%>" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i></a>
+                                <a href="../edit/<%=posts[i].id%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <%}%>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Your Bookmarks</h5>
+            <hr>
+            <%if(bookmarks.length == 0){%>
+            <p class="card-text">Haven't Bookmarked Anything Yet</p>
+            <%}%>
+
+            <%for(let i = 0; i < bookmarks.length; i++){%>
+                
+            <%}%>
         </div>
     </div>
 
