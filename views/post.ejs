@@ -38,6 +38,7 @@
                 </button>
             </div>
         </nav><br>
+        <%if(userInfo.isadmin == 0){%>
         <nav class="navbar fixed-bottom bg-light">
             <div class="container-fluid">
                 <div class="row w-100 text-center">
@@ -56,6 +57,26 @@
                 </div>
             </div>
         </nav>
+        <%}else{%>
+        <nav class="navbar fixed-bottom bg-light">
+            <div class="container-fluid">
+                <a href="../dashboard" type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-house"></i> Go Back</a> 
+            </div>
+        </nav>
+        <%}%>
+        <%if(userInfo.isadmin == 1){%>
+        <div class="card text-bg-light">
+            <div class="card-body">
+                <p class="fs-4">Admin Access</p>
+                <div class="adminTools">
+                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
+                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
+                    <div class="vr"></div>
+                    <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
+                </div>
+            </div>
+        </div><br>
+        <%}%>
         <div class="post">
             <p class="fs-2"><%=postInfo.title%></p>
             <p class="text-muted"><%=postInfo.description%></p>
@@ -70,7 +91,8 @@
             <div id="reportMarkdown">
                 <%-report%>
             </div>
-            <% if(postInfo.support == 1){ %>
+            <% if(userInfo.isadmin == 0){%>
+            <% if(postInfo.support == 1){%>
             <div>
                 <div class="row d-flex align-items-center justify-content-center">
                     <div class="col-4">
@@ -81,28 +103,61 @@
                     </div>
                 </div>
             </div>
-            <%}%>
+            <%}}else{%>
+                <% if(postInfo.support == 1){%>
+                <div class="col-7 text-align-start text-muted">
+                    This Post Is Supported By <%=postInfo.likes%> Students
+                </div>
+            <%}}%>
             <hr>
             <div>
                 <a href="" class="btn btn-sm btn-outline-secondary">
                     <div class="row">
                         <div class="col-1">
-                            <img src="<%if(postInfo.anonymous == 1){%>../images/anonymous.webp<%}else{%><%=postInfo.picture%><%}%>" class="rounded-circle" style="width:20px"/>
+                            <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
                         </div>
-                        <div class="col-9 text-align-start"><%if(postInfo.anonymous == 1){%>Anonymous<%}else{%><%=postInfo.name%><%}%></div>
+                        <div class="col-9 text-align-start"><%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%></div>
                     </div>
                 </a>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
                 </div>
-                <%if(userInfo.mail == postInfo.mail){%>
-                <a href="../edit/<%=postInfo.id%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
-                <%}%>
-            </div><br><br>
+                <%if(userInfo.isadmin == 0){%>
+                <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
+                <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
+                <%}}%>
+            </div><br>
+            <%if(solution.length != 0){%>
+            <div>
+                <div class="card text-bg-success mb-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-5">Solution</div>
+                            <div class="col-7 d-flex justify-content-end align-items-center">
+                                <span style="margin-right:10px;">Solved By</span>
+                                <a href="" class="btn btn-sm btn-light" style="border:0;">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <img src="<%=solution[0].picture%>" class="rounded-circle" style="width:20px"/>
+                                        </div>
+                                        <div class="col-9 text-align-start"><%=solution[0].name%></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text"><%=solution[0].message%></p>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            <br>
             <div class="comment">
                 <p class="fs-3 text-muted">Comments</p>
                 <% if(postInfo.comment == 1){%>
+                <% if(userInfo.isadmin == 0){%>
                 <div class="mb-3">
                     <label for="CommentArea" class="form-label">Post Your Comment</label>
                     <textarea class="form-control" id="CommentArea" rows="2"></textarea>
@@ -112,6 +167,7 @@
                     </div>
                 </div>
                 <br>
+                <%}%>
                 <%for(let i = 0; i < comments.length; i++){%>
                     <div class="card" style="margin-top:5px;">
                         <div class="card-body">
@@ -268,7 +324,77 @@
           </div>
         </div>
     </div>
+    <%if(userInfo.isadmin == 1){%>
+    <div class="modal fade" id="staticSolvePost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticSolvePostLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Solve Post</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="solutionTextArea" class="form-label">Solution</label>
+                    <textarea class="form-control" id="solutionTextArea" rows="12"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Dismiss</button>
+              <button type="button" id="postSolution" class="btn btn-success">Solve Post</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="staticDeleteRealPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteRealPostLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="fa-solid fa-trash-can"></i> Delete Post</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <code>Beware:</code> Once The Post Is Deleted You Can't Be Able To Recover It!
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" id="deleteRealPost">Delete Post</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <%}%>
 <script>
+    $("#deleteRealPost").click(function(){
+        $.post("/post",{
+            deletePost:true,
+            id:"<%=postInfo.id%>",
+        },
+        function (data, status){
+            location.reload();
+        });
+    });
+
+    $("#postSolution").click(function(){
+        if($("#solutionTextArea").val().trim().replace('`','') == ""){
+            $("#ErrorPostToast").toast("show");
+            return;
+        }
+        document.getElementById("solutionTextArea").removeAttribute("disabled");
+        document.getElementById("postSolution").removeAttribute("disabled");
+
+        $.post("/post",{
+            postSolution:true,
+            id:"<%=postInfo.id%>",
+            message:$("#solutionTextArea").val().replace('`','')
+        },
+        function (data, status){
+            document.getElementById("solutionTextArea").removeAttribute("disabled");
+            document.getElementById("postSolution").removeAttribute("disabled");
+            $("#solutionTextArea").val("");
+            location.reload();
+        });
+    });
+
     $("#postComment").click(function(){
         if($("#CommentArea").val().trim().replace('`','') == ""){
             $("#ErrorPostToast").toast("show");

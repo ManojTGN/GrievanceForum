@@ -26,10 +26,13 @@ router.get("/:id",(request,response) => {
                     connection.query("UPDATE `posts` SET `views`= views+1 WHERE `id`='"+request.params.id+"'",(err, result, fields) => {});
                 }
             });
+
             connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND type='1'",(err, result, fields) => {
                 let markdown = dompurify.sanitize(marked(post[0].report));// <%-check%>
                 connection.query("SELECT * FROM `comments` WHERE postid='"+request.params.id+"'",(err,res,field)=>{
-                    response.render("post",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length});
+                    connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND type='2'",(err, r, fields) => {
+                        response.render("post",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length,solution:r});
+                    });
                 });
             });
         });
@@ -66,6 +69,18 @@ router.post("/",(request,response) => {
     if("deleteComment" in request.body){
         connection.query("DELETE FROM comments WHERE `sno`='"+request.body.id+"'",(err,result,field)=>{response.send('1');})
         connection.query("UPDATE `posts` SET `comments`= comments-1 WHERE `id`='"+request.body.Postid+"'",(err, result, fields) => {});
+        return;
+    }
+
+    if("postSolution" in request.body){
+        connection.query("INSERT INTO `postinfo`( `postid`,`mail`,`name`,`picture`,`message`,`type`) VALUES ('"+request.body.id+"','"+cookie[request.socket.remoteAddress]['mail']+"','"+cookie[request.socket.remoteAddress]['name']+"','"+cookie[request.socket.remoteAddress]['picture']+"','"+request.body.message+"','2')",(err, result, fields) => {response.send('1');});
+        connection.query("UPDATE `posts` SET `status`= 1 WHERE `id`='"+request.body.id+"'",(err, result, fields) => {});
+        return;
+    }
+
+    if("deletePost" in request.body){
+        connection.query("DELETE FROM `postinfo` WHERE `id`='"+request.body.id+"'",(err, result, fields) => {response.send('1');});
+        connection.query("DELETE FROM `posts` WHERE `id`='"+request.body.id+"'",(err, result, fields) => {});
         return;
     }
 });

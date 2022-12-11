@@ -139,6 +139,35 @@
                             </div>
                         </div>
                     </div><br>
+                    <div>
+                        <label class="form-label">Post Status</label><br>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" value="solvedPost" type="radio" name="postStatus" id="postStatus0" checked>
+                                    <label class="form-check-label" for="postStatus0">
+                                    Both
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" value="solvedPost" type="radio" name="postStatus" id="postStatus1">
+                                    <label class="form-check-label" for="postStatus1">
+                                    Solved Post
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input class="form-check-input" value="unSolvedPost" type="radio" name="postStatus" id="postStatus2">
+                                    <label class="form-check-label" for="postStatus2">
+                                    Unsolved Post
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -176,7 +205,7 @@
     <hr>
     <div>
         <div class="row">
-            <div class="col-4 d-flex align-items-center justify-content-center">
+            <div class="col-4 d-flex align-items-center text-align-start">
                 <p class="fs-3">Your Feed</p>
             </div>
             <div class="col-8">
@@ -229,8 +258,8 @@
                             <div class="col-9"><p class="alert-heading fs-4">${data[i]['title']}</p></div>
                             <div class="col-3 text-align-end text-muted" style="font-size:12px;">${data[i]['datetime']}</div>
                         </div>
-                        
                         <p class="text-muted">${data[i]['description']}</p>
+                        `+((data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
                         <hr>
                         <a href="" class="btn btn-sm btn-outline-secondary">
                             <div class="row">
@@ -275,6 +304,7 @@
             category:(PostLoadMode == 2)?categoryid:document.getElementById("categorySelect").value,
             sort:document.getElementById("SortPostRadio1").checked?0:1,
             date:document.getElementById("sortDate").value,
+            status:document.getElementById("postStatus0").checked?2:(document.getElementById("postStatus1").checked?1:0),
             canComment:document.getElementById("CanComment").checked?1:0,
             canSupport:document.getElementById("CanSupport").checked?1:0
         },postRes);

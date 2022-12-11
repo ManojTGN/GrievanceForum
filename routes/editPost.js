@@ -16,17 +16,23 @@ router.get("/",(request,response) => {
 
 router.get("/:id",(request,response) => {
     if (request.socket.remoteAddress in cookie){
+
         connection.query(
-        "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"'",(err, result, fields)=>{
+        "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"'",(err, result, fields)=>{
             if(result.length == 0 || err != null){
                 response.render("edit404");
                 return;
             }
 
-            let post = result;
-            connection.query("SELECT * FROM `category`",(err, result, fields) => {
-                response.render("edit",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],category:result});
-            });
+            let post = result[0];
+            if( post['mail'] == cookie[request.socket.remoteAddress]['mail'] || cookie[request.socket.remoteAddress]['isadmin'] == 1){
+                connection.query("SELECT * FROM `category`",(err, result, fields) => {
+                    response.render("edit",{userInfo:cookie[request.socket.remoteAddress],postInfo:post,category:result});
+                });
+                return;
+            }
+
+            response.render("edit404");
         });
         return;
     }

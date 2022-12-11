@@ -38,9 +38,12 @@ app.get('/', (request, response) => {
         response.redirect("/login");
         return;
     }
+
     console.log(cookie)
     if(cookie[request.socket.remoteAddress]['isadmin'] == 1){
-        response.render("admin",{userInfo:cookie[request.socket.remoteAddress]});
+        connection.query("SELECT * FROM `category`",(err, result, fields) => {
+            response.render("admin",{userInfo:cookie[request.socket.remoteAddress],category:result});
+        });
         return;
     }
 
@@ -76,10 +79,12 @@ app.post('/', (request, response) => {
             
             let query = `
             SELECT * FROM posts WHERE draft='0'`
+            + ((request.body.isadminview == 1)?` AND (visibility = 0 OR visibility = 1)`:` AND visibility = 0`)
             + ((request.body.search == '')?``:` AND (title LIKE '%${request.body.search}%' OR description LIKE '%${request.body.search}%')`)
             + ((request.body.category == 0)?``:` AND category='${request.body.category}'`)
             + ((request.body.canComment == 0)?``:` AND comment='${request.body.canComment}'`)
             + ((request.body.canSupport == 0)?``:` AND support='${request.body.canSupport}'`)
+            + ((request.body.status == 2)?` AND (status=0 OR status=1)`:((request.body.status == 1)?` AND status=1`:` AND status=0`))
             + ((request.body.sort == 0)?` ORDER BY views DESC`:` ORDER BY sno DESC`)
             ;
             connection.query(query,(err, result, fields) => {
@@ -101,6 +106,7 @@ app.post('/', (request, response) => {
     }
 });
 
+app.get('/logout', (request, response) => { delete cookie[request.socket.remoteAddress];response.redirect("/login"); });
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
 app.listen(process.env.PORT || 8080, "localhost"  || process.env.HOST || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!`));
