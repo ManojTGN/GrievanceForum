@@ -12,11 +12,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
+        :root{
+            --card: #fff;
+            --background: var(--bs-gray-100);
+            --color: var(--bs-gray-900);
+            --btn-p: var(--bs-primary);
+            --btn-s: var(--bs-success);
+        }
+        .dark-theme{
+            --card: #262B2F;
+            --background: var(--bs-gray-900);
+            --color: var(--bs-gray-500);
+            --btn-p: #084298;
+            --btn-s: #0A3622;
+        }
+
+        .btn-primary{
+            background-color: var(--btn-p);
+        }
+        .btn-success{
+            background-color: var(--btn-s);
+        }
+        .card, .alert, .navbar {
+            background-color: var(--card);
+        }
+        .card .card{
+            background-color: var(--background);
+        }
+        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
+            color: var(--color);
+        }
+
         body{
-            background-color:white;
+            background-color: var(--background);
             font-family: 'Montserrat', sans-serif;
             font-family: 'Quicksand', sans-serif;
         }
@@ -24,27 +54,256 @@
             border: 2px solid var(--bs-primary);
             transition: border .2s;
         }
-        @media (min-width:100px)  { }
-        @media (min-width:600px)  { }
-        @media (min-width:1281px) { }
+        .mobile, .desktop, .noview{
+            position:absolute;
+            visibility: hidden;
+            opacity: 0;
+
+            transition: opacity 200ms ease-in-out;
+        }
+
+        /*Mobile SideBar Bug Fix*/
+        #navbarSupportedContent{
+            position:static;
+            left:0%;
+        }
+
+        @media (min-width:0px) {
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
+            #navbarSupportedContent{position:absolute;left:-200%;}
+        }
+
+        @media (min-width:300px)  { 
+            .mobile {opacity: 1;visibility: visible;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{opacity: 0;visibility: hidden;}
+            #navbarSupportedContent{position:absolute;left:-200%;}
+        }
+        @media (min-width:768px)  { 
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 1;visibility: visible;}
+            .noview{opacity: 0;visibility: hidden;}
+            #navbarSupportedContent{position:static;left:0%;}
+        }
+
     </style>
+    <script>
+        $( document ).ready(function() {
+            if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
+            else localStorage.setItem('darkmode',false);
+        });
+    </script>
 </head>
 <body>
-<div class="container-fluid">
-
-    <nav class="navbar bg-light">
+<div class="noview w-75">
+    <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
+    <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
+</div>
+<div class="container-fluid desktop" style="height:100%">
+    <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link link-primary active" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
+            </li>
+            </ul>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class='fa-solid fa-moon'></i> Toggle Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </nav>
+    <br>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body" style="overflow:hidden">
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="input-group mb-3">
+                                <input id="SearchBox" type="text" class="form-control" placeholder="Search GrievanceForum">
+                                <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-2" style="white-space: nowrap; ">
+                            <button class="btn btn-primary w-100" onclick="getPostFeed(1)">Search</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm" data-bs-toggle="collapse" href="#collapsePostInfo" role="button" aria-expanded="false" aria-controls="collapsePostInfo">
+                        <input class="form-check-input" type="checkbox" id="FilterCheckBox">
+                        <label class="form-check-label" for="FilterCheckBox">
+                            <i class="fa-solid fa-filter"></i> Filter Search
+                        </label>
+                    </button>
+        
+                    <div class="collapse w-100" style="border:0" id="collapsePostInfo">
+                        <div class="card card-body">
+                            <br>
+                            <div>
+                                <label class="form-label">Post Category</label><br>
+                                <select id="categorySelect" class="form-select" aria-label="Default select example">
+                                    <option value="0" selected>All Category</option>
+                                    <%for(let i = 0; i < category.length;i++){%>
+                                    <option value="<%=i+1%>"><%=category[i]['title']%></option>
+                                    <%}%>
+                                </select>
+                            </div><br>
+                            <div>
+                                <label class="form-label">Sort Post By</label><br>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SortPostRadio1" value="0">
+                                            <label class="form-check-label" for="SortPostRadio1">Top</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="SortPostRadio2" value="1" checked>
+                                            <label class="form-check-label" for="SortPostRadio2">New</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <select id="sortDate" class="form-select" aria-label="Default select example">
+                                            <option value="0">Today</option>
+                                            <option value="1">This Week</option>
+                                            <option value="2" selected>This Month</option>
+                                            <option value="3">This Year</option>
+                                            <option value="3">LifeTime</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <label class="form-label">Post Comment & Support</label><br>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="CanComment">
+                                            <label class="form-check-label" for="CanComment">
+                                            Can Comment
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="CanSupport">
+                                            <label class="form-check-label" for="CanSupport">
+                                            Can Support
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <label class="form-label">Post Status</label><br>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="solvedPost" type="radio" name="postStatus" id="postStatus0" checked>
+                                            <label class="form-check-label" for="postStatus0">
+                                            Both
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="solvedPost" type="radio" name="postStatus" id="postStatus1">
+                                            <label class="form-check-label" for="postStatus1">
+                                            Solved Post
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="unSolvedPost" type="radio" name="postStatus" id="postStatus2">
+                                            <label class="form-check-label" for="postStatus2">
+                                            Unsolved Post
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><hr><br>
+            <div id="searchResultTextBox-desktop" style="position:absolute;visibility:hidden" class="alert alert-primary" role="alert">
+                <div class="row">
+                <div class="col-7" id="searchResultText-desktop">Showing Feed From Result</div>
+                <div class="col-5 d-flex justify-content-end align-items-end"><button class="btn btn-sm btn-outline-primary w-50" onclick="getPostFeed(0)" >Reset</button></div>
+                </div>
+            </div>
+            <div id="postFeed-desktop">
+    
+            </div>
+            <div class="d-flex justify-content-center align-items-center" id="PostLoader-desktop" style="margin-top:20%">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-body">
+                    <p class="fs-5"><i class="fa-solid fa-list"></i> Select Categories</p><hr>
+                    <%for(let i = 0; i < category.length;i++){%>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="CategoryRadio" onclick="getPostFeed(2,<%=category[i]['sno']%>)"  id="<%=category[i]['title']%>Radio">
+                            <label class="form-check-label" for="<%=category[i]['title']%>Radio">
+                                <i class="<%=category[i]['icon']%>"></i> <%=category[i]['title']%>
+                            </label>
+                        </div>
+                        <br>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mobile">
+    <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="../">
                 <i class="fa-regular fa-snowflake d-inline-block "></i>
                 GrievanceForum
             </a>
-            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:140px">
-                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
-                <%=userInfo["name"]%>
-            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
         </div>
     </nav><br>
-    <nav class="navbar fixed-bottom bg-light">
+    <nav class="navbar fixed-bottom">
         <div class="container-fluid">
             <div class="row w-100 text-center">
                 <div class="col">
@@ -183,7 +442,7 @@
                         <label class="form-check-label" for="<%=category[i]['title']%>Radio">
                         <input class="form-check-input" onclick="getPostFeed(2,<%=category[i]['sno']%>)" style="visibility: hidden;" type="radio" name="CategoryRadio" id="<%=category[i]['title']%>Radio">
                         <div class="card mb-3" style="height:140px;width:270px;">
-                            <div class="row" style="c:\Users\Manoj A\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\code\electron-sandbox\workbench\workbench.htmlmargin-left:2px;">
+                            <div class="row" style="margin-left:2px;">
                                 <div class="col-4 d-flex align-items-center justify-content-center">
                                     <img src="/images/categories/<%=category[i]['image']%>" class="img-fluid rounded-start" alt="...">
                                 </div>
@@ -217,11 +476,11 @@
                 </div>
             </div>
         </div>
-        <div id="postFeed">
+        <div id="postFeed-mobile">
 
         </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center" id="PostLoader" style="margin-top:20%">
+    <div class="d-flex justify-content-center align-items-center" id="PostLoader-mobile" style="margin-top:20%">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
@@ -233,7 +492,7 @@
 
         function postRes(data, status){
             if(data.length == 0){
-                document.getElementById("postFeed").insertAdjacentHTML('beforeend', `
+                let postNF_ = `<br>
                 <div class="card mb-3" style="border:0;">
                     <div class="row g-0">
                         <div class="col-4">
@@ -247,12 +506,14 @@
                         </div>
                     </div>
                 </div>
-                `);
+                `
+                document.getElementById("postFeed-mobile").insertAdjacentHTML('beforeend', postNF_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML('beforeend', postNF_);
             }
 
+            let post_;
             for(let i = 0; i < data.length; i++){
-                document.getElementById("postFeed").insertAdjacentHTML( 'beforeend', `
-                <a href="../post/${data[i]['id']}" style="color:black;text-decoration: none !important;">
+                post_ = `<a href="../post/${data[i]['id']}" style="color:black;text-decoration: none !important;">
                     <div class="alert alert-light" style="border:1px solid var(--bs-secondary);overflow:hidden" role="alert">
                         <div class="row">
                             <div class="col-9"><p class="alert-heading fs-4">${data[i]['title']}</p></div>
@@ -277,23 +538,36 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['cat_name']+`</button>
                     </div>
                 </a><br>`
-                );
+
+                document.getElementById("postFeed-mobile").insertAdjacentHTML( 'beforeend',post_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML( 'beforeend',post_);
             }
 
-            $("#PostLoader").css("visibility","hidden");
+            $("#PostLoader-mobile").css("visibility","hidden");
+            $("#PostLoader-desktop").css("visibility","hidden");
             if(PostLoadMode == 0){//ON LOAD
                 $("#searchResultTextBox").css("visibility","hidden");
+                $("#searchResultTextBox-desktop").css("visibility","hidden");
+                $("#searchResultTextBox-desktop").css("position","absolute");
             }else if(PostLoadMode == 1){//NORMAL SEARCH
                 $("#searchResultText").html("From Search Result");
+                $("#searchResultText-desktop").html("From Search Result");
                 $("#searchResultTextBox").css("visibility","visible");
+                $("#searchResultTextBox-desktop").css("visibility","visible");
+                $("#searchResultTextBox-desktop").css("position","static");
             }else if(PostLoadMode == 2){//CATEGORY
                 $("#searchResultText").html("From The Category "+cat_name);
+                $("#searchResultText-desktop").html("From The Category "+cat_name);
                 $("#searchResultTextBox").css("visibility","visible");
+                $("#searchResultTextBox-desktop").css("visibility","visible");
+                $("#searchResultTextBox-desktop").css("position","static");
             }
         }
 
-        $("#postFeed").empty();
-        $("#PostLoader").css("visibility","visible");
+        $("#postFeed-mobile").empty();
+        $("#postFeed-desktop").empty();
+        $("#PostLoader-mobile").css("visibility","visible");
+        $("#PostLoader-desktop").css("visibility","visible");
         let cat_name = document.getElementById("categorySelect")[categoryid].text;
 
         $.post("",{

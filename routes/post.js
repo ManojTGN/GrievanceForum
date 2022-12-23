@@ -30,8 +30,10 @@ router.get("/:id",(request,response) => {
             connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND type='1'",(err, result, fields) => {
                 let markdown = dompurify.sanitize(marked(post[0].report));// <%-check%>
                 connection.query("SELECT * FROM `comments` WHERE postid='"+request.params.id+"'",(err,res,field)=>{
-                    connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND type='2'",(err, r, fields) => {
-                        response.render("post",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length,solution:r});
+                    connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND type='2'",(err, re, fields) => {
+                        connection.query("SELECT * FROM `category` WHERE `sno`='"+post[0].category+"'",(err, r, fields) => {
+                            response.render("post",{userInfo:cookie[request.socket.remoteAddress],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length,solution:re,category:r});
+                        });
                     });
                 });
             });

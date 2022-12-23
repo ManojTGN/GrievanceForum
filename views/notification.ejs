@@ -14,31 +14,246 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
+        :root{
+            --card: #fff;
+            --background: var(--bs-gray-100);
+            --color: var(--bs-gray-900);
+            --Icolor: rgb(0, 0, 0);
+            --btn-p: var(--bs-primary);
+            --btn-s: var(--bs-success);
+        }
+        .dark-theme{
+            --card: #262B2F;
+            --background: var(--bs-gray-900);
+            --color: var(--bs-gray-500);
+            --Icolor: #fff;
+            --btn-p: #084298;
+            --btn-s: #0A3622;
+        }
+
+        .btn-primary{
+            background-color: var(--btn-p);
+        }
+        .btn-success{
+            background-color: var(--btn-s);
+        }
+        .card, .alert, .navbar, .toast, .toast-header, .toast-body{
+            background-color: var(--card);
+        }
+        .card .card{
+            background-color: var(--background);
+        }
+        div span{
+            color: var(--Icolor);
+        }
+        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
+            color: var(--color);
+        }
+
         body{
-            background-color:white;
+            background-color:var(--background);
             font-family: 'Montserrat', sans-serif;
             font-family: 'Quicksand', sans-serif;
         }
-        @media (min-width:100px)  { }
-        @media (min-width:600px)  { }
-        @media (min-width:1281px) { }
+        .mobile, .desktop, .noview{
+            position:absolute;
+            visibility: hidden;
+            opacity: 0;
+
+            transition: opacity 200ms ease-in-out;
+        }
+
+        /*Mobile & Desktop SideBar Bug Fix*/
+        #navbarSupportedContent{ position:static;left:0%;}
+        #mobileNotificationCards{ position:static; }
+
+        @media (min-width:0px) {
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
+            
+            #navbarSupportedContent{position:absolute;left:-200%;}
+            #mobileNotificationCards{position:absolute;top:-5000%;}
+        }
+
+        @media (min-width:300px)  { 
+            .mobile {opacity: 1;visibility: visible;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{opacity: 0;visibility: hidden;}
+
+            #navbarSupportedContent{position:absolute;left:-200%;}
+            #mobileNotificationCards{position:static;top:0%;}
+        }
+        @media (min-width:768px)  { 
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 1;visibility: visible;}
+            .noview{opacity: 0;visibility: hidden;}
+            #navbarSupportedContent{position:static;left:0%;}
+            #mobileNotificationCards{position:absolute;top:-5000%;}
+        }
     </style>
+    <script>
+        $( document ).ready(function() {
+            if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
+            else localStorage.setItem('darkmode',false);
+        });
+    </script>
 </head>
 <body>
-<div class="container-fluid">
-    <nav class="navbar bg-light">
+<div class="noview w-75">
+    <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
+    <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
+</div>
+<div class="container-fluid desktop" style="width:100%;height:100%;">
+    <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-primary active" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
+            </li>
+            </ul>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </nav>
+    <br><br>
+    <div class="d-flex align-items-center justify-content-center">
+        <div>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true"><i class="fa-solid fa-envelopes-bulk"></i> All</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="fa-solid fa-envelope"></i> Unread</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false"><i class="fa-solid fa-envelope-open"></i> Read</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    <p class="fs-5">All Notification</p>
+                    <% let i =0;notifications.forEach(function(notification) {i+=1; %>
+                    <div class="toast w-100" id="NotificationToast-desktop<%=i%>" style="margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
+                        <div class="toast-header">
+                            <i style="color:var(--bs-<%=notification.color%>);" class="<%=notification.icon%> rounded me-2"></i>"
+                            <strong class="me-auto" style="color:var(--bs-<%=notification.color%>);"><%=notification.title%></strong>
+                            <small class="text-muted"><%=notification.datetime%></small>
+                        </div>
+                        <div class="toast-body">
+                            <%-notification.message%> <%-notification.button%>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                    <div class="row">
+                        <div class="col"><p class="fs-5">Unread Notification</p></div>
+                        <div class="col">
+                            <%if(notifications.length > 0 && notifications[0].isread == 0){%>
+                            <a class="btn btn-sm btn-outline-secondary" href="../notification"><i class="fa-solid fa-check-double"></i> Mark As Read</a>
+                            <%}%>
+                        </div>
+                    </div>
+                    <% i =0;notifications.forEach(function(notification) { %>
+                        <%if(notification.isread == 1){return;}i+=1;%>
+                        <div class="alert alert-<%=notification.color%>" role="alert" style="margin-top:10px;">
+                            <div class="row">
+                                <div class="col-3 fs-1 d-flex justify-content-center align-items-center" style="color:var(--bs-<%=notification.color%>)"><i class="<%=notification.icon%>"></i></div>
+                                <div class="col-9">
+                                    <h5 class="alert-heading"><%=notification.title%></h5>
+                                    <p><%=notification.message%></p>
+                                    <hr>
+                                    <%-notification.button%> <div class="vr"></div> <%=notification.datetime%>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                
+                    <% if(i == 0){%>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div>
+                                <img src="images/noNotification.png" style="position:relative;left:70px;width:300px;"/>
+                                <span style="position:relative;top:50px;right:150px;width:200px;">No New Messages!</span>
+                            </div>
+                        </div>
+                        <br>
+                    <%}%>
+                </div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+                    <p class="fs-5">Read Notification</p>
+                    <% i =0;notifications.forEach(function(notification) { %>
+                        <%if(notification.isread == 0){return;}i+=1;%>
+                        <div class="toast w-100" id="NotificationToast-desktopR<%=i%>" style="margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
+                            <div class="toast-header">
+                                <i style="color:var(--bs-<%=notification.color%>);" class="<%=notification.icon%> rounded me-2"></i>"
+                                <strong class="me-auto" style="color:var(--bs-<%=notification.color%>);"><%=notification.title%></strong>
+                                <small class="text-muted"><%=notification.datetime%></small>
+                            </div>
+                            <div class="toast-body">
+                                <%-notification.message%> <%-notification.button%>
+                            </div>
+                        </div>
+                    <% }); %>
+
+                    <% if(i == 0){%>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div>
+                                <img src="images/noNotification.png" style="position:relative;left:70px;width:300px;"/>
+                                <span style="position:relative;top:50px;right:150px;width:200px;">No Messages Available!</span>
+                            </div>
+                        </div>
+                        <br>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mobile">
+    <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="../">
                 <i class="fa-regular fa-snowflake d-inline-block "></i>
                 GrievanceForum
             </a>
-            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:140px">
-                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
-                <%=userInfo["name"]%>
-            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
         </div>
     </nav><br>
-    <nav class="navbar fixed-bottom bg-light">
+    <nav class="navbar fixed-bottom">
         <div class="container-fluid">
             <div class="row w-100 text-center">
                 <div class="col">
@@ -57,9 +272,9 @@
         </div>
     </nav>
     
-
+    <div id="mobileNotificationCards">
     <label class="form-label">New Unread Messages</label><br>
-    <% let i =0;notifications.forEach(function(notification) { %>
+    <% i =0;notifications.forEach(function(notification) { %>
         <%if(notification.isread == 1){return;}i+=1;%>
         <div class="alert alert-<%=notification.color%>" role="alert" style="margin-top:10px;">
             <div class="row">
@@ -75,7 +290,7 @@
     <% }); %>
 
     <% if(i == 0){%>
-        <div class="d-flex text-muted  justify-content-center align-items-center">
+        <div class="d-flex justify-content-center align-items-center">
             <div>
                 <img src="images/noNotification.png" style="position:relative;left:70px;width:300px;"/>
                 <span style="position:relative;top:50px;right:150px;width:200px;">No New Messages!</span>
@@ -87,7 +302,7 @@
     <hr><br>
     <% i =0;notifications.forEach(function(notification) { %>
         <%if(notification.isread == 0){return;}i+=1;%>
-        <div class="toast w-100" id="NotificationToast<%=i%>" style="background-color:#e9ecef;margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
+        <div class="toast w-100" id="NotificationToast-mobile<%=i%>" style="background-color:#e9ecef;margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
             <div class="toast-header">
                 <i style="color:var(--bs-<%=notification.color%>);" class="<%=notification.icon%> rounded me-2"></i>"
                 <strong class="me-auto" style="color:var(--bs-<%=notification.color%>);"><%=notification.title%></strong>
@@ -98,18 +313,19 @@
             </div>
         </div>
     <% }); %>
+    </div>
 </div>
 <br><br><br>
 <script>
     $(document).ready(async function(){
         
-        $.post("",{
-        readall:true,
-        });
+        $.post("",{ readall:true,});
 
         let n = <%=i%>;
         for(let i = 0;i<n;i++){
-            $("#NotificationToast"+i).toast("show");
+            $("#NotificationToast-mobile"+i).toast("show");
+            $("#NotificationToast-desktop"+i).toast("show");
+            $("#NotificationToast-desktopR"+i).toast("show");
             await new Promise(r => setTimeout(r, 50));
         }
     });

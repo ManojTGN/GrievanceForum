@@ -17,36 +17,169 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
+        :root{
+            --card: #fff;
+            --background: var(--bs-gray-100);
+            --color: var(--bs-gray-900);
+            --btn-p: var(--bs-primary);
+            --btn-s: var(--bs-success);
+            --btn-d: var(--bs-danger);
+        }
+        .dark-theme{
+            --card: #262B2F;
+            --background: var(--bs-gray-900);
+            --color: var(--bs-gray-500);
+            --btn-p: #084298;
+            --btn-s: #0A3622;
+            --btn-d: rgb(117, 29, 29);
+        }
+        .col span{
+            color: var(--color);
+        }
+        .btn-primary{
+            background-color: var(--btn-p);
+        }
+        .btn-danger{
+            background-color: var(--btn-d);
+        }
+        .btn-success, .text-bg-success .card-header, .text-bg-success .card-body{
+            background-color: var(--btn-s);
+        }
+        .card, .alert, .navbar, .toast, .toast-header, textarea.form-control, .modal-header, .modal-body, .modal-footer{
+            background-color: var(--card);
+        }
+        .card .card{
+            background-color: var(--background);
+        }
+        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
+            color: var(--color);
+        }
+
         body{
-            background-color:white;
+            background-color:var(--background);
             font-family: 'Montserrat', sans-serif;
             font-family: 'Quicksand', sans-serif;
         }
-        @media (min-width:100px)  { }
-        @media (min-width:600px)  { }
-        @media (min-width:1281px) { }
+        .mobile, .desktop, .noview{
+            position:absolute;
+            visibility: hidden;
+            opacity: 0;
+
+            transition: opacity 200ms ease-in-out;
+        }
+
+        /*Mobile SideBar Bug Fix*/
+        #navbarSupportedContent{
+            position:static;
+            left:0%;
+        }
+        .mobile{
+            width: 100%;
+        }
+
+        @media (min-width:0px) {
+            .Create{opacity: 0;visibility: hidden;}
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
+            #navbarSupportedContent{position:absolute;left:-200%;}
+        }
+
+        @media (min-width:300px)  { 
+            .Create{opacity: 1;visibility: visible;width:100%;}
+            .mobile {opacity: 1;visibility: visible;position:fixed;}
+            .desktop{opacity: 0;visibility: hidden;}
+            .noview{opacity: 0;visibility: hidden;}
+            #navbarSupportedContent{position:absolute;left:-200%;}
+        }
+        @media (min-width:768px)  {
+            .Create{opacity: 1;visibility: visible;width:50%;position:absolute;left:50%;transform: translate(-50%,0%);} 
+            .mobile {opacity: 0;visibility: hidden;}
+            .desktop{opacity: 1;visibility: visible;}
+            .noview{opacity: 0;visibility: hidden;}
+            #navbarSupportedContent{position:static;left:0%;}
+            .centerDesktopDiv{
+                width:50%;
+                position:absolute;
+                left:50%;
+                transform: translate(-50%,0%);
+            }
+        }
     </style>
+    <script>
+        $( document ).ready(function() {
+            if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
+            else localStorage.setItem('darkmode',false);
+        });
+    </script>
 </head>
 <body>
+<div class="noview w-75">
+    <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
+    <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
+</div>
+<div class="container-fluid desktop" style="height:100%;width:100%;">
+    <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
+            </li>
+            </ul>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </nav>
+    <br>
+</div>
 <div class="container-fluid">
-
-    <nav class="navbar bg-light">
+    <nav class="navbar mobile">
         <div class="container-fluid">
             <a class="navbar-brand" href="../">
                 <i class="fa-regular fa-snowflake d-inline-block "></i>
                 GrievanceForum
             </a>
-            <button class="btn btn-sm btn-outline-primary rounded-pill" style="width:140px">
-                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:30%;"/>
-                <%=userInfo["name"]%>
-            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
         </div>
     </nav><br>
-    <nav class="navbar fixed-bottom bg-light">
+    <nav class="navbar fixed-bottom mobile">
         <div class="container-fluid">
             <div class="row w-100 text-center">
                 <div class="col">
-                    <a href="../dashboard" type="button" class="btn btn-primary"> <i class="fa-solid fa-house"></i></a>
+                    <a href="../dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
                 </div>
                 <div class="col">
                     <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
@@ -60,10 +193,8 @@
             </div>
         </div>
     </nav>
-    
 
     <div class="Create">
-
         <p class="fs-5">
             Manage Your Post
         </p>
