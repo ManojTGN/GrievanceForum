@@ -22,3 +22,11 @@
     - jsonwebtoken
     - DotEnv
     - Nodemon (Only For Dev)
+
+## Installation
+- Download And Install XAMPP / WAMP / any software supports MYSQL local server
+- Import The Database With The `bitforum.sql` To The MYSQL
+- Install The Node Dependencies As Mentioned Above
+- Start The MYSQL server And 
+- Start Running The Node Server With `npm run`
+- Goto `localhost:3000` And Start Using The Forum!
