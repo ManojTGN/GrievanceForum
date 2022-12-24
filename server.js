@@ -29,8 +29,8 @@ app.use("/post",postRouter);
 //Only For Testing
 //cookie[process.env.PH_LOGIN_IP]={'mail':'manoj.ig20@bitsathy.ac.in','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu2I6ZF4fmjt38CgaQxL1YNL7jmvk-cHCwxzOy94=s96-c'};
 //cookie[process.env.PC_LOGIN_IP]={'mail':'manoj.thunderviz@gmail.com','name':'MANOJ A','picture':'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
-cookie["192.168.199.148"]={'isadmin':0,'mail': 'manoj.thunderviz@gmail.com','name': 'Manoj A','picture': 'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
-cookie["192.168.199.53"]={'isadmin':0,'mail': 'srinivash.ig20@bitsathy.ac.in','name': 'SRINIVASH','picture': 'https://lh3.googleusercontent.com/a/AEdFTp74i81Tehh0u4KaAzsLLFTgIss4C-WNQbj-G-qu5g=s96-c'};
+//cookie["192.168.199.148"]={'isadmin':0,'mail': 'manoj.thunderviz@gmail.com','name': 'Manoj A','picture': 'https://lh3.googleusercontent.com/a/ALm5wu3nd1GdJO4M-ucv16RoGUPE8X-9bde8ebm_gakm8g=s96-c'};
+//cookie["192.168.199.53"]={'isadmin':0,'mail': 'srinivash.ig20@bitsathy.ac.in','name': 'SRINIVASH','picture': 'https://lh3.googleusercontent.com/a/AEdFTp74i81Tehh0u4KaAzsLLFTgIss4C-WNQbj-G-qu5g=s96-c'};
 
 app.get('/', (request, response) => {
     if(!(request.socket.remoteAddress in cookie)){
@@ -112,4 +112,4 @@ app.post('/', (request, response) => {
 app.get('/logout', (request, response) => { delete cookie[request.socket.remoteAddress];response.redirect("/login"); });
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(process.env.PORT || 8080, "192.168.199.148"  || process.env.HOST || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
+app.listen(process.env.PORT || 8080, "localhost"  || process.env.HOST || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));

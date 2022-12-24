@@ -428,6 +428,8 @@ function PostDraft(){
     $("#PostDismiss").prop('disabled', true);
     $("#postText").css("opacity","0");
     $("#PostLoader").css("opacity","1");
+    clearInterval(autoSaveInterval);
+
     $.post("/edit",{
         post:true,
         id:"<%=postInfo['id']%>",
@@ -492,7 +494,7 @@ function DeletePost(){
         $("#DeleteOkContainer").css("visibility","visible");
     });
 }
-<%if(postInfo.draft == 1){%>setInterval(SaveDraft.bind(null,true), 30*1000);<%}%>
+<%if(postInfo.draft == 1){%>const autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);<%}%>
 </script>
 </body>
 </html>

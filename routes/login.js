@@ -11,6 +11,13 @@ router.get("/",(request,response) => {
 });
 
 router.post("/",(request,response) => {
+
+    if("guest" in request.body){
+        cookie[request.socket.remoteAddress]={'mail':'guest'+Math.floor(Math.random() * (9999 - 99) ) + 99+'@bitsathy.ac.in','name':'Guest','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
+        response.redirect("../");
+        return;
+    }
+
     let user = jsonwebtoken.decode(request.body["credential"]);
     connection.query("SELECT * FROM `users` WHERE `mail`='"+user['email']+"'",(err, result, fields) => { 
         if (err) throw err;

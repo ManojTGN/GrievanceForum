@@ -157,12 +157,13 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Your Posts</h5>
+                    <h5 class="card-title"><i class="fa-regular fa-clone"></i> Your Posts</h5>
                     <hr>
                     <%if(posts.length == 0){%>
                     <p class="card-text">Haven't Posted Anything Yet</p>
                     <%}%>
                     <%for(let i = 0; i < posts.length; i++){%>
+                        <% if(posts[i].draft == 1) continue;%>
                         <div class="card" style="border:0px;">
                             <div class="card-body">
                                 <div class="row">
@@ -181,7 +182,7 @@
         <div class="col-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Your Bookmarks</h5>
+                    <h5 class="card-title"><i class="fa-regular fa-bookmark"></i> Your Bookmarks</h5>
                     <hr>
                     <%if(bookmarks.length == 0){%>
                     <p class="card-text">Haven't Bookmarked Anything Yet</p>
@@ -252,12 +253,13 @@
     <br>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Your Posts</h5>
+            <h5 class="card-title"><i class="fa-regular fa-clone"></i> Your Posts</h5>
             <hr>
             <%if(posts.length == 0){%>
             <p class="card-text">Haven't Posted Anything Yet</p>
             <%}%>
             <%for(let i = 0; i < posts.length; i++){%>
+                <% if(posts[i].draft == 1) continue;%>
                 <div class="card" style="border:0px;">
                     <div class="card-body">
                         <div class="row">
@@ -275,7 +277,7 @@
     <br>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Your Bookmarks</h5>
+            <h5 class="card-title"><i class="fa-regular fa-bookmark"></i> Your Bookmarks</h5>
             <hr>
             <%if(bookmarks.length == 0){%>
             <p class="card-text">Haven't Bookmarked Anything Yet</p>
