@@ -34,7 +34,7 @@ app.get('/', (request, response) => {
         return;
     }
 
-    //console.log(cookie)
+    console.log(cookie)
     if(cookie[request.socket.remoteAddress]['isadmin'] == 1){
         connection.query("SELECT * FROM `category`",(err, result, fields) => {
             response.render("admin",{userInfo:cookie[request.socket.remoteAddress],category:result});
@@ -43,7 +43,6 @@ app.get('/', (request, response) => {
     }
 
     connection.query("SELECT * FROM `category`",(err, result, fields) => {
-        console.log("\n\n",err,result,"\n\n");
         response.render("dashboard",{userInfo:cookie[request.socket.remoteAddress],category:result});
     });
 });
