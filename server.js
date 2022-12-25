@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
+const port = process.env.PORT;
 const loginRouter = require('./routes/login');
 const manageRouter = require('./routes/managePost');
 const createRouter = require('./routes/createPost');
@@ -106,4 +107,4 @@ app.post('/', (request, response) => {
 app.get('/logout', (request, response) => { delete cookie[request.socket.remoteAddress];response.redirect("/login"); });
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(process.env.PORT,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
+app.listen(port,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
