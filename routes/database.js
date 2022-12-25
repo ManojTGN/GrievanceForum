@@ -1,9 +1,10 @@
 var mysql=require('mysql');
+require('dotenv').config();
 
 var connection=mysql.createConnection({
-   host:'containers-us-west-123.railway.app',
+   host:process.env.DB_HOST,
    user:'root',
-   password:'nVk9GR1v6vihSdqPT3jp',
+   password:process.env.DB_PASS,
    database:'railway'
 });
 
