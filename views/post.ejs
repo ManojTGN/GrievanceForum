@@ -10,653 +10,600 @@
     <script src="https://kit.fontawesome.com/08c3f952c9.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="../css/style.css" rel="stylesheet"/>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
-        :root{
-            --card: #fff;
-            --background: var(--bs-gray-100);
-            --color: var(--bs-gray-900);
-            --btn-p: var(--bs-primary);
-            --btn-s: var(--bs-success);
-            --btn-d: var(--bs-danger);
-        }
-        .dark-theme{
-            --card: #262B2F;
-            --background: var(--bs-gray-900);
-            --color: var(--bs-gray-500);
-            --btn-p: #084298;
-            --btn-s: #0A3622;
-            --btn-d: rgb(117, 29, 29);
-        }
-        .col span{
-            color: var(--color);
-        }
-        .btn-primary{
-            background-color: var(--btn-p);
-        }
-        .btn-danger{
-            background-color: var(--btn-d);
-        }
-        .btn-success, .text-bg-success .card-header, .text-bg-success .card-body{
-            background-color: var(--btn-s);
-        }
-        .card, .alert, .navbar, .toast, .toast-header, textarea.form-control, .modal-header, .modal-body, .modal-footer{
-            background-color: var(--card);
-        }
-        .card .card{
-            background-color: var(--background);
-        }
-        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
-            color: var(--color);
-        }
-
-        body{
-            background-color: var(--background);
-            font-family: 'Montserrat', sans-serif;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .mobile, .desktop, .noview{
-            position:absolute;
-            visibility: hidden;
-            opacity: 0;
-
-            transition: opacity 200ms ease-in-out;
-        }
-
-        /*Mobile SideBar Bug Fix*/
-        #navbarSupportedContent{
-            position:static;
-            left:0%;
-        }
-
-        @media (min-width:0px) {
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
-        }
-
-        @media (min-width:300px)  { 
-            .mobile {opacity: 1;visibility: visible;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
-        }
-        @media (min-width:768px)  { 
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 1;visibility: visible;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:static;left:0%;}
-            .centerDesktopDiv{
-                width:50%;
-                position:absolute;
-                left:50%;
-                transform: translate(-50%,0%);
+    <!-- Profile Page (Style & Script) -->
+    <style> </style>
+    <script>
+        function load_darkmode() {
+            if(localStorage.darkmode == 'true') {
+                document.body.classList.toggle('dark-theme');
+            }
+            else {
+                localStorage.setItem('darkmode',false);
             }
         }
-    </style>
-    <script>
-        $( document ).ready(function() {
-            if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
-            else localStorage.setItem('darkmode',false);
-        });
     </script>
 </head>
-<body>
-    <div class="noview w-75">
-        <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
-        <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
-    </div>
-    <div class="container-fluid desktop">
-        <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
-            <div class="container-fluid">
-            <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <%if(userInfo.isadmin == 0){%>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
-                </li>
-                <%}%>
-                </ul>
-                <div class="btn-group">
-                    <%if(userInfo.isadmin == 1){%>
-                    <div class="d-flex justify-content-center align-items-center" style="margin-right:10px;">
-                        <span class="badge text-bg-success">Admin</span>
-                    </div>
-                    <%}%>
-                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                        <img src="<%if(userInfo.name == 'Guest'){%>../<%}%><%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                        <%=userInfo["name"]%>
-                    </button>
-                    <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                    </ul>
-                </div>
-            </div>
-            </div>
-        </nav>
-        <br>
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <div class="card w-100">
-                    <div class="card-body">
+<body onload="load_darkmode()">
 
-                        <p class="fs-2"><%=postInfo.title%></p>
-                        <p class="text-muted"><%=postInfo.description%></p>
-                        <hr>
-                        <button type="button" class="btn btn-sm btn-outline-secondary"><%=postInfo.cat_name%></button>
-                        <!--<span class="text-muted"> Posted By </span>-->
-                        <a href="" class="btn btn-sm btn-outline-secondary">
-                            <div class="row">
-                                <div class="col-1">
-                                    <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
-                                </div>
-                                <div class="col-9 text-align-start"><%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%></div>
+<!--
+    No View Panel
+-->
+<div class="noview w-75">
+    <p>
+        <i class="fa-solid fa-xmark"></i> Can't Be Viewed
+    </p>
+    <hr>
+    <p class="text-muted">
+        Increase Your Resolution<br>To View The App!
+    </p>
+</div>
+
+<!--
+    Desktop Panel
+-->
+<div class="container-fluid desktop">
+
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/desktopNavbar.ejs') %>
+    <br>
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+
+            <!-- Post (Title | Description | Report) -->
+            <div class="card w-100">
+                <div class="card-body">
+                    
+                    <p class="fs-2">
+                        <%=postInfo.title%>
+                    </p>
+                    <p class="text-muted">
+                        <%=postInfo.description%>
+                    </p>
+
+                    <hr>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <%=postInfo.cat_name%>
+                    </button>
+                    <a href="" class="btn btn-sm btn-outline-secondary">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
                             </div>
-                        </a>
-                        <div id="reportMarkdown">
-                            <%-report%>
+                            <div class="col-9 text-align-start">
+                                <%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%>
+                            </div>
                         </div>
-                        <hr>
-                        <%if(solution.length != 0){%>
+                    </a>
+
+                    <div id="reportMarkdown">
+                        <%-report%>
+                    </div>
+
+                    <hr>
+                    <!-- Post Solution -->
+                    <%if(solution.length != 0){%>
                         <br>
                         <div>
-                            <div class="card text-bg-success mb-3">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-5">Solution</div>
-                                        <div class="col-7 d-flex justify-content-end align-items-center">
-                                            <span style="margin-right:10px;">Solved By</span>
-                                            <a href="" class="btn btn-sm btn-light" style="border:0;">
-                                                <div class="row">
-                                                    <div class="col-2">
-                                                        <img src="<%=solution[0].picture%>" class="rounded-circle" style="width:20px"/>
-                                                    </div>
-                                                    <div class="col-9 text-align-start"><%=solution[0].name%></div>
-                                                </div>
-                                            </a>
-                                        </div>
+                        <div class="card text-bg-success mb-3">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-5">
+                                        Solution
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                <p class="card-text"><%=solution[0].message%></p>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <%}%>
-                        <div class="comment">
-                            <p class="fs-5 text-muted">Comments</p>
-                            <% if(postInfo.comment == 1){%>
-                            <% if(userInfo.isadmin == 0){%>
-                            <div class="mb-3">
-                                <label for="CommentArea-desktop" class="form-label">Post Your Comment</label>
-                                <textarea class="form-control" id="CommentArea-desktop" rows="2"></textarea>
-                                <br>
-                                <div class="d-flex align-items-end justify-content-end">
-                                    <button class="btn btn-sm btn-primary" id="postComment-desktop">Post Comment</button>
-                                </div>
-                            </div>
-                            <br>
-                            <%}%>
-                            <%for(let i = 0; i < comments.length; i++){%>
-                                <div class="card" style="margin-top:5px;">
-                                    <div class="card-body">
-                                        <div class="d-flex text-muted">
-                                            <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
-                                                <div class="row">
-                                                    <div class="col-1">
-                                                        <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
-                                                    </div>
-                                                    <div class="col-9 text-align-start"><%=comments[i].name%></div>
-                                                </div>
-                                            </a>• <%=comments[i].datetime%>
-                                        </div>
+                                    <div class="col-7 d-flex justify-content-end align-items-center">
 
-                                        <p class="card-text"><%=comments[i].message%></p>
-                                        <% if(comments[i].mail == userInfo['mail']){ %>
-                                            <hr>
-                                            <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                                            <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
-                                        <%}%>
+                                        <span style="margin-right:10px;">Solved By</span>
+                                        <a href="" class="btn btn-sm btn-light" style="border:0;">
+                                            <div class="row">
+                                                <div class="col-2">
+                                                    <img src="<%=solution[0].picture%>" class="rounded-circle" style="width:20px"/>
+                                                </div>
+                                                <div class="col-9 text-align-start">
+                                                    <%=solution[0].name%>
+                                                </div>
+                                            </div>
+                                        </a>
+
                                     </div>
                                 </div>
-                            <%}%>
-                            <%if(comments.length == 0){%><p class="text-muted text-align-center"><i class="fa-solid fa-inbox"></i> Feels Empty.. Noone Commented!</p><%}%>
-                            <%}else{%><p class="text-muted text-align-center"><i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!</p><%}%>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card mb-3" style="height:140px;overflow:hidden">
-                    <div class="row" style="margin-left:2px;">
-                        <div class="col-4 d-flex align-items-center justify-content-center">
-                            <img src="/images/categories/<%=category[0]['image']%>" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-8">
+                            </div>
                             <div class="card-body">
-                            <h5 class="card-title"><i class="<%=category[0]['icon']%>"></i> <%=category[0]['title']%></h5>
-                            <p class="card-text"><%=category[0]['description']%></p>
+                                <p class="card-text">
+                                    <%=solution[0].message%>
+                                </p>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <%if(userInfo.isadmin == 1){%>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Admin Access</h5>
-                        <hr>
-                        <div style="display:grid">
-                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
-                            <br>
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
-                            <br>
-                            <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
                         </div>
-                    </div>
-                </div>
-                <%}%>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                        <p class="card-text">Created On: <span class="text-muted" style="font-size:15px;"><%=postInfo.datetime%></span></p>
-                        <hr>
-                        <div class="row">
-                            <div class="col d-flex align-items-center justify-content-center"><i class="fa-regular fa-eye"></i><span style="margin-left:6px;"></span><%=postInfo.views%></div>
-                            <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.support == 1){%><i class="fa-solid fa-hand-sparkles"></i><span style="margin-left:6px;"></span><%=postInfo.likes%><%}%> </div>
-                            <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.comment == 1){%><i class="fa-regular fa-message"></i><span style="margin-left:6px;"></span><%=postInfo.comments%><%}%> </div>
-                        </div>
-                        <%if(userInfo.isadmin == 0){%>
                         <br>
-                        <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
-                        <%}%>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="btn-group w-100" role="group" aria-label="Basic example">
-                            <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
-                        </div>
-                        <p></p>
-                        <a href="../" class="btn btn-sm btn-outline-secondary w-100">Go Back To Dashboard</a>
-                        <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
-                            <hr>
-                            <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary w-100"><i class="fa-solid fa-pen"></i> Edit Your Post</a>
-                        <%}%>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid mobile">
-        <nav class="navbar">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="../">
-                    <i class="fa-regular fa-snowflake d-inline-block "></i>
-                    GrievanceForum
-                </a>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                        <img src="<%if(userInfo.name == 'Guest'){%>../<%}%><%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                        <%=userInfo["name"]%>
-                    </button>
-                    <ul class="dropdown-menu w-100">
-                        <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav><br>
-        <%if(userInfo.isadmin == 0){%>
-        <nav class="navbar fixed-bottom">
-            <div class="container-fluid">
-                <div class="row w-100 text-center">
-                    <div class="col">
-                        <a href="../dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
-                    </div>
-                    <div class="col">
-                        <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
-                    </div>
-                    <div class="col">
-                        <a href="../notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
-                    </div>
-                    <div class="col">
-                        <a href="../profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <%}else{%>
-        <nav class="navbar fixed-bottom ">
-            <div class="container-fluid">
-                <a href="../dashboard" type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-house"></i> Go Back</a> 
-            </div>
-        </nav>
-        <%}%>
-        <%if(userInfo.isadmin == 1){%>
-        <div class="card">
-            <div class="card-body">
-                <p class="fs-4">Admin Access</p>
-                <div class="adminTools">
-                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
-                    <div class="vr"></div>
-                    <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
-                </div>
-            </div>
-        </div><br>
-        <%}%>
-        <div class="post">
-            <p class="fs-2"><%=postInfo.title%></p>
-            <p class="text-muted"><%=postInfo.description%></p>
-            <hr>
-            <div class="text-muted" style="font-size:13px;">
-                <div class="row">
-                    <div class="col">Created On: <span><%=postInfo.datetime%></span></div>
-                    <div class="col">Viewed: <span><%=postInfo.views%> times</span></div>
-                </div>
-            </div>
-            <br>
-            <div id="reportMarkdown">
-                <%-report%>
-            </div>
-            <% if(userInfo.isadmin == 0){%>
-            <% if(postInfo.support == 1){%>
-            <div>
-                <div class="row d-flex align-items-center justify-content-center">
-                    <div class="col-4">
-                        <button id="supportBtn-mobile" onclick="supportPost()" class="btn btn-large btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
-                    </div>
-                    <div class="col-7 text-align-start text-muted">
-                       This Post Is Supported By <%=postInfo.likes%> Students
-                    </div>
-                </div>
-            </div>
-            <%}}else{%>
-                <% if(postInfo.support == 1){%>
-                <div class="col-7 text-align-start text-muted">
-                    This Post Is Supported By <%=postInfo.likes%> Students
-                </div>
-            <%}}%>
-            <hr>
-            <div>
-                <a href="" class="btn btn-sm btn-outline-secondary">
-                    <div class="row">
-                        <div class="col-1">
-                            <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
-                        </div>
-                        <div class="col-9 text-align-start"><%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%></div>
-                    </div>
-                </a>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
-                </div>
-                <%if(userInfo.isadmin == 0){%>
-                <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
-                <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
-                <%}}%>
-            </div><br>
-            <%if(solution.length != 0){%>
-            <div>
-                <div class="card text-bg-success mb-3">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-5">Solution</div>
-                            <div class="col-7 d-flex justify-content-end align-items-center">
-                                <span style="margin-right:10px;">Solved By</span>
-                                <a href="" class="btn btn-sm btn-light" style="border:0;">
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <img src="<%=solution[0].picture%>" class="rounded-circle" style="width:20px"/>
-                                        </div>
-                                        <div class="col-9 text-align-start"><%=solution[0].name%></div>
-                                    </div>
-                                </a>
+                    <%}%>
+                    
+                    <!-- Post Comments -->
+                    <div class="comment">
+                        <p class="fs-5 text-muted">Comments</p>
+                        <% if(postInfo.comment == 1){%>
+
+                        <% if(userInfo.isadmin == 0){%>
+                        <div class="mb-3">
+                            <label for="CommentArea-desktop" class="form-label">Post Your Comment</label>
+                            <textarea class="form-control" id="CommentArea-desktop" rows="2"></textarea>
+                            <br>
+                            <div class="d-flex align-items-end justify-content-end">
+                                <button class="btn btn-sm btn-primary" id="postComment-desktop">Post Comment</button>
                             </div>
                         </div>
+                        <br>
+                        <%}%>
+
+                        <%for(let i = 0; i < comments.length; i++){%>
+                            <div class="card" style="margin-top:5px;">
+                                <div class="card-body">
+                                    <div class="d-flex text-muted">
+                                        <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
+                                                </div>
+                                                <div class="col-9 text-align-start">
+                                                    <%=comments[i].name%>
+                                                </div>
+                                            </div>
+                                        </a>• <%=comments[i].datetime%>
+                                    </div>
+
+                                    <p class="card-text">
+                                        <%=comments[i].message%>
+                                    </p>
+                                    <% if(comments[i].mail == userInfo['mail']){ %>
+                                        <hr>
+                                        <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                                    <%}%>
+                                </div>
+                            </div>
+                        <%}%>
+
+                        <%if(comments.length == 0){%>
+                            <div class="card w-100" style="border:0px;">
+                                <div class="card-body text-muted text-align-center">
+                                    <i class="fa-solid fa-inbox"></i> No Comments Yet!
+                                </div>
+                            </div>
+                        <%}%>
+
+                        <%}else{%>
+                            <p class="text-muted text-align-center">
+                                <i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!
+                            </p>
+                        <%}%>
                     </div>
-                    <div class="card-body">
-                      <p class="card-text"><%=solution[0].message%></p>
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-3">
+            <div class="card mb-3" style="height:140px;overflow:hidden">
+                <div class="row" style="margin-left:2px;">
+                    <div class="col-4 d-flex align-items-center justify-content-center">
+                        <img src="/images/categories/<%=category[0]['image']%>" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                        <h5 class="card-title"><i class="<%=category[0]['icon']%>"></i> <%=category[0]['title']%></h5>
+                        <p class="card-text"><%=category[0]['description']%></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%if(userInfo.isadmin == 1){%>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Access</h5>
+                    <hr>
+                    <div style="display:grid">
+                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
+                        <br>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
+                        <br>
+                        <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
                     </div>
                 </div>
             </div>
             <%}%>
-            <br>
-            <div class="comment">
-                <p class="fs-3 text-muted">Comments</p>
-                <% if(postInfo.comment == 1){%>
-                <% if(userInfo.isadmin == 0){%>
-                <div class="mb-3">
-                    <label for="CommentArea-mobile" class="form-label">Post Your Comment</label>
-                    <textarea class="form-control" id="CommentArea-mobile" rows="2"></textarea>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">Created On: <span class="text-muted" style="font-size:15px;"><%=postInfo.datetime%></span></p>
+                    <hr>
+                    <div class="row">
+                        <div class="col d-flex align-items-center justify-content-center"><i class="fa-regular fa-eye"></i><span style="margin-left:6px;"></span><%=postInfo.views%></div>
+                        <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.support == 1){%><i class="fa-solid fa-hand-sparkles"></i><span style="margin-left:6px;"></span><%=postInfo.likes%><%}%> </div>
+                        <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.comment == 1){%><i class="fa-regular fa-message"></i><span style="margin-left:6px;"></span><%=postInfo.comments%><%}%> </div>
+                    </div>
+                    <%if(userInfo.isadmin == 0){%>
                     <br>
-                    <div class="d-flex align-items-end justify-content-end">
-                        <button class="btn btn-sm btn-primary" id="postComment-mobile">Post Comment</button>
-                    </div>
+                    <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
+                    <%}%>
                 </div>
-                <br>
-                <%}%>
-                <%for(let i = 0; i < comments.length; i++){%>
-                    <div class="card" style="margin-top:5px;">
-                        <div class="card-body">
-                            <div class="d-flex text-muted">
-                                <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
-                                        </div>
-                                        <div class="col-9 text-align-start"><%=comments[i].name%></div>
-                                    </div>
-                                </a>• <%=comments[i].datetime%>
-                            </div>
-
-                            <p class="card-text"><%=comments[i].message%></p>
-                            <% if(comments[i].mail == userInfo['mail']){ %>
-                                <hr>
-                                <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
-                            <%}%>
-                        </div>
-                    </div>
-                <%}%>
-                <%if(comments.length == 0){%><p class="text-muted text-align-center"><i class="fa-solid fa-inbox"></i> Feels Empty.. Noone Commented!</p><%}%>
-                <%}else{%><p class="text-muted text-align-center"><i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!</p><%}%>
             </div>
-        </div>
-        <br><br><br>
-    </div>
-
-    <div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h1 class="modal-title fs-5" id="ShareModalLabel">Share The Post</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <div class="mb-3">
-                    <div class="input-group mb-3">
-                        <input id="shareURL" type="text" class="form-control" placeholder="Post Link" value="" readonly>
-                        <button class="btn btn-light" type="button" id="button-addon2" onclick="copyText.select();copyText.setSelectionRange(0, 99999);navigator.clipboard.writeText(copyText.value);this.innerHTML='✅';setTimeout(()=>{this.innerHTML='Copy'}, 1000);">Copy</button>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="btn-group w-100" role="group" aria-label="Basic example">
+                        <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
                     </div>
-                    <hr>
-                    <div class="card" style="border:0;overflow:hidden;">
-                        <div class="d-flex" style="overflow-x:scroll;margin-left:10px;font-size:50px;">
-                            <a href="https://api.whatsapp.com/send?text=CheckOut This Post In The GrievanceForum! {URL_HERE}" data-action="share/whatsapp/share"  target="_blank">
-                                <i class="fa-brands fa-whatsapp text-muted"></i>
-                            </a>
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=link_to_be_shared" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-facebook text-muted"></i>
-                            </a>
-                            <a href="https://twitter.com/intent/tweet?text=CheckOut This Post In The GrievanceForum&url=https://google.com" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-twitter text-muted"></i>
-                            </a>
-                            <a href="MAILTO:" style="margin-left:20px;" target="_blank">
-                                <i class="fa-solid fa-envelope text-muted"></i>
-                            </a>
-                            <a href="http://www.reddit.com/submit?url=url_here&title=CheckOut This Post In The GrievanceForum" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-reddit text-muted"></i>
-                            </a>
-                            <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-pinterest text-muted"></i>
-                            </a>
-                            <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-linkedin text-muted"></i>
-                            </a>
-                            <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
-                                <i class="fa-brands fa-blogger text-muted"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <script> 
-                        let copyText = document.getElementById('shareURL');
-                        copyText.value = window.location.href.replace('http://','');
-                    </script>
-                </div>
+                    <p></p>
+                    <a href="../" class="btn btn-sm btn-outline-secondary w-100">Go Back To Dashboard</a>
+                    <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
+                        <hr>
+                        <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary w-100"><i class="fa-solid fa-pen"></i> Edit Your Post</a>
+                    <%}%>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
-        <div class="d-flex">
-            <div class="toast-body">Invalid Comment ( Write Something... )</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+</div>
+<div class="container-fluid mobile">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../">
+                <i class="fa-regular fa-snowflake d-inline-block "></i>
+                GrievanceForum
+            </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                    <img src="<%if(userInfo.name == 'Guest'){%>../<%}%><%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                    <%=userInfo["name"]%>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticDeleteBackdropLabel"><i class="fa-regular fa-trash-can"></i> Delete Comment</h1>
-            </div>
-            <div class="modal-body">
-                <div id="DeleteLoaderText" style="opacity: 1;transition: opacity 0.3s linear;">
-                    Once The Comment Is Deleted, The Comment Can't Be Recovered. To Delete This Comment Click The <code>Delete</code> Button Below.
+    </nav><br>
+    <%if(userInfo.isadmin == 0){%>
+    <nav class="navbar fixed-bottom">
+        <div class="container-fluid">
+            <div class="row w-100 text-center">
+                <div class="col">
+                    <a href="../dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
                 </div>
-    
-                <input type="text" class="form-control" id="DeleteId" style="visibility:hidden;" disabled>
-                
-                <div id="ExtraTitleDesc" style="overflow:hidden;height:100px;transition: all ease-in-out 0.2s;">
-                    <hr>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <input type="text" name="description" class="form-control" id="Deletedescription" disabled>
-                    </div>
+                <div class="col">
+                    <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
                 </div>
-                <div id="DeleteLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <div class="col">
+                    <a href="../notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
+                </div>
+                <div class="col">
+                    <a href="../profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
-                    <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
-                </div>
-                <div id="DeleteTwoBtnContainer">
-                    <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
-                    <button type="button" class="btn btn-danger" id="DeletePost">Delete</button>
-                </div>
-            </div>
-          </div>
         </div>
-    </div>
-
-    <div class="modal fade" id="staticEditBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticEditBackdropLabel"><i class="fa-regular fa-trash-can"></i> Edit Comment</h1>
-            </div>
-            <div class="modal-body">
-                <div id="EditLoaderText" style="opacity: 1;transition: opacity 0.3s linear;"></div>
-                <input type="text" class="form-control" id="EditId" style="visibility:hidden;position:absolute" disabled>
-                <div id="ExtraEditTitleDesc" style="overflow:hidden;transition: all ease-in-out 0.2s;">
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" name="description" id="Editdescription" rows="2"></textarea>
-                    </div>
-                </div>
-                <div id="EditLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div style="position:relative;left:155px;visibility:hidden;" id="EditOkContainer">
-                    <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
-                </div>
-                <div id="EditTwoBtnContainer">
-                    <button type="button" class="btn btn-secondary" id="EditDismiss" data-bs-dismiss="modal">Dismiss</button>
-                    <button type="button" class="btn btn-primary" id="EditPost">Edit</button>
-                </div>
-            </div>
-          </div>
+    </nav>
+    <%}else{%>
+    <nav class="navbar fixed-bottom ">
+        <div class="container-fluid">
+            <a href="../dashboard" type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-house"></i> Go Back</a> 
         </div>
-    </div>
-    <%if(userInfo.isadmin == 1){%>
-    <div class="modal fade" id="staticSolvePost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticSolvePostLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Solve Post</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="solutionTextArea" class="form-label">Solution</label>
-                    <textarea class="form-control" id="solutionTextArea" rows="12"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Dismiss</button>
-              <button type="button" id="postSolution" class="btn btn-success">Solve Post</button>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="modal fade" id="staticDeleteRealPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteRealPostLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="fa-solid fa-trash-can"></i> Delete Post</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <code>Beware:</code> Once The Post Is Deleted You Can't Be Able To Recover It!
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-danger" id="deleteRealPost">Delete Post</button>
-            </div>
-          </div>
-        </div>
-    </div>
+    </nav>
     <%}%>
+    <%if(userInfo.isadmin == 1){%>
+    <div class="card">
+        <div class="card-body">
+            <p class="fs-4">Admin Access</p>
+            <div class="adminTools">
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
+                <div class="vr"></div>
+                <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
+            </div>
+        </div>
+    </div><br>
+    <%}%>
+    <div class="post">
+        <p class="fs-2"><%=postInfo.title%></p>
+        <p class="text-muted"><%=postInfo.description%></p>
+        <hr>
+        <div class="text-muted" style="font-size:13px;">
+            <div class="row">
+                <div class="col">Created On: <span><%=postInfo.datetime%></span></div>
+                <div class="col">Viewed: <span><%=postInfo.views%> times</span></div>
+            </div>
+        </div>
+        <br>
+        <div id="reportMarkdown">
+            <%-report%>
+        </div>
+        <% if(userInfo.isadmin == 0){%>
+        <% if(postInfo.support == 1){%>
+        <div>
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-4">
+                    <button id="supportBtn-mobile" onclick="supportPost()" class="btn btn-large btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
+                </div>
+                <div class="col-7 text-align-start text-muted">
+                    This Post Is Supported By <%=postInfo.likes%> Students
+                </div>
+            </div>
+        </div>
+        <%}}else{%>
+            <% if(postInfo.support == 1){%>
+            <div class="col-7 text-align-start text-muted">
+                This Post Is Supported By <%=postInfo.likes%> Students
+            </div>
+        <%}}%>
+        <hr>
+        <div>
+            <a href="" class="btn btn-sm btn-outline-secondary">
+                <div class="row">
+                    <div class="col-1">
+                        <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
+                    </div>
+                    <div class="col-9 text-align-start"><%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%></div>
+                </div>
+            </a>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
+            </div>
+            <%if(userInfo.isadmin == 0){%>
+            <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
+            <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
+            <%}}%>
+        </div><br>
+        <%if(solution.length != 0){%>
+        <div>
+            <div class="card text-bg-success mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-5">Solution</div>
+                        <div class="col-7 d-flex justify-content-end align-items-center">
+                            <span style="margin-right:10px;">Solved By</span>
+                            <a href="" class="btn btn-sm btn-light" style="border:0;">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img src="<%=solution[0].picture%>" class="rounded-circle" style="width:20px"/>
+                                    </div>
+                                    <div class="col-9 text-align-start"><%=solution[0].name%></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><%=solution[0].message%></p>
+                </div>
+            </div>
+        </div>
+        <%}%>
+        <br>
+        <div class="comment">
+            <p class="fs-3 text-muted">Comments</p>
+            <% if(postInfo.comment == 1){%>
+            <% if(userInfo.isadmin == 0){%>
+            <div class="mb-3">
+                <label for="CommentArea-mobile" class="form-label">Post Your Comment</label>
+                <textarea class="form-control" id="CommentArea-mobile" rows="2"></textarea>
+                <br>
+                <div class="d-flex align-items-end justify-content-end">
+                    <button class="btn btn-sm btn-primary" id="postComment-mobile">Post Comment</button>
+                </div>
+            </div>
+            <br>
+            <%}%>
+            <%for(let i = 0; i < comments.length; i++){%>
+                <div class="card" style="margin-top:5px;">
+                    <div class="card-body">
+                        <div class="d-flex text-muted">
+                            <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
+                                    </div>
+                                    <div class="col-9 text-align-start"><%=comments[i].name%></div>
+                                </div>
+                            </a>• <%=comments[i].datetime%>
+                        </div>
+
+                        <p class="card-text"><%=comments[i].message%></p>
+                        <% if(comments[i].mail == userInfo['mail']){ %>
+                            <hr>
+                            <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                        <%}%>
+                    </div>
+                </div>
+            <%}%>
+            <%if(comments.length == 0){%>
+                <div class="card w-100" style="border:0px;">
+                    <div class="card-body text-muted text-align-center">
+                        <i class="fa-solid fa-inbox"></i> No Comments Yet!
+                    </div>
+                </div>
+            <%}%>
+            <%}else{%><p class="text-muted text-align-center"><i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!</p><%}%>
+        </div>
+    </div>
+    <br><br><br>
+</div>
+
+<div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ShareModalLabel">Share The Post</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <div class="mb-3">
+                <div class="input-group mb-3">
+                    <input id="shareURL" type="text" class="form-control" placeholder="Post Link" value="" readonly>
+                    <button class="btn btn-light" type="button" id="button-addon2" onclick="copyText.select();copyText.setSelectionRange(0, 99999);navigator.clipboard.writeText(copyText.value);this.innerHTML='✅';setTimeout(()=>{this.innerHTML='Copy'}, 1000);">Copy</button>
+                </div>
+                <hr>
+                <div class="card" style="border:0;overflow:hidden;">
+                    <div class="d-flex" style="overflow-x:scroll;margin-left:10px;font-size:50px;">
+                        <a href="https://api.whatsapp.com/send?text=CheckOut This Post In The GrievanceForum! {URL_HERE}" data-action="share/whatsapp/share"  target="_blank">
+                            <i class="fa-brands fa-whatsapp text-muted"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=link_to_be_shared" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-facebook text-muted"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?text=CheckOut This Post In The GrievanceForum&url=https://google.com" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-twitter text-muted"></i>
+                        </a>
+                        <a href="MAILTO:" style="margin-left:20px;" target="_blank">
+                            <i class="fa-solid fa-envelope text-muted"></i>
+                        </a>
+                        <a href="http://www.reddit.com/submit?url=url_here&title=CheckOut This Post In The GrievanceForum" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-reddit text-muted"></i>
+                        </a>
+                        <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-pinterest text-muted"></i>
+                        </a>
+                        <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-linkedin text-muted"></i>
+                        </a>
+                        <a href="whatsapp://send?text=The text to share!" style="margin-left:20px;" target="_blank">
+                            <i class="fa-brands fa-blogger text-muted"></i>
+                        </a>
+                    </div>
+                </div>
+                <script> 
+                    let copyText = document.getElementById('shareURL');
+                    copyText.value = window.location.href.replace('http://','');
+                </script>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
+    <div class="d-flex">
+        <div class="toast-body">Invalid Comment ( Write Something... )</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticDeleteBackdropLabel"><i class="fa-regular fa-trash-can"></i> Delete Comment</h1>
+        </div>
+        <div class="modal-body">
+            <div id="DeleteLoaderText" style="opacity: 1;transition: opacity 0.3s linear;">
+                Once The Comment Is Deleted, The Comment Can't Be Recovered. To Delete This Comment Click The <code>Delete</code> Button Below.
+            </div>
+
+            <input type="text" class="form-control" id="DeleteId" style="visibility:hidden;" disabled>
+            
+            <div id="ExtraTitleDesc" style="overflow:hidden;height:100px;transition: all ease-in-out 0.2s;">
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="description" class="form-control" id="Deletedescription" disabled>
+                </div>
+            </div>
+            <div id="DeleteLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="position:relative;left:155px;visibility:hidden;" id="DeleteOkContainer">
+                <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
+            </div>
+            <div id="DeleteTwoBtnContainer">
+                <button type="button" class="btn btn-secondary" id="DeleteDismiss" data-bs-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-danger" id="DeletePost">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticEditBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticEditBackdropLabel"><i class="fa-regular fa-trash-can"></i> Edit Comment</h1>
+        </div>
+        <div class="modal-body">
+            <div id="EditLoaderText" style="opacity: 1;transition: opacity 0.3s linear;"></div>
+            <input type="text" class="form-control" id="EditId" style="visibility:hidden;position:absolute" disabled>
+            <div id="ExtraEditTitleDesc" style="overflow:hidden;transition: all ease-in-out 0.2s;">
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" id="Editdescription" rows="2"></textarea>
+                </div>
+            </div>
+            <div id="EditLoader" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="position:relative;left:155px;visibility:hidden;" id="EditOkContainer">
+                <a href="../post/<%=postInfo.id%>" type="submit" class="btn btn-success" >Ok</a>
+            </div>
+            <div id="EditTwoBtnContainer">
+                <button type="button" class="btn btn-secondary" id="EditDismiss" data-bs-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-primary" id="EditPost">Edit</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<%if(userInfo.isadmin == 1){%>
+<div class="modal fade" id="staticSolvePost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticSolvePostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Solve Post</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="solutionTextArea" class="form-label">Solution</label>
+                <textarea class="form-control" id="solutionTextArea" rows="12"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Dismiss</button>
+            <button type="button" id="postSolution" class="btn btn-success">Solve Post</button>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticDeleteRealPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteRealPostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="fa-solid fa-trash-can"></i> Delete Post</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <code>Beware:</code> Once The Post Is Deleted You Can't Be Able To Recover It!
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" id="deleteRealPost">Delete Post</button>
+        </div>
+        </div>
+    </div>
+</div>
+<%}%>
 <script>
     $("#deleteRealPost").click(function(){
         $.post("/post",{

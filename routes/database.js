@@ -1,10 +1,10 @@
 var mysql=require('mysql');
 
 var connection=mysql.createConnection({
-   host:'localhost',
+   host:'containers-us-west-123.railway.app',
    user:'root',
-   password:'',
-   database:'bitforum'
+   password:'nVk9GR1v6vihSdqPT3jp',
+   database:'railway'
 });
 
 connection.connect(function(error){

@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
+
+:root{
+    --card: #fff;
+    --background: var(--bs-gray-100);
+    --color: var(--bs-gray-900);
+    --btn-p: var(--bs-primary);
+    --btn-s: var(--bs-success);
+}
+
+.dark-theme{
+    --card: #262B2F;
+    --background: var(--bs-gray-900);
+    --color: var(--bs-gray-500);
+    --btn-p: #084298;
+    --btn-s: #0A3622;
+}
+
+.btn-primary{ background-color: var(--btn-p); }
+.btn-success{ background-color: var(--btn-s); }
+.card .card{ background-color: var(--background); }
+nav .container-fluid .btn-group button{ overflow: hidden; }
+body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{ color: var(--color); }
+.card, .alert, .navbar, .toast, .toast-header, .toast-body, .modal-header, .modal-body, .modal-footer{ background-color: var(--card); }
+#navbarSupportedContent{ position:static;left:0%; } /*Mobile SideBar Bug Fix*/
+
+body{
+    background-color:var(--background);
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+}
+.mobile, .desktop, .noview{
+    position:absolute;
+    visibility: hidden;
+    opacity: 0;
+
+    transition: opacity 200ms ease-in-out;
+}
+.desktop{
+    height:100%;
+    width:100%;
+}
+.noview{
+    text-align: center;
+}
+.noview p:nth-child(1){
+    color:red;
+}
+
+@media (min-width:0px) {
+    .mobile {opacity: 0;visibility: hidden;}
+    .desktop{opacity: 0;visibility: hidden;}
+    .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
+    #navbarSupportedContent{position:absolute;left:-200%;}
+}
+
+@media (min-width:300px)  { 
+    .mobile {opacity: 1;visibility: visible;}
+    .desktop{opacity: 0;visibility: hidden;}
+    .noview{opacity: 0;visibility: hidden;}
+    #navbarSupportedContent{position:absolute;left:-200%;}
+}
+@media (min-width:768px)  { 
+    .mobile {opacity: 0;visibility: hidden;}
+    .desktop{opacity: 1;visibility: visible;}
+    .noview{opacity: 0;visibility: hidden;}
+    #navbarSupportedContent{position:static;left:0%;}
+    .centerDesktopDiv{
+        width:50%;
+        position:absolute;
+        left:50%;
+        transform: translate(-50%,0%);
+    }
+}

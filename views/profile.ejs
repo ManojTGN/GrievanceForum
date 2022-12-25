@@ -6,165 +6,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GrievanceForum</title>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/08c3f952c9.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="css/style.css" rel="stylesheet"/>
 
+    <!-- Profile Page (Style & Script) -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
-        :root{
-            --card: #fff;
-            --background: var(--bs-gray-100);
-            --color: var(--bs-gray-900);
-            --btn-p: var(--bs-primary);
-            --btn-s: var(--bs-success);
+        .mb-3{
+            width:66%;
         }
-        .dark-theme{
-            --card: #262B2F;
-            --background: var(--bs-gray-900);
-            --color: var(--bs-gray-500);
-            --btn-p: #084298;
-            --btn-s: #0A3622;
-        }
-
-        .btn-primary{
-            background-color: var(--btn-p);
-        }
-        .btn-success{
-            background-color: var(--btn-s);
-        }
-        .card, .alert, .navbar, .toast, .toast-header{
-            background-color: var(--card);
-        }
-        .card .card{
-            background-color: var(--background);
-        }
-        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
-            color: var(--color);
-        }
-
-        body{
-            background-color:var(--background);
-            font-family: 'Montserrat', sans-serif;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .mobile, .desktop, .noview{
-            position:absolute;
-            visibility: hidden;
-            opacity: 0;
-
-            transition: opacity 200ms ease-in-out;
-        }
-
-        /*Mobile SideBar Bug Fix*/
-        #navbarSupportedContent{
-            position:static;
-            left:0%;
-        }
-
-        @media (min-width:0px) {
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
-        }
-
-        @media (min-width:300px)  { 
-            .mobile {opacity: 1;visibility: visible;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
-        }
-        @media (min-width:768px)  { 
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 1;visibility: visible;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:static;left:0%;}
-            .centerDesktopDiv{
-                width:50%;
-                position:absolute;
-                left:50%;
-                transform: translate(-50%,0%);
-            }
+        .card-body .card{
+            border:0px;
         }
     </style>
     <script>
-        $( document ).ready(function() {
-            if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
-            else localStorage.setItem('darkmode',false);
-        });
+        function load_darkmode() {
+            if(localStorage.darkmode == 'true') {
+                document.body.classList.toggle('dark-theme');
+            }
+            else {
+                localStorage.setItem('darkmode',false);
+            }
+        }
     </script>
+
 </head>
-<body>
+<body onload="load_darkmode()">
+
+<!--
+    No View Panel
+-->
 <div class="noview w-75">
-    <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
-    <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
+
+    <p>
+        <i class="fa-solid fa-xmark"></i> Can't Be Viewed
+    </p>
+    <hr>
+
+    <p class="text-muted">
+        Increase Your Resolution <br> To View The App!
+    </p>
+
 </div>
-<div class="container-fluid desktop" style="width:100%;height:100%;">
-    <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
-        <div class="container-fluid">
-        <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
-            </li>
-            </ul>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                    <%=userInfo["name"]%>
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                </ul>
-            </div>
-        </div>
-        </div>
-    </nav>
+
+<!--
+    Desktop Panel
+-->
+<div class="container-fluid desktop">
+
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/desktopNavbar.ejs') %>
     <br>
+
     <div class="d-flex justify-content-center align-items-center">
-        <div class="card" style="width:66%;">
+
+        <!-- Profile Card -->
+        <div class="card mb-3">
             <div class="row g-0">
-                <div class="col-4">
-                <img src="<%=userInfo['picture']%>" class="img-fluid rounded-start" alt="...">
+                <div class="col-md-4 w-25 d-flex justify-content-center align-items-center">
+                    <img src="<%=userInfo['picture']%>" class="img-fluid rounded-start w-100" alt="profilePicture">
                 </div>
-                <div class="col-8">
-                <div class="card-body text-align-start">
-                    <h5 class="card-title"><%=userInfo['name']%></h5>
-                    <p class="card-text"><%=userInfo['mail']%></p>
-                </div>
+                <div class="col-md-8 w-75">
+                    <div class="card-body">
+                        <h5 class="card-title"><%=userInfo['name']%></h5>
+                        <p class="card-text"><%=userInfo['mail']%></p>
+                        <hr>
+                        <p class="card-text">
+                            <div class="row">
+                                <div class="col">
+                                    <small class="text-muted">Total Post Read: 0</small><br>
+                                    <small class="text-muted">Total Comments: 0</small>
+                                </div>
+                                <div class="col">
+                                    <small class="text-muted">Total Bookmarks: 0</small><br>
+                                    <small class="text-muted">Total Posts Made: 0</small>
+                                </div>
+                            </div>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
     <br>
+
     <div class="row justify-content-center">
+
         <div class="col-4">
+            <!-- User Posts -->
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fa-regular fa-clone"></i> Your Posts</h5>
+
+                    <h5 class="card-title">
+                        <i class="fa-regular fa-clone"></i> Your Posts
+                    </h5>
                     <hr>
+
                     <%if(posts.length == 0){%>
                     <p class="card-text">Haven't Posted Anything Yet</p>
                     <%}%>
+
                     <%for(let i = 0; i < posts.length; i++){%>
                         <% if(posts[i].draft == 1) continue;%>
-                        <div class="card" style="border:0px;">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-5"><%=i+1%>.<%=posts[i].title%></div>
@@ -176,67 +122,48 @@
                             </div>
                         </div>
                     <%}%>
+
                 </div>
             </div>
         </div>
+
         <div class="col-4">
+            <!-- User Bookmarks -->
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fa-regular fa-bookmark"></i> Your Bookmarks</h5>
+                    <h5 class="card-title">
+                        <i class="fa-regular fa-bookmark"></i> Your Bookmarks
+                    </h5>
                     <hr>
+
                     <%if(bookmarks.length == 0){%>
                     <p class="card-text">Haven't Bookmarked Anything Yet</p>
                     <%}%>
         
                     <%for(let i = 0; i < bookmarks.length; i++){%>
-                        
+                        <!--Todo: Bookmark List-->
                     <%}%>
                 </div>
             </div>
         </div>
+
     </div>
+
 </div>
+
+<!--
+    Mobile Panel
+-->
 <div class="container-fluid mobile">
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../">
-                <i class="fa-regular fa-snowflake d-inline-block "></i>
-                GrievanceForum
-            </a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                    <%=userInfo["name"]%>
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav><br>
-    <nav class="navbar fixed-bottom">
-        <div class="container-fluid">
-            <div class="row w-100 text-center">
-                <div class="col">
-                    <a href="dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
-                </div>
-                <div class="col">
-                    <a href="manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
-                </div>
-                <div class="col">
-                    <a href="notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
-                </div>
-                <div class="col">
-                    <a href="profile" type="button" class="btn btn-primary"> <i class="fa-solid fa-user"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/mobileTopNavbar.ejs') %>
+    <br>
 
+    <!-- Include Bottom Nav Bar -->
+    <%- include('partials/mobileBottomNavbar.ejs') %>
+
+    <!-- Profile Card -->
     <div class="card">
         <div class="row g-0">
             <div class="col-4">
@@ -251,45 +178,63 @@
         </div>
     </div>
     <br>
+
+    <!-- User Posts -->
     <div class="card">
         <div class="card-body">
+
             <h5 class="card-title"><i class="fa-regular fa-clone"></i> Your Posts</h5>
             <hr>
+
             <%if(posts.length == 0){%>
             <p class="card-text">Haven't Posted Anything Yet</p>
             <%}%>
+
             <%for(let i = 0; i < posts.length; i++){%>
                 <% if(posts[i].draft == 1) continue;%>
-                <div class="card" style="border:0px;">
+
+                <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-8"><%=i+1%>.<%=posts[i].title%></div>
+                            <div class="col-8">
+                                <%=i+1%>.<%=posts[i].title%>
+                            </div>
                             <div class="col-4">
-                                <a href="../post/<%=posts[i].id%>" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i></a>
-                                <a href="../edit/<%=posts[i].id%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i></a>
+                                <a href="../post/<%=posts[i].id%>" class="btn btn-sm btn-secondary">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <a href="../edit/<%=posts[i].id%>" class="btn btn-sm btn-primary">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             <%}%>
+
         </div>
     </div>
     <br>
+
+    <!-- User Bookmarks -->
     <div class="card">
         <div class="card-body">
+
             <h5 class="card-title"><i class="fa-regular fa-bookmark"></i> Your Bookmarks</h5>
             <hr>
+
             <%if(bookmarks.length == 0){%>
-            <p class="card-text">Haven't Bookmarked Anything Yet</p>
+                <p class="card-text">Haven't Bookmarked Anything Yet</p>
             <%}%>
 
             <%for(let i = 0; i < bookmarks.length; i++){%>
-                
+            
             <%}%>
+
         </div>
     </div>
 
 </div>
-<!-- <i class="fa-solid fa-user-pen"></i> -->
+
 </body>
 </html>

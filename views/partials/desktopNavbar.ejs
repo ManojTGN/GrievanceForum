@@ -1,0 +1,75 @@
+<!-- Top Nav Bar -->
+<nav class="navbar sticky-top navbar-expand navbar-expand-lg">
+    <div class="container-fluid">
+    
+    <!-- App Logo & Title -->
+    <a class="navbar-brand" href="../"> 
+        <i class="fa-regular fa-snowflake d-inline-block "></i> GrievanceForum
+    </a>
+
+    <!-- Ham Button For Toggle Nav Bar Tabs -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav Bar Tabs -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <!-- Home Tabs -->
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="../dashboard">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </li>
+
+            <!-- ManagePost Tabs -->
+            <li class="nav-item">
+                <a class="nav-link" href="../manage">
+                    <i class="fa-solid fa-plus"></i> ManagePost
+                </a>
+            </li>
+
+            <!-- Notification Tabs -->
+            <li class="nav-item">
+                <a class="nav-link" href="../notification">
+                    <i class="fa-solid fa-bell"></i> Notification
+                </a>
+            </li>
+        </ul>
+
+        <!-- Profile Dropdown Button -->
+        <div class="btn-group">
+
+            <!-- Profile Button -->
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
+                <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
+                <%=userInfo["name"]%>
+            </button>
+
+            <!-- Profile Dropdowns -->
+            <ul class="dropdown-menu w-100">
+                <li>
+                    <a class="dropdown-item" href="../profile">
+                        <i class="fa-regular fa-user"></i> Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);">
+                        <i class="fa-solid fa-circle-half-stroke"></i> Dark Mode
+                    </a>
+                </li>
+                <li> <hr class="dropdown-divider"> </li>
+                <li>
+                    <a class="dropdown-item" href="../logout" style="color:red;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    </div>
+</nav>
