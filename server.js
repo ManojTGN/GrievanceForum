@@ -106,4 +106,4 @@ app.post('/', (request, response) => {
 app.get('/logout', (request, response) => { delete cookie[request.socket.remoteAddress];response.redirect("/login"); });
 app.get('/index', (request, response) => { response.redirect("/"); });
 app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(process.env.PORT || 8080, "localhost"  || process.env.HOST || process.env.WIFI_HOST ,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
+app.listen(process.env.PORT, "https://grievanceforum-production.up.railway.app/",() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
