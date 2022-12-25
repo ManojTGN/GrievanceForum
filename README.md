@@ -1,7 +1,7 @@
 # GrievanceForum
 
 ## GrievanceForum WebApp Portfolio
-![WebAppPortfolio](https://raw.githubusercontent.com/ManojTGN/GrievanceForum/main/public/images/AppPortfolio.jpg?token=GHSAT0AAAAAAB2UW65Z45CRD24WT5NVUOYAY5GZV5A)
+![WebAppPortfolio](https://github.com/ManojTGN/GrievanceForum/blob/main/public/images/AppPortfolio.jpg?raw=true)
 
 ## Features
     - Customized Categories
