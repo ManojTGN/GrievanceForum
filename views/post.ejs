@@ -67,6 +67,7 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary">
                         <%=postInfo.cat_name%>
                     </button>
+
                     <a href="" class="btn btn-sm btn-outline-secondary">
                         <div class="row">
                             <div class="col-1">
@@ -158,13 +159,14 @@
                                     </p>
                                     <% if(comments[i].mail == userInfo['mail']){ %>
                                         <hr>
-                                        <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                                        <button class="btn btn-sm btn-primary" <%="onclick=editComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                                        <button class="btn btn-sm btn-danger" <%="onclick=deleteComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
                                     <%}%>
                                 </div>
                             </div>
                         <%}%>
 
+                        <!-- Empty Post Comment -->
                         <%if(comments.length == 0){%>
                             <div class="card w-100" style="border:0px;">
                                 <div class="card-body text-muted text-align-center">
@@ -172,7 +174,8 @@
                                 </div>
                             </div>
                         <%}%>
-
+                        
+                        <!-- Disabled Comment -->
                         <%}else{%>
                             <p class="text-muted text-align-center">
                                 <i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!
@@ -186,6 +189,7 @@
         </div>
 
         <div class="col-3">
+            <!-- Category Card -->
             <div class="card mb-3" style="height:140px;overflow:hidden">
                 <div class="row" style="margin-left:2px;">
                     <div class="col-4 d-flex align-items-center justify-content-center">
@@ -199,6 +203,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Admin Access -->
             <%if(userInfo.isadmin == 1){%>
             <div class="card mb-3">
                 <div class="card-body">
@@ -214,113 +220,133 @@
                 </div>
             </div>
             <%}%>
+            <!-- Post Basic Info -->
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
                     <p class="card-text">Created On: <span class="text-muted" style="font-size:15px;"><%=postInfo.datetime%></span></p>
                     <hr>
                     <div class="row">
-                        <div class="col d-flex align-items-center justify-content-center"><i class="fa-regular fa-eye"></i><span style="margin-left:6px;"></span><%=postInfo.views%></div>
-                        <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.support == 1){%><i class="fa-solid fa-hand-sparkles"></i><span style="margin-left:6px;"></span><%=postInfo.likes%><%}%> </div>
-                        <div class="col d-flex align-items-center justify-content-center"><% if(postInfo.comment == 1){%><i class="fa-regular fa-message"></i><span style="margin-left:6px;"></span><%=postInfo.comments%><%}%> </div>
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <i class="fa-regular fa-eye"></i>
+                            <span style="margin-left:6px;"></span>
+                            <%=postInfo.views%>
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <% if(postInfo.support == 1){%>
+                                <i class="fa-solid fa-hand-sparkles"></i>
+                                <span style="margin-left:6px;"></span>
+                                <%=postInfo.likes%>
+                            <%}%> 
+                        </div>
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <% if(postInfo.comment == 1){%>
+                                    <i class="fa-regular fa-message"></i>
+                                    <span style="margin-left:6px;"></span>
+                                    <%=postInfo.comments%>
+                                <%}%>
+                            </div>
                     </div>
+
+                    <!-- Post Support Button -->
                     <%if(userInfo.isadmin == 0){%>
-                    <br>
-                    <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
+                        <br>
+                        <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
                     <%}%>
                 </div>
             </div>
+
+            <!-- Share | Bookmark | GoBack -->
             <div class="card mb-3">
                 <div class="card-body">
-                    <div class="btn-group w-100" role="group" aria-label="Basic example">
-                        <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
+                    <div class="btn-group w-100" role="group">
+                        <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Share
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fa-regular fa-bookmark"></i> Bookmark
+                        </button>
                     </div>
                     <p></p>
                     <a href="../" class="btn btn-sm btn-outline-secondary w-100">Go Back To Dashboard</a>
+                    
+                    <!-- Edit Post Button -->
                     <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
                         <hr>
-                        <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary w-100"><i class="fa-solid fa-pen"></i> Edit Your Post</a>
+                        <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary w-100">
+                            <i class="fa-solid fa-pen"></i> Edit Your Post
+                        </a>
                     <%}%>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
+<!--
+    Mobile Panel
+-->
 <div class="container-fluid mobile">
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../">
-                <i class="fa-regular fa-snowflake d-inline-block "></i>
-                GrievanceForum
-            </a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                    <img src="<%if(userInfo.name == 'Guest'){%>../<%}%><%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                    <%=userInfo["name"]%>
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav><br>
+
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/mobileTopNavbar.ejs') %>
+    <br>
+
     <%if(userInfo.isadmin == 0){%>
-    <nav class="navbar fixed-bottom">
-        <div class="container-fluid">
-            <div class="row w-100 text-center">
-                <div class="col">
-                    <a href="../dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
+        <!-- Include Bottom Nav Bar -->
+        <%- include('partials/mobileBottomNavbar.ejs') %>
     <%}else{%>
-    <nav class="navbar fixed-bottom ">
-        <div class="container-fluid">
-            <a href="../dashboard" type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-house"></i> Go Back</a> 
-        </div>
-    </nav>
+        <nav class="navbar fixed-bottom ">
+            <div class="container-fluid">
+                <a href="../dashboard" type="button" class="btn btn-sm btn-secondary">
+                    <i class="fa-solid fa-house"></i> Go Back
+                </a> 
+            </div>
+        </nav>
     <%}%>
+    
+    <!-- Admin Access -->
     <%if(userInfo.isadmin == 1){%>
     <div class="card">
         <div class="card-body">
             <p class="fs-4">Admin Access</p>
             <div class="adminTools">
-                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>> <i class="fa-regular fa-square-check"></i> <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%></button>
-                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost" > <i class="fa-regular fa-square-minus"></i> Remove Post</button>
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#staticSolvePost" <%if(solution.length != 0){%>disabled<%}%>>
+                    <i class="fa-regular fa-square-check"></i>
+                    <%if(solution.length == 0){%>Solve Post<%}else{%>Solved<%}%>
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteRealPost">
+                    <i class="fa-regular fa-square-minus"></i> Remove Post
+                </button>
                 <div class="vr"></div>
-                <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary"> <i class="fa-regular fa-pen-to-square"></i> Edit Post</a>
+                <a href="../edit/<%=postInfo.id%>" type="button" class="btn btn-sm btn-primary">
+                    <i class="fa-regular fa-pen-to-square"></i> Edit Post
+                </a>
             </div>
         </div>
     </div><br>
     <%}%>
+
+    <!-- Post Info (Title | Description | Report) -->
     <div class="post">
+
         <p class="fs-2"><%=postInfo.title%></p>
         <p class="text-muted"><%=postInfo.description%></p>
         <hr>
+
         <div class="text-muted" style="font-size:13px;">
             <div class="row">
                 <div class="col">Created On: <span><%=postInfo.datetime%></span></div>
                 <div class="col">Viewed: <span><%=postInfo.views%> times</span></div>
             </div>
         </div>
+
         <br>
         <div id="reportMarkdown">
             <%-report%>
         </div>
+
         <% if(userInfo.isadmin == 0){%>
         <% if(postInfo.support == 1){%>
         <div>
@@ -333,13 +359,14 @@
                 </div>
             </div>
         </div>
-        <%}}else{%>
+        <%} }else{%>
             <% if(postInfo.support == 1){%>
             <div class="col-7 text-align-start text-muted">
                 This Post Is Supported By <%=postInfo.likes%> Students
             </div>
         <%}}%>
         <hr>
+
         <div>
             <a href="" class="btn btn-sm btn-outline-secondary">
                 <div class="row">
@@ -358,6 +385,7 @@
             <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
             <%}}%>
         </div><br>
+
         <%if(solution.length != 0){%>
         <div>
             <div class="card text-bg-success mb-3">
@@ -383,6 +411,7 @@
             </div>
         </div>
         <%}%>
+            
         <br>
         <div class="comment">
             <p class="fs-3 text-muted">Comments</p>
