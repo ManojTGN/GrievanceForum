@@ -31,12 +31,11 @@ app.use("/post",postRouter);
 
 app.get('/', (request, response) => {
     if(!(request.cookies['login'] in cookie)){
-        console.log(`ip:${request.socket.remoteAddress} Connected To The Server!`)
+        console.log(`ip: ${request.socket.remoteAddress} Connected To The Server!`)
         response.redirect("/login");
         return;
     }
 
-    //console.log(cookie)
     if(cookie[request.cookies['login']]['isadmin'] == 1){
         connection.query("SELECT * FROM `category`",(err, result, fields) => {
             response.render("admin",{userInfo:cookie[request.cookies['login']],category:result});

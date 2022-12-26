@@ -41,6 +41,7 @@
             if(localStorage.darkmode == 'true') document.body.classList.toggle('dark-theme');
             else localStorage.setItem('darkmode',false);
         });
+        let autoSaveInterval;
     </script>
 </head>
 <body>
@@ -210,13 +211,18 @@
             <label class="form-label">Post</label>
             <div class="card">
                 <div class="card-body">
-                    <a href="<%if(postInfo.draft == 1){%>../manage<%}else{%>../post/<%=postInfo.id%><%}%>" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
+                    <a href="<%if(postInfo.draft == 1){%>../manage<%}else{%>../post/<%=postInfo.id%><%}%>" class="btn btn-secondary">
+                        <i class="fa-solid fa-chevron-left"></i> Back
+                    </a>
+
                     <div class="vr"></div>
+
                     <%if(postInfo.draft == 1){%>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop" id="PostConfirmDraft">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop">
                         Post
                     </button>
                     <%}%>
+
                     <button type="button" class="btn btn-success" id="SaveDraft">
                         Save <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%>
                     </button>
@@ -229,15 +235,14 @@
 
     </div>
     <br><br><br>
+</div>
 
-    <!-- Save Toast -->
-    <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
-        <div class="d-flex">
-            <div class="toast-body" id="saveToastPara"></div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
+<!-- Save Toast -->
+<div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
+    <div class="d-flex">
+        <div class="toast-body" id="saveToastPara"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
-
 </div>
 
 <!-- Invalid Post Toast -->
@@ -355,7 +360,7 @@ function PostDraft(){
     $("#PostLoader").css("opacity","1");
     clearInterval(autoSaveInterval);
 
-    $.post("/edit",{
+    $.post("../edit",{
         post:true,
         id:"<%=postInfo['id']%>",
         mail:"<%=postInfo['mail']%>",
@@ -422,7 +427,7 @@ function DeletePost(){
 
 const startAutoSave = parseInt('<%=postInfo.draft%>');
 if(startAutoSave == 1) {
-    let autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);
+    autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);
 }
 </script>
 </body>
