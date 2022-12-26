@@ -24,6 +24,7 @@
                 </a>
             </li>
 
+            <%if(userInfo.isadmin == 0){%>
             <!-- ManagePost Tabs -->
             <li class="nav-item">
                 <a class="nav-link" href="../manage">
@@ -37,6 +38,8 @@
                     <i class="fa-solid fa-bell"></i> Notification
                 </a>
             </li>
+            <%}%>
+
         </ul>
 
         <!-- Profile Dropdown Button -->

@@ -14,96 +14,26 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="../css/style.css" rel="stylesheet"/>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Quicksand:wght@600&display=swap');
-        :root{
-            --card: #fff;
-            --background: var(--bs-gray-100);
-            --color: var(--bs-gray-900);
-            --btn-p: var(--bs-primary);
-            --btn-s: var(--bs-success);
-            --btn-d: var(--bs-danger);
+        #saveToastPara{
+            background-color: var(--bs-success);
         }
-        .dark-theme{
-            --card: #262B2F;
-            --background: var(--bs-gray-900);
-            --color: var(--bs-gray-500);
-            --btn-p: #084298;
-            --btn-s: #0A3622;
-            --btn-d: rgb(117, 29, 29);
-        }
-        .col span{
-            color: var(--color);
-        }
-        .btn-primary{
-            background-color: var(--btn-p);
-        }
-        .btn-danger{
-            background-color: var(--btn-d);
-        }
-        .btn-success, .text-bg-success .card-header, .text-bg-success .card-body{
-            background-color: var(--btn-s);
-        }
-        .card, .alert, .navbar, .toast, .toast-header, textarea.form-control, .modal-header, .modal-body, .modal-footer{
-            background-color: var(--card);
-        }
-        .card .card{
-            background-color: var(--background);
-        }
-        body, .form-check-label, .alert-heading, .navbar-brand, .nav-link, #SearchBox{
-            color: var(--color);
+        #saveToast{
+            position: fixed;
+            left: 1%;
+            bottom: 10%;
         }
 
-        body{
-            background-color:var(--background);
-            font-family: 'Montserrat', sans-serif;
-            font-family: 'Quicksand', sans-serif;
+        @media (min-width:0px)  { 
+            .fixed-bottom{opacity: 0;visibility: hidden;}
         }
-        .mobile, .desktop, .noview{
-            position:absolute;
-            visibility: hidden;
-            opacity: 0;
-
-            transition: opacity 200ms ease-in-out;
-        }
-
-        /*Mobile SideBar Bug Fix*/
-        #navbarSupportedContent{
-            position:static;
-            left:0%;
-        }
-        .mobile{
-            width: 100%;
-        }
-
-        @media (min-width:0px) {
-            .Create{opacity: 0;visibility: hidden;}
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
-        }
-
         @media (min-width:300px)  { 
-            .Create{opacity: 1;visibility: visible;width:100%;}
-            .mobile {opacity: 1;visibility: visible;position:fixed;}
-            .desktop{opacity: 0;visibility: hidden;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:absolute;left:-200%;}
+            .fixed-bottom{opacity: 1;visibility: visible;}
         }
-        @media (min-width:768px)  {
-            .Create{opacity: 1;visibility: visible;width:50%;position:absolute;left:50%;transform: translate(-50%,0%);} 
-            .mobile {opacity: 0;visibility: hidden;}
-            .desktop{opacity: 1;visibility: visible;}
-            .noview{opacity: 0;visibility: hidden;}
-            #navbarSupportedContent{position:static;left:0%;}
-            .centerDesktopDiv{
-                width:50%;
-                position:absolute;
-                left:50%;
-                transform: translate(-50%,0%);
-            }
+        @media (min-width:768px)  { 
+            .fixed-bottom{opacity: 0;visibility: hidden;}
         }
     </style>
     <script>
@@ -114,110 +44,78 @@
     </script>
 </head>
 <body>
+
+<!--
+    No View Panel
+-->
 <div class="noview w-75">
-    <p style="text-align:center;color:red;"><i class="fa-solid fa-xmark"></i> Can't Be Viewed</p><hr>
-    <p class="text-muted" style="text-align:center;">Increase Your Resolution<br>To View The App!</p>
+    <p>
+        <i class="fa-solid fa-xmark"></i> Can't Be Viewed
+    </p>
+    <hr>
+    <p class="text-muted">
+        Increase Your Resolution<br>To View The App!
+    </p>
 </div>
-<div class="container-fluid desktop" style="height:100%;width:100%;">
-    <nav class="navbar sticky-top navbar-expand navbar-expand-lg">
-        <div class="container-fluid">
-        <a class="navbar-brand" href="../"> <i class="fa-regular fa-snowflake d-inline-block "></i>GrievanceForum </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../dashboard"><i class="fa-solid fa-house"></i> Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../manage"><i class="fa-solid fa-plus"></i> ManagePost</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../notification"><i class="fa-solid fa-bell"></i> Notification</a>
-            </li>
-            </ul>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                    <%=userInfo["name"]%>
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                </ul>
-            </div>
-        </div>
-        </div>
-    </nav>
+
+<!--
+    Desktop Panel
+-->
+<div class="container-fluid desktop">
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/desktopNavbar.ejs') %>
     <br>
 </div>
-<div class="container-fluid">
-    <nav class="navbar mobile">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../">
-                <i class="fa-regular fa-snowflake d-inline-block "></i>
-                GrievanceForum
-            </a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="width:180px">
-                    <img src="<%=userInfo['picture']%>" class="rounded-circle" style="width:20%;"/>
-                    <%=userInfo["name"]%>
-                </button>
-                <ul class="dropdown-menu w-100">
-                    <li><a class="dropdown-item" href="../profile"><i class="fa-regular fa-user"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);"><i class="fa-solid fa-circle-half-stroke"></i> Dark Mode</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="../logout" style="color:red;"><i class="fa-solid fa-arrow-right-from-bracket"></i> logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav><br>
-    <nav class="navbar fixed-bottom mobile">
-        <div class="container-fluid">
-            <div class="row w-100 text-center">
-                <div class="col">
-                    <a href="../dashboard" type="button" class="btn btn-link"> <i class="fa-solid fa-house"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../manage" type="button" class="btn btn-link"> <i class="fa-solid fa-plus"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../notification" type="button" class="btn btn-link"> <i class="fa-solid fa-bell"></i></a>
-                </div>
-                <div class="col">
-                    <a href="../profile" type="button" class="btn btn-link"> <i class="fa-solid fa-user"></i></a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
+<!--
+    Mobile Panel
+-->
+<div class="container-fluid">
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/mobileTopNavbar.ejs') %>
+    <br>
+
+    <!-- Include Bottom Nav Bar -->
+    <%- include('partials/mobileBottomNavbar.ejs') %>
+
+
+    <!-- Post Inputs -->
     <div class="Create">
         <p class="fs-5">
             Manage Your Post
         </p>
+        
+        <!-- Post ID -->
         <div class="mb-3">
             <label class="form-label">Post ID</label>
             <input type="text" class="form-control" placeholder="Post ID" value="<%=postInfo['id']%>" disabled>
         </div>
+        
+        <!-- Post Title -->
         <div class="mb-3">
             <label class="form-label">Title<span style="color:red;">*</span></label>
             <input type="text" class="form-control" placeholder="Title" id="title" value="<%=postInfo['title'];%>" required>
         </div>
+        
+        <!-- Post Description -->
         <div class="form-group">
             <label for="Description">Description<span style="color:red;">*</span></label>
             <textarea class="form-control" placeholder="Description" id="description" rows="3" style="resize: none;" required><%=postInfo['description']%></textarea>
-          </div>
+        </div>
+        
+        <!-- Post Report -->
         <div>
             <label class="form-label">Report<span style="color:red;">*</span></label>
             <textarea id="my-text-area" required></textarea>
-        </div><br>
+        </div>
+        <br>
+        <!-- Load Post Report -->
         <script>
-        const easyMDE = new EasyMDE({autosave:{enabled: false},placeholder:"Report",spellChecker: false,tabSize:4,toolbar: ["bold", "italic", "strikethrough", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
-        easyMDE.value(`<%=postInfo["report"]%>`);
+            const easyMDE = new EasyMDE({autosave:{enabled: false},placeholder:"Report",spellChecker: false,tabSize:4,toolbar: ["bold", "italic", "strikethrough", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "redo", "undo", "|", "fullscreen", "guide"],element: document.getElementById('my-text-area')});
+            easyMDE.value(`<%=postInfo["report"]%>`);
         </script>
+        
+        <!-- Post Preview -->
         <button type="button" class="btn btn-primary btn-sm" onclick="if(easyMDE.value().trim() == '') return;this.remove();previewMarkdown()"><i class="fa-regular fa-eye"></i> Preview Your Report</button>
         <div id="PreviewBox" style="visibility:hidden">
             <label class="form-label">Report Preview</label> <button type="button" class="btn btn-primary btn-sm" id="Preview"><i class="fa-regular fa-eye"></i> Preview Your Report</button>
@@ -225,7 +123,11 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div><br>
+
+        <!-- Post Settings -->
         <p class="fs-5">Post Settings</p>
+
+        <!-- Post Categories -->
         <div>
             <label class="form-label">Post Category</label>
             <div class="card">
@@ -238,6 +140,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Post Visibility -->
         <div>
             <label class="form-label">Post visibility</label>
             <div class="card">
@@ -253,6 +157,8 @@
                 </div>
               </div>
         </div>
+
+        <!-- Post (Comments | Anonymous | Support) -->
         <div>
             <label class="form-label">Incognito & Comments</label>
             <div class="card">
@@ -278,6 +184,7 @@
                     <p class="text-muted" id="anonymousInfo"><i class="fa-regular fa-circle-question"></i>This Section Has No Effect When Post Visibility Is Set To <span class="font-monospace">Admin(Only)</span>!</p>
                 </div>
             </div>
+
             <script>
                 function ChangeIncognito(checkbox){
                     if(checkbox == 'admin'){
@@ -297,6 +204,8 @@
                 }
             </script>
         </div>
+
+        <!-- Post (POST | SAVE | DELETE | BACK) -->
         <div>
             <label class="form-label">Post</label>
             <div class="card">
@@ -304,28 +213,42 @@
                     <a href="<%if(postInfo.draft == 1){%>../manage<%}else{%>../post/<%=postInfo.id%><%}%>" class="btn btn-secondary"><i class="fa-solid fa-chevron-left"></i> Back</a>
                     <div class="vr"></div>
                     <%if(postInfo.draft == 1){%>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop" id="PostConfirmDraft">Post</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticPostConfirmBackdrop" id="PostConfirmDraft">
+                        Post
+                    </button>
                     <%}%>
-                    <button type="button" class="btn btn-success" id="SaveDraft">Save <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%></button>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteBackdrop">Delete <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%></button>
+                    <button type="button" class="btn btn-success" id="SaveDraft">
+                        Save <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%>
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticDeleteBackdrop">
+                        Delete <%if(postInfo.draft == 1){%>Draft<%}else{%>Post<%}%>
+                    </button>
                 </div>
             </div>
         </div>
+
     </div>
     <br><br><br>
-    <div class="toast align-items-center text-bg-success border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
+
+    <!-- Save Toast -->
+    <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="saveToast">
         <div class="d-flex">
             <div class="toast-body" id="saveToastPara"></div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
+
 </div>
+
+<!-- Invalid Post Toast -->
 <div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
     <div class="d-flex">
         <div class="toast-body">Invalid Post Details ( Title | Description | Report )</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
+
+<!-- Delete Post Modal -->
 <div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -354,6 +277,8 @@
       </div>
     </div>
 </div>
+
+<!-- Post Post Modal -->
 <div class="modal fade" id="staticPostConfirmBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticPostConfirmBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -494,7 +419,11 @@ function DeletePost(){
         $("#DeleteOkContainer").css("visibility","visible");
     });
 }
-<%if(postInfo.draft == 1){%>const autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);<%}%>
+
+const startAutoSave = parseInt('<%=postInfo.draft%>');
+if(startAutoSave == 1) {
+    let autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);
+}
 </script>
 </body>
 </html>

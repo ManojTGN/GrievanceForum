@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ManojTGN/GrievanceForum#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "crypto": "^1.0.1",
     "darkmode-js": "^1.5.7",
     "dompurify": "^2.4.1",
@@ -29,7 +30,8 @@
     "jsonwebtoken": "^9.0.0",
     "marked": "^4.2.3",
     "mysql": "^2.18.1",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "node-localstorage": "^2.2.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

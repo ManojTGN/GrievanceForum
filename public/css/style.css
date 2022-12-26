@@ -36,6 +36,9 @@ body{
 
     transition: opacity 200ms ease-in-out;
 }
+.mobile{
+    width:100%;
+}
 .desktop{
     height:100%;
     width:100%;
@@ -48,6 +51,7 @@ body{
 }
 
 @media (min-width:0px) {
+    .Create{opacity: 0;visibility: hidden;}
     .mobile {opacity: 0;visibility: hidden;}
     .desktop{opacity: 0;visibility: hidden;}
     .noview{top:50%;left:50%;transform:translate(-50%,-50%);opacity: 1;visibility: visible;}
@@ -55,20 +59,18 @@ body{
 }
 
 @media (min-width:300px)  { 
+    .Create{opacity: 1;visibility: visible;width:100%;}
     .mobile {opacity: 1;visibility: visible;}
     .desktop{opacity: 0;visibility: hidden;}
     .noview{opacity: 0;visibility: hidden;}
     #navbarSupportedContent{position:absolute;left:-200%;}
+    #saveToast{width:100%;}
 }
 @media (min-width:768px)  { 
+    .Create{opacity: 1;visibility: visible;width:50%;position:absolute;left:50%;transform: translate(-50%,0%);} 
     .mobile {opacity: 0;visibility: hidden;}
     .desktop{opacity: 1;visibility: visible;}
     .noview{opacity: 0;visibility: hidden;}
     #navbarSupportedContent{position:static;left:0%;}
-    .centerDesktopDiv{
-        width:50%;
-        position:absolute;
-        left:50%;
-        transform: translate(-50%,0%);
-    }
+    #saveToast{width:20%;}
 }

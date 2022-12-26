@@ -15,7 +15,7 @@ router.get("/",(request,response) => {
 });
 
 router.get("/:id",(request,response) => {
-    if (request.socket.remoteAddress in cookie){
+    if (request.cookies['login'] in cookie){
 
         connection.query(
         "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"'",(err, result, fields)=>{
@@ -25,9 +25,9 @@ router.get("/:id",(request,response) => {
             }
 
             let post = result[0];
-            if( post['mail'] == cookie[request.socket.remoteAddress]['mail'] || cookie[request.socket.remoteAddress]['isadmin'] == 1){
+            if( post['mail'] == cookie[request.cookies['login']]['mail'] || cookie[request.cookies['login']]['isadmin'] == 1){
                 connection.query("SELECT * FROM `category`",(err, result, fields) => {
-                    response.render("edit",{userInfo:cookie[request.socket.remoteAddress],postInfo:post,category:result});
+                    response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result});
                 });
                 return;
             }
@@ -56,7 +56,7 @@ router.post("/",(request,response) => {
 
     if("post" in request.body){
         connection.query("UPDATE `posts` SET `title`='"+request.body['title']+"', `description`='"+request.body['description']+"', `report`='"+request.body['report']+"', `category`='"+request.body['category']+"', `cat_name`='"+request.body['categoryName']+"', `visibility`='"+request.body['visibility']+"', `anonymous`='"+request.body['anonymous']+"', `comment`='"+request.body['comment']+"', `support`='"+request.body['support']+"', `draft`='0' WHERE id='"+request.body['id']+"';",(err, result, fields)=>{
-            connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `button`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.socket.remoteAddress]["mail"]+"','Post Submission','You Have Posted An Submission To The GrivanceForum','"+'<a class="btn btn-sm btn-secondary" href="../post/'+request.body['id']+'">View Post</a>'+"','fa-solid fa-file-circle-check','success','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
+            connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `button`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.cookies['login']]["mail"]+"','Post Submission','You Have Posted An Submission To The GrivanceForum','"+'<a class="btn btn-sm btn-secondary" href="../post/'+request.body['id']+'">View Post</a>'+"','fa-solid fa-file-circle-check','success','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
             if(err) response.sendStatus(500);
             else response.sendStatus(200);
         });
@@ -65,7 +65,7 @@ router.post("/",(request,response) => {
 
     if("delete" in request.body){
         connection.query("DELETE FROM `posts` WHERE `id`='"+request.body['id']+"';",(err, result, fields)=>{
-            connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.socket.remoteAddress]["mail"]+"','Post Deletion','The Post Has Been Deleted (unrecovered)','fa-regular fa-trash-can','danger','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
+            connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.cookies['login']]["mail"]+"','Post Deletion','The Post Has Been Deleted (unrecovered)','fa-regular fa-trash-can','danger','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
             if(err) response.sendStatus(500);
             else response.sendStatus(200);
         });

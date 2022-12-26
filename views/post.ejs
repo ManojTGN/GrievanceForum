@@ -347,6 +347,7 @@
             <%-report%>
         </div>
 
+        <!-- Support Post -->
         <% if(userInfo.isadmin == 0){%>
         <% if(postInfo.support == 1){%>
         <div>
@@ -359,6 +360,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Support Count -->
         <%} }else{%>
             <% if(postInfo.support == 1){%>
             <div class="col-7 text-align-start text-muted">
@@ -373,19 +376,30 @@
                     <div class="col-1">
                         <img src="<%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.picture%><%}else{%>../images/anonymous.webp<%}%>" class="rounded-circle" style="width:20px"/>
                     </div>
-                    <div class="col-9 text-align-start"><%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%></div>
+                    <div class="col-9 text-align-start">
+                        <%if(userInfo.isadmin || postInfo.anonymous != 1){%><%=postInfo.name%><%}else{%>Anonymous<%}%>
+                    </div>
                 </div>
             </a>
+
+            <!-- Share | Bookmark | Edit Post -->
             <div class="btn-group" role="group" aria-label="Basic example">
-                <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Share</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-bookmark"></i> Bookmark</button>
+                <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Share
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-regular fa-bookmark"></i> Bookmark
+                </button>
             </div>
             <%if(userInfo.isadmin == 0){%>
             <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
-            <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen"></i> Edit Post</a>
+            <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-pen"></i> Edit Post
+            </a>
             <%}}%>
         </div><br>
 
+        <!-- Post Solution -->
         <%if(solution.length != 0){%>
         <div>
             <div class="card text-bg-success mb-3">
@@ -411,7 +425,8 @@
             </div>
         </div>
         <%}%>
-            
+
+        <!-- Comments -->
         <br>
         <div class="comment">
             <p class="fs-3 text-muted">Comments</p>
@@ -427,6 +442,7 @@
             </div>
             <br>
             <%}%>
+
             <%for(let i = 0; i < comments.length; i++){%>
                 <div class="card" style="margin-top:5px;">
                     <div class="card-body">
@@ -444,12 +460,14 @@
                         <p class="card-text"><%=comments[i].message%></p>
                         <% if(comments[i].mail == userInfo['mail']){ %>
                             <hr>
-                            <button class="btn btn-sm btn-primary" onclick="editComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteComment(<%=comments[i].sno%>,`<%=comments[i].message%>`)"><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                            <button class="btn btn-sm btn-primary"  <%="onclick=editComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                            <button class="btn btn-sm btn-danger" <%="onclick=deleteComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
                         <%}%>
                     </div>
                 </div>
             <%}%>
+
+            <!-- Empty Comment -->
             <%if(comments.length == 0){%>
                 <div class="card w-100" style="border:0px;">
                     <div class="card-body text-muted text-align-center">
@@ -457,12 +475,18 @@
                     </div>
                 </div>
             <%}%>
-            <%}else{%><p class="text-muted text-align-center"><i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!</p><%}%>
+            <%}else{%>
+                <p class="text-muted text-align-center">
+                    <i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!
+                </p>
+            <%}%>
         </div>
     </div>
+
     <br><br><br>
 </div>
 
+<!-- Share Post -->
 <div class="modal fade" id="ShareModal" tabindex="-1" aria-labelledby="ShareModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -515,13 +539,7 @@
     </div>
 </div>
 
-<div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
-    <div class="d-flex">
-        <div class="toast-body">Invalid Comment ( Write Something... )</div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-</div>
-
+<!-- Delete Comment -->
 <div class="modal fade" id="staticDeleteBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -561,6 +579,7 @@
     </div>
 </div>
 
+<!-- Edit Comment -->
 <div class="modal fade" id="staticEditBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticEditBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -594,6 +613,8 @@
         </div>
     </div>
 </div>
+
+<!-- Solve Post -->
 <%if(userInfo.isadmin == 1){%>
 <div class="modal fade" id="staticSolvePost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticSolvePostLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -615,6 +636,8 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Post -->
 <div class="modal fade" id="staticDeleteRealPost" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteRealPostLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -633,6 +656,15 @@
     </div>
 </div>
 <%}%>
+
+<!-- Invalid Comment Post Error -->
+<div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
+    <div class="d-flex">
+        <div class="toast-body">Invalid Comment ( Write Something... )</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
 <script>
     $("#deleteRealPost").click(function(){
         $.post("/post",{
@@ -685,6 +717,7 @@
             location.reload();
         });
     });
+
     $("#postComment-mobile").click( ()=>{
         if($("#CommentArea-mobile").val().trim().replace('`','') == ""){
             $("#ErrorPostToast").toast("show");

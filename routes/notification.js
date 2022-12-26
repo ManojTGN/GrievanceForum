@@ -6,9 +6,9 @@ const connection = require('./database');
 const cookie = require('./cookie');
 
 router.get("/",(request,response) => {
-    if(request.socket.remoteAddress in cookie){
-        connection.query("SELECT * FROM `notifications` WHERE `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' ORDER BY `sno` DESC",(err,result,fields) => {
-            response.render("notification",{userInfo:cookie[request.socket.remoteAddress],notifications:result});
+    if(request.cookies['login'] in cookie){
+        connection.query("SELECT * FROM `notifications` WHERE `mail`='"+cookie[request.cookies['login']]['mail']+"' ORDER BY `sno` DESC",(err,result,fields) => {
+            response.render("notification",{userInfo:cookie[request.cookies['login']],notifications:result});
         });
         return;
     }
@@ -16,7 +16,7 @@ router.get("/",(request,response) => {
 });
 
 router.post("/",(request,response) => {
-    connection.query("UPDATE `notifications` SET `isread`='1' WHERE `mail`='"+cookie[request.socket.remoteAddress]['mail']+"' AND `isread`='0'",(err,result,fields) => {});
+    connection.query("UPDATE `notifications` SET `isread`='1' WHERE `mail`='"+cookie[request.cookies['login']]['mail']+"' AND `isread`='0'",(err,result,fields) => {});
     response.sendStatus(200);
 });
 

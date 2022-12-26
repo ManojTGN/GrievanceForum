@@ -1,3 +1,4 @@
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const express = require('express');
 const path = require('path');
@@ -15,6 +16,7 @@ const cookie = require('./routes/cookie');
 const connection = require("./routes/database");
 const postRouter = require("./routes/post");
 
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname,'public')));
 app.set("view engine","ejs");
@@ -28,22 +30,22 @@ app.use("/profile",profileRouter);
 app.use("/post",postRouter);
 
 app.get('/', (request, response) => {
-    if(!(request.socket.remoteAddress in cookie)){
-        console.log(request.socket.remoteAddress," Connected To The Server!")
+    if(!(request.cookies['login'] in cookie)){
+        console.log(`ip:${request.socket.remoteAddress} Connected To The Server!`)
         response.redirect("/login");
         return;
     }
 
-    console.log(cookie)
-    if(cookie[request.socket.remoteAddress]['isadmin'] == 1){
+    //console.log(cookie)
+    if(cookie[request.cookies['login']]['isadmin'] == 1){
         connection.query("SELECT * FROM `category`",(err, result, fields) => {
-            response.render("admin",{userInfo:cookie[request.socket.remoteAddress],category:result});
+            response.render("admin",{userInfo:cookie[request.cookies['login']],category:result});
         });
         return;
     }
 
     connection.query("SELECT * FROM `category`",(err, result, fields) => {
-        response.render("dashboard",{userInfo:cookie[request.socket.remoteAddress],category:result});
+        response.render("dashboard",{userInfo:cookie[request.cookies['login']],category:result});
     });
 });
 
@@ -104,7 +106,7 @@ app.post('/', (request, response) => {
     }
 });
 
-app.get('/logout', (request, response) => { delete cookie[request.socket.remoteAddress];response.redirect("/login"); });
-app.get('/index', (request, response) => { response.redirect("/"); });
-app.get('/dashboard', (request, response) => { response.redirect("/"); });
-app.listen(port,() => console.log(`GrievanceForum Server Started Successfully!\nif Localhost: http://localhost:3000/`));
+app.get('/logout', (request, response) => { delete cookie[request.cookies['login']];delete request.cookies['login'];response.redirect("/login"); });
+app.get('/index', (request, response) => { response.redirect("../"); });
+app.get('/dashboard', (request, response) => { response.redirect("../"); });
+app.listen(port,() => console.log(`GrievanceForum Server Started Successfully!\n`));

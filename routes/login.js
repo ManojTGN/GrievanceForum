@@ -1,4 +1,5 @@
 const express = require('express');
+const crypto = require('crypto');
 const jsonwebtoken = require('jsonwebtoken');
 const router = express.Router();
 require('dotenv').config();
@@ -12,8 +13,11 @@ router.get("/",(request,response) => {
 
 router.post("/",(request,response) => {
 
+    let hash = crypto.createHash('md5').update((new Date()).toLocaleString()+crypto.randomInt(1000)).digest('hex');
+
     if("guest" in request.body){
-        cookie[request.socket.remoteAddress]={'mail':'guest'+Math.floor(Math.random() * (9999 - 99) ) + 99+'@bitsathy.ac.in','name':'Guest','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
+        response.cookie('login',hash);
+        cookie[hash]={'mail':'@bitsathy.ac.in','name':'Guest','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
         response.redirect("../");
         return;
     }
@@ -24,11 +28,12 @@ router.post("/",(request,response) => {
         
         let isadmin = 0;
         if(result.length < 1)
-            connection.query("INSERT INTO `users`(`username`, `mail`) VALUES ('"+user['name']+"','"+user['email']+"')", (err, result, fields) => { if (err) throw err; });
+            connection.query("INSERT INTO `users`(`username`, `mail`, `isadmin`) VALUES ('"+user['name']+"','"+user['email']+"',0)", (err, result, fields) => { if (err) throw err; });
         else
             isadmin = result[0].isadmin;
         
-        cookie[request.socket.remoteAddress]={'mail':user['email'],'name':user['name'],'picture':user['picture'],'isadmin':isadmin};
+        response.cookie('login',hash);
+        cookie[hash]={'mail':user['email'],'name':user['name'],'picture':user['picture'],'isadmin':isadmin};
         response.redirect("../");
     });
 });
