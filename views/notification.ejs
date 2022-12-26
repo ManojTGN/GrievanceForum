@@ -146,7 +146,7 @@
 
                     <% i = 0;notifications.forEach(function(notification) { %>
                         <% if(notification.isread == 1){ return; } i+=1;%>
-                        <div class="alert alert-<%=notification.color%>" role="alert" style="margin-top:10px;">
+                        <div class="alert alert-<%=notification.color%>" role="alert" style="margin-top:10px;" >
                             <div class="row">
                                 <div class="col-3 fs-1 d-flex justify-content-center align-items-center" <%="style=color:var(--bs-"+notification.color+");"%> >
                                     <i class="<%=notification.icon%>"></i>

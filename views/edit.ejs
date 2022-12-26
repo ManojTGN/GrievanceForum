@@ -360,7 +360,7 @@ function PostDraft(){
     $("#PostLoader").css("opacity","1");
     clearInterval(autoSaveInterval);
 
-    $.post("../edit",{
+    $.post("/edit",{
         post:true,
         id:"<%=postInfo['id']%>",
         mail:"<%=postInfo['mail']%>",

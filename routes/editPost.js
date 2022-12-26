@@ -40,6 +40,9 @@ router.get("/:id",(request,response) => {
 });
 
 router.post("/",(request,response) => {
+
+    console.log(request.body);
+
     if("preview" in request.body){
         let markdown = dompurify.sanitize(marked(request.body["report"]));// <%-check%>
         response.send(markdown);
@@ -53,7 +56,6 @@ router.post("/",(request,response) => {
             return;
         });
 
-        response.sendStatus(500);
         return;
     }
 
@@ -65,7 +67,6 @@ router.post("/",(request,response) => {
             return;
         });
 
-        response.sendStatus(500);
         return;
     }
 
@@ -77,7 +78,6 @@ router.post("/",(request,response) => {
             return;
         });
 
-        response.sendStatus(500);
         return;
     }
 
