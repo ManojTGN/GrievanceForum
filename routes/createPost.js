@@ -14,6 +14,11 @@ const dompurify = createDomPurify(new JSDOM().window)
 
 router.get("/",(request,response) => {
     
+    if ( !(request.cookies['login'] in cookie) ){
+        response.redirect("/login");
+        return;
+    }
+
     if (request.cookies['login'] in cookie){
         let hash = crypto.createHash('md5').update((new Date()).toLocaleString()+crypto.randomInt(1000)).digest('hex');
         connection.query(

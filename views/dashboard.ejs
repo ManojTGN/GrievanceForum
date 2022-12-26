@@ -21,6 +21,14 @@
 </head>
 <body>
 
+<script>
+    if(localStorage.darkmode == 'true'){
+        document.body.classList.toggle('dark-theme');
+    }else{
+        localStorage.setItem('darkmode',false);
+    }
+</script>
+
 <!--
     No View Panel
 -->
@@ -183,7 +191,16 @@
             <div class="card">
                 <div class="card-body">
                     <p class="fs-5"><i class="fa-brands fa-flipboard"></i> Create Post</p><hr>
-                    <img id="createPost-desktop" src="images/dashboardCreate.jpg" class="img-fluid rounded-start" alt="...">
+                    <img id="createPost-desktop" src="" class="img-fluid rounded-start" alt="...">
+                    
+                    <script>
+                        if(localStorage.darkmode == 'true'){
+                            document.getElementById('createPost-desktop').src='images/dashboardCreateDark.jpg';
+                        }else{
+                            document.getElementById('createPost-desktop').src='images/dashboardCreate.jpg';
+                        }
+                    </script>
+
                     <p class="card-text">Create A New Post In The BIT GrievanceForum Now! Click The Create Post Button To Get Started</p>
                     <a href="../create" class="btn btn-success w-100" style="white-space: nowrap;overflow: hidden;"> <i class="fa-solid fa-pencil"></i> Create Post </a>
                 </div>
@@ -509,15 +526,6 @@
     }
 
     $(document).ready(getPostFeed(0));
-</script>
-
-<script>
-    $( document ).ready(function() {
-        if(localStorage.darkmode == 'true'){
-            document.body.classList.toggle('dark-theme');
-            document.getElementById('createPost-desktop').src='images/dashboardCreateDark.jpg';
-        }else localStorage.setItem('darkmode',false);
-    });
 </script>
 </body>
 </html>

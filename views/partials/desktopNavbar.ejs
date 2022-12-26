@@ -19,7 +19,7 @@
 
             <!-- Home Tabs -->
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../dashboard">
+                <a class="nav-link -desktop" aria-current="page" href="../dashboard">
                     <i class="fa-solid fa-house"></i> Home
                 </a>
             </li>
@@ -27,20 +27,25 @@
             <%if(userInfo.isadmin == 0){%>
             <!-- ManagePost Tabs -->
             <li class="nav-item">
-                <a class="nav-link" href="../manage">
+                <a class="nav-link manage-desktop" href="../manage">
                     <i class="fa-solid fa-plus"></i> ManagePost
                 </a>
             </li>
 
             <!-- Notification Tabs -->
             <li class="nav-item">
-                <a class="nav-link" href="../notification">
+                <a class="nav-link notification-desktop" href="../notification">
                     <i class="fa-solid fa-bell"></i> Notification
                 </a>
             </li>
             <%}%>
 
         </ul>
+
+        <script>
+            let desktop_url = (window.location.href.split('/')[3]+"-desktop").replace(" ","").replace("#","");
+            document.getElementsByClassName(desktop_url)[0].className = "nav-link link-primary";
+        </script>
 
         <!-- Profile Dropdown Button -->
         <div class="btn-group">
@@ -70,6 +75,7 @@
                     </a>
                 </li>
             </ul>
+
         </div>
 
     </div>

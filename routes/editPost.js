@@ -15,33 +15,39 @@ router.get("/",(request,response) => {
 });
 
 router.get("/:id",(request,response) => {
-    if (request.cookies['login'] in cookie){
 
-        connection.query(
-        "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"'",(err, result, fields)=>{
-            if(result.length == 0 || err != null){
-                response.render("edit404");
-                return;
-            }
-
-            let post = result[0];
-            if( post['mail'] == cookie[request.cookies['login']]['mail'] || cookie[request.cookies['login']]['isadmin'] == 1){
-                connection.query("SELECT * FROM `category`",(err, result, fields) => {
-                    response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result});
-                });
-                return;
-            }
-
-            response.render("edit404");
-        });
+    if ( !(request.cookies['login'] in cookie) ){
+        response.redirect("/login");
         return;
     }
-    response.redirect("/login");
+
+    connection.query(
+    "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"'",(err, result, fields)=>{
+        if(result.length == 0 || err != null){
+            response.render("edit404");
+            return;
+        }
+
+        let post = result[0];
+        if( post['mail'] == cookie[request.cookies['login']]['mail'] || cookie[request.cookies['login']]['isadmin'] == 1){
+            connection.query("SELECT * FROM `category`",(err, result, fields) => {
+                response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result});
+            });
+            return;
+        }
+
+        response.render("edit404");
+    });
+    return;
+    
 });
 
 router.post("/",(request,response) => {
 
-    console.log(request.body);
+    if ( !(request.cookies['login'] in cookie) ){
+        response.redirect("/login");
+        return;
+    }
 
     if("preview" in request.body){
         let markdown = dompurify.sanitize(marked(request.body["report"]));// <%-check%>

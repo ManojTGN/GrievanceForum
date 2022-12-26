@@ -26,18 +26,16 @@
             width:200px;
         }
     </style>
-    <script>
-        function load_darkmode() {
-            if(localStorage.darkmode == 'true') {
-                document.body.classList.toggle('dark-theme');
-            }
-            else {
-                localStorage.setItem('darkmode',false);
-            }
-        }
-    </script>
 </head>
-<body onload="load_darkmode()">
+<body>
+
+<script>
+    if(localStorage.darkmode == 'true'){
+        document.body.classList.toggle('dark-theme');
+    }else{
+        localStorage.setItem('darkmode',false);
+    }
+</script>
 
 <!--
     No View Panel
@@ -67,12 +65,12 @@
             <!-- Notification Top 3 Option Bar-->
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                    <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="false">
                         <i class="fa-solid fa-envelopes-bulk"></i> All
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+                    <button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="true">
                         <i class="fa-solid fa-envelope"></i> Unread
                     </button>
                 </li>
@@ -86,10 +84,10 @@
             <div class="tab-content" id="pills-tabContent">
 
                 <!-- All Notifications Tab -->
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
                     
                     <p class="fs-5">All Notification</p>
-                    <% let i =0; notifications.forEach(function(notification) { i+=1; %>
+                    <% let i =0; notifications.forEach(function(notification) { %>
 
                         <div class="toast w-100" id="NotificationToast-desktop<%=i%>" style="margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
                             
@@ -110,7 +108,7 @@
                             </div>
 
                         </div>
-                    <% });%>
+                    <% i+=1; });%>
 
                     <!-- All Notifications Tab Empty Image -->
                     <% if(i == 0){%>
@@ -127,7 +125,7 @@
                 </div>
 
                 <!-- Unread Notifications Tab -->
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
                     
                     <div class="row">
                         <div class="col">
@@ -183,7 +181,7 @@
                 <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
                     <p class="fs-5">Read Notification</p>
                     <% i =0; notifications.forEach(function(notification) { %>
-                        <% if(notification.isread == 0){ return; } i+=1;%>
+                        <% if(notification.isread == 0){ return; }%>
                         <div class="toast w-100" id="NotificationToast-desktopR<%=i%>" style="margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
                             <div class="toast-header">
                                 <i <%="style=color:var(--bs-"+notification.color+");"%> class="<%=notification.icon%> rounded me-2"></i>"
@@ -198,7 +196,7 @@
                                 <%-notification.message%> <%-notification.button%>
                             </div>
                         </div>
-                    <% }); %>
+                    <% i+=1; }); %>
                     
                     <!-- Read Notifications Tab Empty Image -->
                     <% if(i == 0){%>
@@ -278,7 +276,7 @@
 
         <!-- Read Notifications -->
         <% i =0;notifications.forEach(function(notification) { %>
-            <% if( notification.isread == 0 ){ return; } i+=1; %>
+            <% if( notification.isread == 0 ){ return; } %>
             <div class="toast w-100" id="NotificationToast-mobile<%=i%>" style="margin-top:10px;" data-bs-animation="true" data-bs-autohide="false">
                 <div class="toast-header">
                     <i <%="style=color:var(--bs-"+notification.color+")"%> class="<%=notification.icon%> rounded me-2"></i>"
@@ -293,7 +291,7 @@
                     <%-notification.message%> <%-notification.button%>
                 </div>
             </div>
-        <% }); %>
+        <% i+=1;}); %>
     </div>
 </div>
 <br><br><br>
@@ -308,6 +306,7 @@
             $("#NotificationToast-mobile"+i).toast("show");
             $("#NotificationToast-desktop"+i).toast("show");
             $("#NotificationToast-desktopR"+i).toast("show");
+            console.log(i,n);
             await new Promise(r => setTimeout(r, 50));
         }
     });

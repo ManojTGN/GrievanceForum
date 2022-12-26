@@ -20,19 +20,15 @@
             border:0px;
         }
     </style>
-    <script>
-        function load_darkmode() {
-            if(localStorage.darkmode == 'true') {
-                document.body.classList.toggle('dark-theme');
-            }
-            else {
-                localStorage.setItem('darkmode',false);
-            }
-        }
-    </script>
-
 </head>
-<body onload="load_darkmode()">
+<body>
+<script>
+    if(localStorage.darkmode == 'true'){
+        document.body.classList.toggle('dark-theme');
+    }else{
+        localStorage.setItem('darkmode',false);
+    }
+</script>
 
 <!--
     No View Panel
@@ -141,9 +137,20 @@
                     <%}%>
         
                     <%for(let i = 0; i < bookmarks.length; i++){%>
-                        <!--Todo: Bookmark List-->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-5"><%=i+1%>.<%=bookmarks[i].name%></div>
+                                    <div class="col-7">
+                                        <a href="../post/<%=bookmarks[i].id%>" class="btn btn-sm btn-secondary"><i class="fa-solid fa-eye"></i></a>
+                                        <a href="#delete" class="btn btn-sm btn-danger"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <%}%>
                 </div>
+
             </div>
         </div>
 
