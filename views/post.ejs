@@ -247,8 +247,12 @@
 
                     <!-- Post Support Button -->
                     <%if(userInfo.isadmin == 0){%>
+                        <% if(postInfo.support == 1){%>
                         <br>
-                        <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success"><i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%></button>
+                        <button id="supportBtn-desktop" onclick="supportPost()" class="btn btn-large w-100 btn<%if(isSupporting == 0){%>-outline<%}%>-success">
+                            <i class="fa-solid fa-hand-sparkles"></i> <%if(isSupporting == 0){%>Support This Post<%}else{%>Currently Supporting<%}%>
+                        </button>
+                        <%}%>
                     <%}%>
                 </div>
             </div>
