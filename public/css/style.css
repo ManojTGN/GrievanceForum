@@ -64,7 +64,7 @@ body{
     .desktop{opacity: 0;visibility: hidden;}
     .noview{opacity: 0;visibility: hidden;}
     #navbarSupportedContent{position:absolute;left:-200%;}
-    #saveToast{width:100%;}
+    #saveToast, #failedSaveToast, #ErrorPostToast{width:100%;}
 }
 @media (min-width:768px)  { 
     .Create{opacity: 1;visibility: visible;width:50%;position:absolute;left:50%;transform: translate(-50%,0%);} 
@@ -72,5 +72,5 @@ body{
     .desktop{opacity: 1;visibility: visible;}
     .noview{opacity: 0;visibility: hidden;}
     #navbarSupportedContent{position:static;left:0%;}
-    #saveToast{width:20%;}
+    #saveToast, #failedSaveToast, #ErrorPostToast{width:20%;}
 }

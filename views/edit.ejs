@@ -16,13 +16,13 @@
     <link href="../css/style.css" rel="stylesheet"/>
 
     <style>
-        #deleteToastPara{
+        #deleteToastPara, #failedSaveToastPara{
             background-color: var(--bs-danger);
         }
         #saveToastPara{
             background-color: var(--bs-success);
         }
-        #saveToast{
+        #saveToast, #failedSaveToast, #ErrorPostToast{
             position: fixed;
             left: 1%;
             bottom: 10%;
@@ -248,8 +248,16 @@
     </div>
 </div>
 
+<!-- Failed Save Toast -->
+<div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" id="failedSaveToast">
+    <div class="d-flex">
+        <div class="toast-body" id="failedSaveToastPara"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
 <!-- Invalid Post Toast -->
-<div class="toast align-items-center text-bg-danger border-0" style="position: fixed;left: 1%;bottom: 10%;width: 98%;" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
+<div class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" id="ErrorPostToast">
     <div class="d-flex">
         <div class="toast-body" id="deleteToastPara">Invalid Post Details ( Title | Description | Report )</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -349,9 +357,9 @@ function previewMarkdown(){
 
 function PostDraft(){
     if(
-        $("#title").val().trim() == "" ||
-        $("#description").val().trim() == "" ||
-        easyMDE.value().trim() == ""
+        $("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').replace('\n','').trim() == "" ||
+        $("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').trim() == "" ||
+        easyMDE.value().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').trim() == ""
     ){
         $('#staticPostConfirmBackdrop').modal('hide');
         $("#ErrorPostToast").toast("show");
@@ -363,51 +371,73 @@ function PostDraft(){
     $("#PostLoader").css("opacity","1");
     clearInterval(autoSaveInterval);
 
-    $.post("/edit",{
-        post:true,
-        id:"<%=postInfo['id']%>",
-        mail:"<%=postInfo['mail']%>",
-        title:$("#title").val() || "",
-        description:$("#description").val() || "",
-        report:easyMDE.value().replaceAll("`","") || "",
-        category:document.getElementById("categorySelect").value,
-        categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
-        visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
-        anonymous:document.getElementById("anonymousCheck").checked?1:0,
-        comment:document.getElementById("CommentOthersCheck").checked?1:0,
-        support:document.getElementById("SupportPostCheck").checked?1:0,
-        draft:1
-    },
-    function(data, status){
-        $("#postText").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
-        $("#postText").css("opacity","1");
-        $("#PostLoader").css("opacity","0");
-        $("#TwoPostButton").css("visibility","hidden");
-        $("#PostOkContainer").css("visibility","visible");
+    $.ajax({
+        type:"post",
+        url:"/edit",
+        data:{
+            post:true,
+            id:"<%=postInfo['id']%>",
+            mail:"<%=postInfo['mail']%>",
+            title:$("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').replace('\n','') || "",
+            description:$("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            report:easyMDE.value().replace('\'','').replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            category:document.getElementById("categorySelect").value,
+            categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
+            visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
+            anonymous:document.getElementById("anonymousCheck").checked?1:0,
+            comment:document.getElementById("CommentOthersCheck").checked?1:0,
+            support:document.getElementById("SupportPostCheck").checked?1:0,
+            draft:1
+        },
+        success: function(data){
+            $("#postText").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
+            $("#postText").css("opacity","1");
+            $("#PostLoader").css("opacity","0");
+            $("#TwoPostButton").css("visibility","hidden");
+            $("#PostOkContainer").css("visibility","visible");
+        },
+        failed:function(data){
+            $("#postText").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
+            $("#postText").css("opacity","1");
+            $("#PostLoader").css("opacity","0");
+            $("#TwoPostButton").css("visibility","hidden");
+            $("#PostOkContainer").css("visibility","visible");
+        }
     });
 }
 
 function SaveDraft(isAutoSave=false){
-    $.post("/edit",{
-        save:true,
-        id:"<%=postInfo['id']%>",
-        mail:"<%=postInfo['mail']%>",
-        title:$("#title").val() || "",
-        description:$("#description").val() || "",
-        report:easyMDE.value().replaceAll("`","") || "",
-        category:document.getElementById("categorySelect").value,
-        categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
-        visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
-        anonymous:document.getElementById("anonymousCheck").checked?1:0,
-        comment:document.getElementById("CommentOthersCheck").checked?1:0,
-        support:document.getElementById("SupportPostCheck").checked?1:0,
-        draft:1
-    },
-    function(data, status){
-        if(isAutoSave==true){ $("#saveToastPara").html(`AutoSave Successfull ${(new Date())}`); }
-        else{$("#saveToastPara").html(`Save Successfull`);}
-        $("#saveToast").toast("show");
+    $.ajax({
+        type: 'POST',
+        url: "/edit",
+        data: {
+            save:true,
+            id:"<%=postInfo['id']%>",
+            mail:"<%=postInfo['mail']%>",
+            title:$("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            description:$("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            report:easyMDE.value().replace('\'','').replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            category:document.getElementById("categorySelect").value,
+            categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
+            visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
+            anonymous:document.getElementById("anonymousCheck").checked?1:0,
+            comment:document.getElementById("CommentOthersCheck").checked?1:0,
+            support:document.getElementById("SupportPostCheck").checked?1:0,
+            draft:1
+        },
+        success: function(data) {
+            if(isAutoSave==true) $("#saveToastPara").html(`AutoSave Successfull ${(new Date())}`); 
+            else $("#saveToastPara").html(`Save Successfull`);
+            $("#saveToast").toast("show");
+        },
+        error: function(xhrReq, textStatus, errorThrown) {
+            if(isAutoSave==true)$("#failedSaveToastPara").html(`AutoSave Failed!`); 
+            else $("#failedSaveToastPara").html(`Save Failed`);
+            
+            $("#failedSaveToast").toast("show");
+        }
     });
+
 }
 
 function DeletePost(){

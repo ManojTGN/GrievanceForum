@@ -22,7 +22,17 @@ router.get("/",(request,response) => {
 });
 
 router.post("/",(request,response) => {
-    response.sendStatus(200);
+
+    if ( !(request.cookies['login'] in cookie) ){
+        response.redirect("/login");
+        return;
+    }
+    
+    if('deleteBookmark' in request.body){
+        connection.query("DELETE FROM `postinfo` WHERE `type`=3 AND `postid`='"+request.body.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err,bookmark,fields) => {});
+        response.sendStatus(200);
+        return;
+    }
 });
 
 module.exports = router;

@@ -56,8 +56,8 @@ router.post("/",(request,response) => {
     }
 
     if("save" in request.body){
-        connection.query("UPDATE `posts` SET `title`='"+request.body['title']+"', `description`='"+request.body['description']+"', `report`='"+request.body['report']+"', `category`='"+request.body['category']+"', `cat_name`='"+request.body['categoryName']+"', `visibility`='"+request.body['visibility']+"', `anonymous`='"+request.body['anonymous']+"', `comment`='"+request.body['comment']+"', `support`='"+request.body['support']+"' WHERE id='"+request.body['id']+"';",(err, result, fields)=>{
-            if(err) response.sendStatus(500);
+        connection.query(`UPDATE posts SET title='${request.body['title']}', description='${request.body['description']}', report='${request.body['report']}', category='${request.body['category']}', cat_name='${request.body['categoryName']}', visibility='${request.body['visibility']}', anonymous='${request.body['anonymous']}', comment='${request.body['comment']}', support='${request.body['support']}' WHERE id='${request.body['id']}';`,(err, result, fields)=>{
+            if(err){response.status(500).send("error");}
             else response.sendStatus(200);
             return;
         });
@@ -68,7 +68,7 @@ router.post("/",(request,response) => {
     if("post" in request.body){
         connection.query("UPDATE `posts` SET `title`='"+request.body['title']+"', `description`='"+request.body['description']+"', `report`='"+request.body['report']+"', `category`='"+request.body['category']+"', `cat_name`='"+request.body['categoryName']+"', `visibility`='"+request.body['visibility']+"', `anonymous`='"+request.body['anonymous']+"', `comment`='"+request.body['comment']+"', `support`='"+request.body['support']+"', `draft`='0' WHERE id='"+request.body['id']+"';",(err, result, fields)=>{
             connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `button`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.cookies['login']]["mail"]+"','Post Submission','You Have Posted An Submission To The GrivanceForum','"+'<a class="btn btn-sm btn-secondary" href="../post/'+request.body['id']+'">View Post</a>'+"','fa-solid fa-file-circle-check','success','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
-            if(err) response.sendStatus(500);
+            if(err){response.sendStatus(500);}
             else response.sendStatus(200);
             return;
         });
@@ -79,7 +79,7 @@ router.post("/",(request,response) => {
     if("delete" in request.body){
         connection.query("DELETE FROM `posts` WHERE `id`='"+request.body['id']+"';",(err, result, fields)=>{
             connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.cookies['login']]["mail"]+"','Post Deletion','The Post Has Been Deleted (unrecovered)','fa-regular fa-trash-can','danger','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
-            if(err) response.sendStatus(500);
+            if(err){response.sendStatus(500);}
             else response.sendStatus(200);
             return;
         });

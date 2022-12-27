@@ -45,7 +45,7 @@
     <%- include('partials/desktopNavbar.ejs') %>
     <br>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" id="navbarSupportedContent">
         <div class="col-6">
 
             <!-- Post (Title | Description | Report) -->
@@ -155,8 +155,8 @@
                                     </p>
                                     <% if(comments[i].mail == userInfo['mail']){ %>
                                         <hr>
-                                        <button class="btn btn-sm btn-primary" <%="onclick=editComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                                        <button class="btn btn-sm btn-danger" <%="onclick=deleteComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                                        <button class="btn btn-sm btn-primary" <%-"onclick='editComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                                        <button class="btn btn-sm btn-danger" <%-"onclick='deleteComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
                                     <%}%>
                                 </div>
                             </div>
@@ -373,6 +373,9 @@
         <hr>
 
         <div>
+            <form method="POST" action="../post">
+                <input style="position:absolute;visibility:hidden;" name="title" value="<%=postInfo.title%>">
+                <input style="position:absolute;visibility:hidden;" name="id" value="<%=postInfo.id%>">
             <a href="" class="btn btn-sm btn-outline-secondary">
                 <div class="row">
                     <div class="col-1">
@@ -385,20 +388,21 @@
             </a>
 
             <!-- Share | Bookmark | Edit Post -->
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Share
-                </button>
-                <button name="bookmark" type="submit" class="btn btn-sm btn-outline-secondary <%if(isBookmarked.length > 0){%>active<%}%>">
-                    <i class="fa-regular fa-bookmark"></i> Bookmark<%if(isBookmarked.length > 0){%>ed<%};%>
-                </button>
-            </div>
+            <button data-bs-toggle="modal" data-bs-target="#ShareModal" type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Share
+            </button>
+            <button name="bookmark" type="submit" class="btn btn-sm btn-outline-secondary <%if(isBookmarked.length > 0){%>active<%}%>">
+                <i class="fa-regular fa-bookmark"></i> Bookmark<%if(isBookmarked.length > 0){%>ed<%};%>
+            </button>
+            
+            
             <%if(userInfo.isadmin == 0){%>
             <%if(userInfo.mail == postInfo.mail && postInfo.status != 1){%>
             <a href="<%if(postInfo.status == 1){%>javascript:void(0)<%}else{%>../edit/<%=postInfo.id%><%}%>" class="btn btn-sm btn-primary">
                 <i class="fa-solid fa-pen"></i> Edit Post
             </a>
             <%}}%>
+            </form>
         </div><br>
 
         <!-- Post Solution -->
@@ -462,8 +466,8 @@
                         <p class="card-text"><%=comments[i].message%></p>
                         <% if(comments[i].mail == userInfo['mail']){ %>
                             <hr>
-                            <button class="btn btn-sm btn-primary"  <%="onclick=editComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                            <button class="btn btn-sm btn-danger" <%="onclick=deleteComment("+comments[i].sno+",`"+comments[i].message+"`)"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                            <button class="btn btn-sm btn-primary"  <%-"onclick='editComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                            <button class="btn btn-sm btn-danger"   <%-"onclick='deleteComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
                         <%}%>
                     </div>
                 </div>

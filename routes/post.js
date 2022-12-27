@@ -91,9 +91,10 @@ router.post("/",(request,response) => {
     }
 
     if("deletePost" in request.body){
-        connection.query("DELETE FROM `postinfo` WHERE `postid`='"+request.body.id+"'",(err, result, fields) => {console.log(err);response.send('1');});
-        connection.query("DELETE FROM `comments` WHERE `postid`='"+request.body.id+"'",(err, result, fields) => {console.log(err);response.send('1');});
+        connection.query("DELETE FROM `postinfo` WHERE `postid`='"+request.body.id+"'",(err, result, fields) => {console.log(err);});
+        connection.query("DELETE FROM `comments` WHERE `postid`='"+request.body.id+"'",(err, result, fields) => {console.log(err);});
         connection.query("DELETE FROM `posts` WHERE `id`='"+request.body.id+"'",(err, result, fields) => {console.log(err);});
+        response.send('1');
         return;
     }
 
