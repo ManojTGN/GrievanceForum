@@ -9,8 +9,13 @@
             <div class="col">
                 <a href="../manage" type="button" class="btn btn-link manage"> <i class="fa-solid fa-plus"></i></a>
             </div>
-            <div class="col">
+            <div class="col position-relative">
                 <a href="../notification" type="button" class="btn btn-link notification"> <i class="fa-solid fa-bell"></i></a>
+                <%if(xnotifications > 0){%>
+                    <span class="position-absolute translate-middle badge rounded-pill bg-danger" style="top:20%;left:70%">
+                        <%=xnotifications%>
+                    <span class="visually-hidden">unread messages</span>
+                <%}%>
             </div>
             <div class="col">
                 <a href="../profile" type="button" class="btn btn-link profile"> <i class="fa-solid fa-user"></i></a>

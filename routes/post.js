@@ -38,7 +38,9 @@ router.get("/:id",(request,response) => {
                 connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND type='2'",(err, re, fields) => {
                     connection.query("SELECT * FROM `category` WHERE `sno`='"+post[0].category+"'",(err, r, fields) => {
                         connection.query("SELECT * FROM `postinfo` WHERE `type`='3' AND `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, bookmark, fields) => {
-                            response.render("post",{userInfo:cookie[request.cookies['login']],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length,solution:re,category:r,isBookmarked:bookmark});
+                        connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {
+                            response.render("post",{userInfo:cookie[request.cookies['login']],postInfo:post[0],comments:res,report:markdown,isSupporting:result.length,solution:re,category:r,isBookmarked:bookmark,xnotifications:urnotifications.length});
+                        });
                         });
                     });
                 });
@@ -70,6 +72,10 @@ router.post("/",(request,response) => {
     if("postComment" in request.body){
         connection.query(`INSERT INTO comments(mail, name, picture, postid, message, datetime) VALUES ('${cookie[request.cookies['login']]['mail']}','${cookie[request.cookies['login']]['name']}','${cookie[request.cookies['login']]['picture']}','${request.body.id}','${request.body.message}','${(new Date()).toLocaleDateString()+' '+(new Date()).toLocaleTimeString()}')`,(err,result,field)=>{response.send('1');})
         connection.query("UPDATE `posts` SET `comments`= comments+1 WHERE `id`='"+request.body.id+"'",(err, result, fields) => {});
+        connection.query("SELECT `mail` from `posts` WHERE `id`='"+request.body.id+"'",(err, mail, fields) => {
+            if(mail[0].mail != cookie[request.cookies['login']]['mail'])
+            connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `button`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+mail[0].mail+"','User Comment','"+cookie[request.cookies['login']]['name']+" Commented: "+request.body.message+"','"+'<a class="btn btn-sm btn-secondary" href="../post/'+request.body.id+'">View Comment</a>'+"','fa-solid fa-message','secondary','"+(new Date()).toLocaleDateString()+" "+(new Date()).toLocaleTimeString()+"','0')",(err, result, fields)=>{});
+        });
         return;
     }
 

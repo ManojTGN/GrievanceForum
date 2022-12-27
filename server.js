@@ -44,7 +44,9 @@ app.get('/', (request, response) => {
     }
 
     connection.query("SELECT * FROM `category`",(err, result, fields) => {
-        response.render("dashboard",{userInfo:cookie[request.cookies['login']],category:result});
+    connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {
+        response.render("dashboard",{userInfo:cookie[request.cookies['login']],category:result,xnotifications:urnotifications.length});
+    });
     });
 });
 

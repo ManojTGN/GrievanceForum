@@ -33,9 +33,21 @@
             </li>
 
             <!-- Notification Tabs -->
-            <li class="nav-item">
+            <li class="nav-item position-relative">
                 <a class="nav-link notification-desktop" href="../notification">
                     <i class="fa-solid fa-bell"></i> Notification
+                </a>
+                <%if(xnotifications > 0){%>
+                <span class="position-absolute translate-middle badge rounded-pill bg-danger" style="top:20%;left:20%">
+                    <%=xnotifications%>
+                <span class="visually-hidden">unread messages</span>
+                <%}%>
+            </li>
+
+            <!-- Profile Tabs -->
+            <li class="nav-item">
+                <a class="nav-link profile-desktop" href="../profile">
+                    <i class="fa-solid fa-user"></i> Profile
                 </a>
             </li>
             <%}%>

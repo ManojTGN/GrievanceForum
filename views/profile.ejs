@@ -94,14 +94,37 @@
                         <hr>
                         <p class="card-text">
                             <div class="row">
+
                                 <div class="col">
-                                    <small class="text-muted">Total Post Read: 0</small><br>
-                                    <small class="text-muted">Total Comments: 0</small>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <small class="text-muted fs-6"><i class="fa-solid fa-book-open"></i> Post Read: <button type="button" class="btn btn-sm btn-light"><%=totalViews.length%></button></small>
+                                        </div>
+                                    </div><br>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <small class="text-muted fs-6"><i class="fa-solid fa-message"></i> Comments: <button type="button" class="btn btn-sm btn-light"><%=totalComments.length%></button></small>
+                                        </div>
+                                    </div><br>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <small class="text-muted fs-6"><i class="fa-solid fa-hand-sparkles"></i> Supports: <button type="button" class="btn btn-sm btn-light"><%=totalLikes.length%></button></small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col">
-                                    <small class="text-muted">Total Bookmarks: 0</small><br>
-                                    <small class="text-muted">Total Posts Made: 0</small>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <small class="text-muted fs-6"><i class="fa-solid fa-bookmark"></i> Bookmarks: <button type="button" class="btn btn-sm btn-light"><%=bookmarks.length%></button></small>
+                                        </div>
+                                    </div><br>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <small class="text-muted fs-6"><i class="fa-solid fa-feather-pointed"></i> Posts Made: <button type="button" class="btn btn-sm btn-light"><%=posts.length%></button></small>
+                                        </div>
+                                    </div>
                                 </div>
+                        
                             </div>
                         </p>
                     </div>
@@ -209,6 +232,45 @@
         </div>
     </div>
     <br>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">
+                <div class="row">
+        
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <small class="text-muted fs-6"><i class="fa-solid fa-book-open"></i> Post Read: <button type="button" class="btn btn-sm btn-light"><%=totalViews.length%></button></small>
+                            </div>
+                        </div><br>
+                        <div class="card">
+                            <div class="card-body">
+                                <small class="text-muted fs-6"><i class="fa-solid fa-message"></i> Comments: <button type="button" class="btn btn-sm btn-light"><%=totalComments.length%></button></small>
+                            </div>
+                        </div><br>
+                        <div class="card">
+                            <div class="card-body">
+                                <small class="text-muted fs-6"><i class="fa-solid fa-hand-sparkles"></i> Supports: <button type="button" class="btn btn-sm btn-light"><%=totalLikes.length%></button></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <small class="text-muted fs-6"><i class="fa-solid fa-bookmark"></i> Bookmarks: <button type="button" class="btn btn-sm btn-light"><%=bookmarks.length%></button></small>
+                            </div>
+                        </div><br>
+                        <div class="card">
+                            <div class="card-body">
+                                <small class="text-muted fs-6"><i class="fa-solid fa-feather-pointed"></i> Posts Made: <button type="button" class="btn btn-sm btn-light"><%=posts.length%></button></small>
+                            </div>
+                        </div>
+                    </div>
+            
+                </div>
+            </p>
+        </div>
+    </div><br>
 
     <!-- User Posts -->
     <div class="card">

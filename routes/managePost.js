@@ -13,7 +13,9 @@ router.get("/",(request,response) => {
     }
 
     connection.query("SELECT * FROM `posts` WHERE `mail`='"+cookie[request.cookies['login']]['mail']+"' AND `draft`=1",(err,result,fields) => {
-        response.render("manage",{userInfo:cookie[request.cookies['login']],drafts:result});
+    connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {
+        response.render("manage",{userInfo:cookie[request.cookies['login']],drafts:result,xnotifications:urnotifications.length});
+    });
     });
 });
 

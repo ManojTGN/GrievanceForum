@@ -31,7 +31,9 @@ router.get("/:id",(request,response) => {
         let post = result[0];
         if( post['mail'] == cookie[request.cookies['login']]['mail'] || cookie[request.cookies['login']]['isadmin'] == 1){
             connection.query("SELECT * FROM `category`",(err, result, fields) => {
-                response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result});
+            connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {
+                response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result,xnotifications:urnotifications.length});
+            });
             });
             return;
         }
