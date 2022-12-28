@@ -13,7 +13,7 @@ router.get("/",(request,response) => {
 
 router.post("/",(request,response) => {
 
-    let hash = crypto.createHash('md5').update((new Date()).toLocaleString()+crypto.randomInt(1000)).digest('hex');
+    let hash = crypto.createHash('md5').update((new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+crypto.randomInt(1000)+"x"+crypto.randomInt(1000)).digest('hex');
 
     if("guest" in request.body){
         response.cookie('login',hash);

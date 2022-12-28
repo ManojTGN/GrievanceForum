@@ -86,14 +86,14 @@ app.post('/', (request, response) => {
             + ((request.body.sort == 0)?` ORDER BY views DESC`:` ORDER BY sno DESC`)
             ;
 
-            console.log(query);
-
             connection.query(query,(err, result, fields) => {
                 if(request.body.date != 4){
-                    let date;
+                    let date;let db_date;
                     for(let i = result.length-1;i>=0;i--){
-                        date = result[i].datetime.split(' ')[0].split('/');
-                        date = ( (new Date()) - (new Date(+date[2], +date[1] - 1 , +date[0])) ) / 86400000;//1000 * 3600 * 24
+                        date = result[i].datetime.replace(",","").split(' ')[0].split('/');
+                        db_date = (new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'}).replace(",","").split(' ')[0].split('/');
+
+                        date = ( (new Date(+db_date[2], +db_date[0] - 1 , +db_date[1])) - (new Date(+date[2], +date[0] - 1 , +date[1])) ) / 86400000;//1000 * 3600 * 24
                         if( request.body.date == 0){if(date > 1) result.splice(i, 1);}
                         else if( request.body.date == 1){if(date > 7) result.splice(i, 1);}
                         else if( request.body.date == 2){if(date > 30) result.splice(i, 1);} 
