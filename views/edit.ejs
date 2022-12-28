@@ -346,7 +346,7 @@ function previewMarkdown(){
 
     $.post("/edit",{
     preview:true,
-    report: easyMDE.value().replaceAll("`","")
+    report: easyMDE.value().replace('\'','').replace('\"','').replace('`','')
     },
     function(data, status){
         if(document.getElementById("PreviewBoxInfo") != undefined) document.getElementById("PreviewBoxInfo").remove();
@@ -357,9 +357,9 @@ function previewMarkdown(){
 
 function PostDraft(){
     if(
-        $("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').replace('\n','').trim() == "" ||
-        $("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').trim() == "" ||
-        easyMDE.value().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').trim() == ""
+        $("#title").val().replace('\'','').replace('\"','').replace('`','').replace('\n','').trim() == "" ||
+        $("#description").val().replace('\'','').replace('\"','').replace('`','').trim() == "" ||
+        easyMDE.value().replace('\'','').replace('\"','').replace('`','').trim() == ""
     ){
         $('#staticPostConfirmBackdrop').modal('hide');
         $("#ErrorPostToast").toast("show");
@@ -378,9 +378,9 @@ function PostDraft(){
             post:true,
             id:"<%=postInfo['id']%>",
             mail:"<%=postInfo['mail']%>",
-            title:$("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`').replace('\n','') || "",
-            description:$("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
-            report:easyMDE.value().replace('\'','').replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            title:$("#title").val().replace('\'','').replace('\"','').replace('`','').replace('\n','') || "",
+            description:$("#description").val().replace('\'','').replace('\"','').replace('`','') || "",
+            report:easyMDE.value().replace('\'','').replace('\"','').replace('`','') || "",
             category:document.getElementById("categorySelect").value,
             categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
             visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
@@ -414,9 +414,9 @@ function SaveDraft(isAutoSave=false){
             save:true,
             id:"<%=postInfo['id']%>",
             mail:"<%=postInfo['mail']%>",
-            title:$("#title").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
-            description:$("#description").val().replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
-            report:easyMDE.value().replace('\'','').replace('\'','\\\'').replace('\"','\\\"').replace('`','\\\`') || "",
+            title:$("#title").val().replace('\'','').replace('\"','').replace('`','') || "",
+            description:$("#description").val().replace('\'','').replace('\"','').replace('`','') || "",
+            report:easyMDE.value().replace('\'','').replace('\"','').replace('`','') || "",
             category:document.getElementById("categorySelect").value,
             categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
             visibility:document.getElementById("PostVisibilityRadio1").checked?0:1,
