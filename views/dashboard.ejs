@@ -194,11 +194,14 @@
                     <img id="createPost-desktop" src="" class="img-fluid rounded-start" alt="...">
                     
                     <script>
-                        if(localStorage.darkmode == 'true'){
-                            document.getElementById('createPost-desktop').src='images/dashboardCreateDark.jpg';
-                        }else{
-                            document.getElementById('createPost-desktop').src='images/dashboardCreate.jpg';
+                        if(localStorage.darkmode == 'true') document.getElementById('createPost-desktop').src='images/dashboardCreateDark.jpg';
+                        else document.getElementById('createPost-desktop').src='images/dashboardCreate.jpg';
+                        
+                        function changeImage(){
+                            if(localStorage.darkmode == 'true')document.getElementById('createPost-desktop').src='images/dashboardCreateDark.jpg';
+                            else document.getElementById('createPost-desktop').src='images/dashboardCreate.jpg';
                         }
+                        
                     </script>
 
                     <p class="card-text">Create A New Post In The BIT GrievanceForum Now! Click The Create Post Button To Get Started</p>

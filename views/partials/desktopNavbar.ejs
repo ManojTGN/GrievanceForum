@@ -76,7 +76,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);">
+                    <a class="dropdown-item" href="#" onclick="document.body.classList.toggle('dark-theme');localStorage.setItem('darkmode',localStorage.darkmode=='true'?false:true);try{changeImage();}catch{}">
                         <i class="fa-solid fa-circle-half-stroke"></i> Dark Mode
                     </a>
                 </li>

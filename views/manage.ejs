@@ -142,6 +142,16 @@
                 <script>
                     if(localStorage.darkmode == 'true') document.getElementById('createPost-desktop').src='images/createPostDark.jpg';
                     else document.getElementById('createPost-desktop').src='images/createPost.jpg';
+                    
+                    function changeImage(){
+                        if(localStorage.darkmode == 'true'){
+                            document.getElementById('createPost-desktop').src='images/createPostDark.jpg';
+                            document.getElementById('createPost-mobile').src='images/createPostDark.jpg';
+                        }else{
+                            document.getElementById('createPost-desktop').src='images/createPost.jpg';
+                            document.getElementById('createPost-mobile').src='images/createPost.jpg';
+                        }
+                    }
                 </script>
                 <div class="card-body">
                     <h5 class="card-title">
