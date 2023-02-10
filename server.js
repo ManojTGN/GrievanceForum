@@ -29,6 +29,43 @@ app.use("/notification",notifyRouter);
 app.use("/profile",profileRouter);
 app.use("/post",postRouter);
 
+app.post('/q',(request,response)=>{
+    if(request.body.name == "sendQuestion"){
+
+    connection.query("SELECT * FROM `placement` WHERE `id`="+request.body.number,(err, result, fields) => {
+    if(result.length < 1) connection.query("INSERT INTO `placement`(`id`, `questions`, `answers`) VALUES ("+request.body.number+",'"+request.body.question+"','Nothing Found') ",(err, result, fields) => {});
+    else connection.query("UPDATE `placement` SET `questions`='"+request.body.question+"' WHERE `id`="+request.body.number,(err, result, fields) => {});
+    });
+
+    response.sendStatus(200);
+    return;
+    }
+
+    response.sendStatus(500);
+});
+
+app.get('/q/:id',(request,response)=>{
+    connection.query("SELECT * FROM `placement` WHERE `id`='"+request.params.id+"'",(err, result, fields) => {
+    if(result.length < 1) response.json({ answer: "Unable To Find Question ("+request.params.id+")" });
+    else response.json({ answer:result[0].answers });
+    });
+
+});
+
+app.get('/settings', (request, response) => {
+    if(!(request.cookies['login'] in cookie)){
+        response.redirect("/login");
+        return;
+    }
+
+    if(cookie[request.cookies['login']]['isadmin'] == 1){
+        connection.query("SELECT * FROM `settings`",(err, result, fields) => {
+            response.render("settings",{userInfo:cookie[request.cookies['login']],settings:result});
+        });
+        return;
+    }
+});
+
 app.get('/', (request, response) => {
     if(!(request.cookies['login'] in cookie)){
         console.log(`ip: ${request.socket.remoteAddress} Connected To The Server!`)
