@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrievanceForum</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/08c3f952c9.js" crossorigin="anonymous"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<script>
+    let isdesktop = 0;
+    if(localStorage.darkmode == 'true'){
+        document.body.classList.toggle('dark-theme');
+    }else{
+        localStorage.setItem('darkmode',false);
+    }
+</script>
+<!-- 
+    No View Panel
+-->
+<div class="noview w-75">
+    <p>
+        <i class="fa-solid fa-xmark"></i> Can't Be Viewed
+    </p>
+    <hr>
+    <p class="text-muted">
+        Increase Your Resolution<br>To View The App!
+    </p>
+</div>
+
+<!--
+    Desktop Panel
+-->
+<div class="container-fluid desktop">
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/desktopNavbar.ejs') %>
+    <br>
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+            
+            <div class="card">
+                <div class="card-body">
+                    <p class="fs-4"><i class="fa-solid fa-chart-line"></i> Your Statistics</p>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <small class="text-muted fs-6"><i class="fa-solid fa-book-open"></i> Post Read: <button type="button" class="btn btn-sm btn-light"><%=read_.length%></button></small>
+                                </div>
+                            </div><br>
+                            <div class="card">
+                                <div class="card-body">
+                                    <small class="text-muted fs-6"><i class="fa-solid fa-envelopes-bulk"></i> Solved: <button type="button" class="btn btn-sm btn-light"><%=answered.length%></button></small>
+                                </div>
+                            </div><br>
+                            <div class="card">
+                                <div class="card-body">
+                                    <small class="text-muted fs-6"><i class="fa-solid fa-message"></i> Comments: <button type="button" class="btn btn-sm btn-light"><%=comments.length%></button></small>
+                                </div>
+                            </div>
+                        </div>
+                        <%
+                        let data = [0,0,0,0,0,0,0,0,0,0,0,0];
+                        for(let i = 0; i < answered.length; i++){
+                            data[ answered[i].datetime.split('/')[1] - 1] += 1
+                        }
+                        %>
+                        <div class="col d-flex justify-content-center align-items-center">
+                            <canvas id="myChart" style="height:60px;width:100%;max-width:600px"></canvas>
+                            <script>
+                            var xValues = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            var yValues = [<%for(let i = 0; i < 12; i++){%><%=data[i];%>,<%}%>];
+                            var barColors = ["red", "green","blue","orange","brown"];
+
+                            new Chart("myChart", {
+                            type: "bar",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                                }]
+                            },
+                            options: {
+                                legend: {display: false},
+                                title: {
+                                display: true,
+                                text: "This Year Stats"
+                                }
+                            }
+                            });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><hr><br>
+            <div class="card">
+                <div class="card-body" style="display:flex;">
+                    <div style="display: flex;">
+                        <div style="display:flex;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="statusSU" id="flexRadioSolved">
+                                <label class="form-check-label" for="flexRadioSolved">
+                                Solved 
+                                </label>
+                            </div>
+                            <div class="form-check" style="margin-left:10px;">
+                                <input class="form-check-input" type="radio" name="statusSU" id="flexRadioUnSolved" checked>
+                                <label class="form-check-label" for="flexRadioUnSolved">
+                                Unsolved
+                                </label>
+                            </div>
+                        </div>
+                        <div class="vr" style="margin-left:20px;"></div>
+                        <div style="display:flex;margin-left:20px;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="viewPA" id="flexRadioPublic">
+                                <label class="form-check-label" for="flexRadioPublic">
+                                Public 
+                                </label>
+                            </div>
+                            <div class="form-check" style="margin-left:10px;">
+                                <input class="form-check-input" type="radio" name="viewPA" id="flexRadioAnonymous" checked>
+                                <label class="form-check-label" for="flexRadioAnonymous">
+                                Anonymous
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 d-flex align-items-end justify-content-end">
+                        <button class="btn btn-sm btn-primary" onclick="refresh()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div id="searchResultTextBox-desktop" style="position:absolute;visibility:hidden" class="alert alert-primary" role="alert">
+                <div class="row">
+                <div class="col-7" id="searchResultText-desktop">Showing Feed From Result</div>
+                <div class="col-5 d-flex justify-content-end align-items-end"><button class="btn btn-sm btn-outline-primary w-50" onclick="getPostFeed(0)" >Reset</button></div>
+                </div>
+            </div>
+            <div id="postFeed-desktop">
+    
+            </div>
+            <div class="d-flex justify-content-center align-items-center" id="PostLoader-desktop" style="margin-top:20%">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+    Mobile Panel
+-->
+<div class="container-fluid mobile">
+    
+    <!-- Include Top Nav Bar -->
+    <%- include('partials/mobileTopNavbar.ejs') %>
+    <br>
+
+    <div class="card">
+        
+    </div>
+    <br>
+    <div>
+        <div id="postFeed-mobile">
+
+        </div>
+    </div>
+</div>
+<br><br><br>
+<script>
+    function refresh(){
+        let status     = document.getElementById("flexRadioSolved").checked;
+        let viewStatus = document.getElementById("flexRadioAnonymous").checked;
+
+        $("#postFeed-mobile").empty();
+        $("#postFeed-desktop").empty();
+        $("#PostLoader-mobile").css("visibility","visible");
+        $("#PostLoader-desktop").css("visibility","visible");
+        
+        function postRes(data, status){
+            
+            if(data.length == 0){
+                let postNF_ = `<br>
+                <div class="card mb-3" style="border:0;">
+                    <div class="row g-0">
+                        <div class="col-4">
+                        <img  src="images/searchQuery/${parseInt(Math.random()*15)}.png" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-8 d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <h5 class="card-title">❌ No Post Found</h5>
+                                <p class="card-text">Click <code>Reset</code> To Reset Your Post Feed!.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                document.getElementById("postFeed-mobile").insertAdjacentHTML('beforeend', postNF_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML('beforeend', postNF_);
+            }
+
+            let post_;
+            for(let i = 0; i < data.length; i++){
+                post_ = `<a href="../post/${data[i]['id']}" style="color:black;text-decoration: none !important;">
+                    <div class="alert alert-light" style="border:1px solid var(--bs-secondary);overflow:hidden" role="alert">
+                        <div class="row">
+                            <div class="col-9"><p class="alert-heading fs-4">${data[i]['title']}</p></div>
+                            <div class="col-3 text-align-end text-muted" style="font-size:12px;">${data[i]['datetime']}</div>
+                        </div>
+                        <p class="text-muted">${data[i]['description']}</p>
+                        `+((data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
+                        <hr>
+                        <a href="" class="btn btn-sm btn-outline-secondary">
+                            <div class="row">
+                                <div class="col-1">
+                                    <img src="`+((data[i].anonymous==1)?"images/anonymous.webp":data[i]['picture'])+`" class="rounded-circle" style="width:20px"/>
+                                </div>
+                                <div class="col-9 text-align-start">`+((data[i].anonymous==1)?"Anonymous":data[i]['name'])+`</div>
+                            </div>
+                        </a>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-eye"></i> ${data[i]['views']}</button>`
+                            + ((data[i]['comment'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-message"></i> ${data[i]['comments']}</button>`:``)
+                            + ((data[i]['support'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-hand-sparkles"></i> ${data[i]['likes']}</button>`:``)+
+                        `</div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['cat_name']+`</button>
+                    </div>
+                </a><br>`
+
+                document.getElementById("postFeed-mobile").insertAdjacentHTML( 'beforeend',post_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML( 'beforeend',post_);
+            }
+
+            $("#PostLoader-mobile").css("visibility","hidden");
+            $("#PostLoader-desktop").css("visibility","hidden");
+        }
+
+        $.post("",{
+            loadPost:true,
+            onload:3,
+            category:<%=userInfo['admintype']%>,
+            status:status?1:0,
+            anonymous:viewStatus?1:0
+        },postRes);
+
+    }
+    function getPostFeed(PostLoadMode,categoryid=<%=userInfo['admintype']%>){
+
+        function postRes(data, status){
+            if(data.length == 0){
+                let postNF_ = `<br>
+                <div class="card mb-3" style="border:0;">
+                    <div class="row g-0">
+                        <div class="col-4">
+                        <img  src="images/searchQuery/${parseInt(Math.random()*15)}.png" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-8 d-flex align-items-center justify-content-center">
+                            <div class="card-body">
+                                <h5 class="card-title">❌ No Post Found</h5>
+                                <p class="card-text">Click <code>Reset</code> To Reset Your Post Feed!.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `
+                document.getElementById("postFeed-mobile").insertAdjacentHTML('beforeend', postNF_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML('beforeend', postNF_);
+            }
+
+            let post_;
+            for(let i = 0; i < data.length; i++){
+                post_ = `<a href="../post/${data[i]['id']}" style="color:black;text-decoration: none !important;">
+                    <div class="alert alert-light" style="border:1px solid var(--bs-secondary);overflow:hidden" role="alert">
+                        <div class="row">
+                            <div class="col-9"><p class="alert-heading fs-4">${data[i]['title']}</p></div>
+                            <div class="col-3 text-align-end text-muted" style="font-size:12px;">${data[i]['datetime']}</div>
+                        </div>
+                        <p class="text-muted">${data[i]['description']}</p>
+                        `+((data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
+                        <hr>
+                        <a href="" class="btn btn-sm btn-outline-secondary">
+                            <div class="row">
+                                <div class="col-1">
+                                    <img src="`+((data[i].anonymous==1)?"images/anonymous.webp":data[i]['picture'])+`" class="rounded-circle" style="width:20px"/>
+                                </div>
+                                <div class="col-9 text-align-start">`+((data[i].anonymous==1)?"Anonymous":data[i]['name'])+`</div>
+                            </div>
+                        </a>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-eye"></i> ${data[i]['views']}</button>`
+                            + ((data[i]['comment'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-message"></i> ${data[i]['comments']}</button>`:``)
+                            + ((data[i]['support'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-hand-sparkles"></i> ${data[i]['likes']}</button>`:``)+
+                        `</div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['cat_name']+`</button>
+                    </div>
+                </a><br>`
+
+                document.getElementById("postFeed-mobile").insertAdjacentHTML( 'beforeend',post_);
+                document.getElementById("postFeed-desktop").insertAdjacentHTML( 'beforeend',post_);
+            }
+
+            $("#PostLoader-mobile").css("visibility","hidden");
+            $("#PostLoader-desktop").css("visibility","hidden");
+        }
+
+        $("#postFeed-mobile").empty();
+        $("#postFeed-desktop").empty();
+        $("#PostLoader-mobile").css("visibility","visible");
+        $("#PostLoader-desktop").css("visibility","visible");
+
+        
+        $.post("",{
+            loadPost:true,
+            onload:PostLoadMode,
+            category:categoryid,
+            status:0,
+            anonymous:0
+        },postRes);
+        
+    }
+
+    $(document).ready(getPostFeed(3));
+</script>
+</body>
+</html>

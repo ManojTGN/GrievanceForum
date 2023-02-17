@@ -51,12 +51,14 @@
                 </a>
             </li>
             <%}else{%>
+                <%if(userInfo.admintype == 0){%>
             <!-- Settings Tabs -->
             <li class="nav-item">
                 <a class="nav-link settings-desktop" href="../settings">
                     <i class="fa-solid fa-gear"></i> Settings
                 </a>
             </li>
+                <%}%>
             <%}%>
 
         </ul>

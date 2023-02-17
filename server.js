@@ -5,6 +5,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
+0.
 const port = process.env.PORT;
 const loginRouter = require('./routes/login');
 const manageRouter = require('./routes/managePost');
@@ -74,9 +75,24 @@ app.get('/', (request, response) => {
     }
 
     if(cookie[request.cookies['login']]['isadmin'] == 1){
-        connection.query("SELECT * FROM `category`",(err, result, fields) => {
-            response.render("admin",{userInfo:cookie[request.cookies['login']],category:result});
-        });
+        if(cookie[request.cookies['login']]['admintype'] == 0){
+            connection.query("SELECT * FROM `category`",(err, result, fields) => {
+                response.render("highadmin",{userInfo:cookie[request.cookies['login']],category:result,admintype:cookie[request.cookies['login']]['admintype']});
+            });
+        }else{
+            connection.query("SELECT * FROM `category` WHERE `sno`="+cookie[request.cookies['login']]['admintype'],(err, result, fields) => {
+                connection.query("SELECT * FROM `postinfo` WHERE `type`=0 AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err,totalViews,fields) => {
+                connection.query("SELECT * FROM `postinfo` WHERE `mail`='"+cookie[request.cookies['login']]['mail']+"' AND `type`='2'",(err,totalAnswered,field)=>{
+                connection.query("SELECT * FROM `comments` WHERE `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err,totalComments,field)=>{
+                    response.render("lowadmin",
+                    {userInfo:cookie[request.cookies['login']],category:result,admintype:cookie[request.cookies['login']]['admintype'],read_:totalViews,comments:totalComments,answered:totalAnswered}
+                    );
+                });
+                });
+                });
+            });
+        }
+        
         return;
     }
 
@@ -98,6 +114,14 @@ app.post('/', (request, response) => {
 
         if(request.body.onload == 2){
             connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+                response.send(result);
+            });
+            return;
+        }
+
+        if(request.body.onload == 3){
+            connection.query(
+            "SELECT * FROM `posts` WHERE `anonymous`="+request.body.anonymous+" AND `status`="+request.body.status+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
                 response.send(result);
             });
             return;

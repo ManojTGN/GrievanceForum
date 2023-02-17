@@ -21,7 +21,8 @@
         localStorage.setItem('darkmode',false);
     }
 </script>
-<!--
+<%console.log(userInfo);%>
+<!-- 
     No View Panel
 -->
 <div class="noview w-75">
@@ -43,149 +44,7 @@
     <br>
 
     <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body" style="overflow:hidden">
-                    <div class="row">
-                        <div class="col-10">
-                            <div class="input-group mb-3">
-                                <input id="SearchBox-desktop" type="text" class="form-control" placeholder="Search GrievanceForum">
-                                <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            </div>
-                        </div>
-                        <div class="col-2" style="white-space: nowrap; ">
-                            <button class="btn btn-primary w-100" onclick="isdesktop = 1;getPostFeed(1)">Search</button>
-                        </div>
-                    </div>
-                    <button class="btn btn-sm" data-bs-toggle="collapse" href="#collapsePostInfo" role="button" aria-expanded="false" aria-controls="collapsePostInfo">
-                        <input class="form-check-input" type="checkbox" id="FilterCheckBox-desktop">
-                        <label class="form-check-label" for="FilterCheckBox-desktop">
-                            <i class="fa-solid fa-filter"></i> Filter Search
-                        </label>
-                    </button>
         
-                    <div class="collapse w-100" style="border:0" id="collapsePostInfo">
-                        <div class="card card-body">
-                            <br>
-                            <div>
-                                <label class="form-label">Post Category</label><br>
-                                <select id="categorySelect-desktop" class="form-select" aria-label="Default select example">
-                                    <option value="0" selected>All Category</option>
-                                    <%for(let i = 0; i < category.length;i++){%>
-                                    <option value="<%=i+1%>"><%=category[i]['title']%></option>
-                                    <%}%>
-                                </select>
-                            </div><br>
-                            <div>
-                                <label class="form-label">Sort Post By</label><br>
-                                <div class="row">
-                                    <div class="col-7">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions-desktop" id="SortPostRadio1-desktop" value="0">
-                                            <label class="form-check-label" for="SortPostRadio1">Top</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions-desktop" id="SortPostRadio2-desktop" value="1" checked='checked'>
-                                            <label class="form-check-label" for="SortPostRadio2">New</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-5">
-                                        <select id="sortDate-desktop" class="form-select" aria-label="Default select example">
-                                            <option value="0">Today</option>
-                                            <option value="1">This Week</option>
-                                            <option value="2" selected>This Month</option>
-                                            <option value="3">This Year</option>
-                                            <option value="3">LifeTime</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div>
-                                <label class="form-label">Post Comment & Support</label><br>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="CanComment-desktop">
-                                            <label class="form-check-label" for="CanComment-desktop">
-                                            Can Comment
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="CanSupport-desktop">
-                                            <label class="form-check-label" for="CanSupport-desktop">
-                                            Can Support
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div><br>
-                            <div>
-                                <label class="form-label">Post Status</label><br>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" value="bothPost" type="radio" name="postStatus-desktop" id="postStatus0-desktop" checked>
-                                            <label class="form-check-label" for="postStatus0-desktop">
-                                            Both
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" value="solvedPost" type="radio" name="postStatus-desktop" id="postStatus1-desktop">
-                                            <label class="form-check-label" for="postStatus1-desktop">
-                                            Solved Post
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-check">
-                                            <input class="form-check-input" value="unSolvedPost" type="radio" name="postStatus-desktop" id="postStatus2-desktop">
-                                            <label class="form-check-label" for="postStatus2-desktop">
-                                            Unsolved Post
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br><hr><br>
-            <div id="searchResultTextBox-desktop" style="position:absolute;visibility:hidden" class="alert alert-primary" role="alert">
-                <div class="row">
-                <div class="col-7" id="searchResultText-desktop">Showing Feed From Result</div>
-                <div class="col-5 d-flex justify-content-end align-items-end"><button class="btn btn-sm btn-outline-primary w-50" onclick="getPostFeed(0)" >Reset</button></div>
-                </div>
-            </div>
-            <div id="postFeed-desktop">
-    
-            </div>
-            <div class="d-flex justify-content-center align-items-center" id="PostLoader-desktop" style="margin-top:20%">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-body">
-                    <p class="fs-5"><i class="fa-solid fa-list"></i> Select Categories</p><hr>
-                    <%for(let i = 0; i < category.length;i++){%>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="CategoryRadio" <%="onclick=getPostFeed("+2,category[i]['sno']+")"%>  id="<%=category[i]['title']%>Radio">
-                            <label class="form-check-label" for="<%=category[i]['title']%>Radio">
-                                <i class="<%=category[i]['icon']%>"></i> <%=category[i]['title']%>
-                            </label>
-                        </div>
-                        <br>
-                    <%}%>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

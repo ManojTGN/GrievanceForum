@@ -27,7 +27,7 @@ router.get("/:id",(request,response) => {
         let post = result;
         connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND type='0'",(err, result, fields) => {
             if(result.length == 0){
-                connection.query("INSERT INTO `postinfo`( `postid`, `mail`, `type`) VALUES ('"+request.params.id+"','"+cookie[request.cookies['login']]['mail']+"','0')",(err, result, fields) => {});
+                connection.query("INSERT INTO `postinfo`( `postid`, `mail`, `type`, `datetime`) VALUES ('"+request.params.id+"','"+cookie[request.cookies['login']]['mail']+"','0','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"')",(err, result, fields) => {});
                 connection.query("UPDATE `posts` SET `views`= views+1 WHERE `id`='"+request.params.id+"'",(err, result, fields) => {});
             }
         });
@@ -59,7 +59,7 @@ router.post("/",(request,response) => {
     if("supportPost" in request.body){
         connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.body.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND type='1'",(err, result, fields) => {
             if(result.length == 0){
-                connection.query("INSERT INTO `postinfo`( `postid`, `mail`, `type`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','1')",(err, result, fields) => {response.send('1');});
+                connection.query("INSERT INTO `postinfo`( `postid`, `mail`, `type`, `datetime`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','1','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"')",(err, result, fields) => {response.send('1');});
                 connection.query("UPDATE `posts` SET `likes`= likes+1 WHERE `id`='"+request.body.id+"'",(err, result, fields) => {});
             }else{
                 connection.query("DELETE FROM `postinfo` WHERE `postid`='"+request.body.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND `type`='1'",(err, result, fields) => {response.send('0');});
@@ -91,7 +91,7 @@ router.post("/",(request,response) => {
     }
 
     if("postSolution" in request.body){
-        connection.query("INSERT INTO `postinfo`( `postid`,`mail`,`name`,`picture`,`message`,`type`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','"+cookie[request.cookies['login']]['name']+"','"+cookie[request.cookies['login']]['picture']+"','"+request.body.message+"','2')",(err, result, fields) => {response.send('1');});
+        connection.query("INSERT INTO `postinfo`( `postid`,`mail`,`name`,`picture`,`message`,`type`,`datetime`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','"+cookie[request.cookies['login']]['name']+"','"+cookie[request.cookies['login']]['picture']+"','"+request.body.message+"','2','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"')",(err, result, fields) => {response.send('1');});
         connection.query("UPDATE `posts` SET `status`= 1 WHERE `id`='"+request.body.id+"'",(err, result, fields) => {});
         return;
     }
@@ -109,7 +109,7 @@ router.post("/",(request,response) => {
             if(result.length > 0){
                 connection.query("DELETE FROM `postinfo` WHERE `postid`='"+request.body.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND `type`='3'",(err, result, fields) => {});
             }else{
-                connection.query("INSERT INTO `postinfo`( `postid`,`mail`,`name`,`picture`,`message`,`type`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','"+request.body.title+"','','','3')",(err, result, fields) => {});
+                connection.query("INSERT INTO `postinfo`( `postid`,`mail`,`name`,`picture`,`message`,`type`, `datetime`) VALUES ('"+request.body.id+"','"+cookie[request.cookies['login']]['mail']+"','"+request.body.title+"','','','3','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"')",(err, result, fields) => {});
             }
             response.redirect('../post/'+request.body.id);
         });

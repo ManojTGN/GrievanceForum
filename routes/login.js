@@ -17,7 +17,7 @@ router.post("/",(request,response) => {
 
     if("guest" in request.body){
         response.cookie('login',hash);
-        cookie[hash]={'mail':'@bitsathy.ac.in','name':'Guest','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
+        cookie[hash]={'mail':'@bitsathy.ac.in','name':'Anonymous','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
         response.redirect("../");
         return;
     }
@@ -27,13 +27,15 @@ router.post("/",(request,response) => {
         if (err) throw err;
         
         let isadmin = 0;
-        if(result.length < 1)
+        let admintype = 0;
+        if(result.length < 1){
             connection.query("INSERT INTO `users`(`username`, `mail`, `isadmin`) VALUES ('"+user['name']+"','"+user['email']+"',0)", (err, result, fields) => { if (err) throw err; });
-        else
+        }else{
             isadmin = result[0].isadmin;
-        
+            admintype = result[0].admintype;
+        }
         response.cookie('login',hash);
-        cookie[hash]={'mail':user['email'],'name':user['name'],'picture':user['picture'],'isadmin':isadmin};
+        cookie[hash]={'mail':user['email'], 'name':user['name'], 'picture':user['picture'], 'isadmin':isadmin, 'admintype':admintype};
         response.redirect("../");
     });
 });

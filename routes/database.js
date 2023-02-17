@@ -7,7 +7,7 @@ var connection = mysql.createPool({
     host:process.env.DB_HOST,
     password:process.env.DB_PASS,
     database:'railway'
-})
+});
 
 // var connection=mysql.createConnection({
 //     host:'localhost',
