@@ -81,10 +81,10 @@
 
                     <hr>
                     <!-- Post Solution -->
-                    <%if(solution.length != 0){%>
+                    <%if(solution.length != 0 && postInfo.status != 0){%>
                         <br>
                         <div>
-                        <div class="card text-bg-success mb-3">
+                        <div class="card text-bg-<%if(postInfo.status == 1){%>secondary<%}else{%>success<%}%> mb-3">
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-5">
@@ -92,7 +92,7 @@
                                     </div>
                                     <div class="col-7 d-flex justify-content-end align-items-center">
 
-                                        <span style="margin-right:10px;">Solved By</span>
+                                        <span style="margin-right:10px;"><%if(postInfo.status == 1){%>Solution By<%}else{%>Solved By<%}%></span>
                                         <a href="" class="btn btn-sm btn-light" style="border:0;">
                                             <div class="row">
                                                 <div class="col-2">
@@ -113,16 +113,36 @@
                                 </p>
                             </div>
                         </div>
+                        <%if(postInfo.status == 1 && postInfo.mail == userInfo['mail']){%>
+                        <div class="card border-success mb-3">
+                            <!-- <div class="card-header">Header</div> -->
+                            <div class="card-body text-success">
+                                <div class="row">
+                                    <div class="col d-flex align-items-center">
+                                        <h5 class="card-title">Are You Satisfied With Action Taken?</h5>
+                                    </div>
+                                    <div class="col d-flex justify-content-end">
+                                        <div>
+                                        <form method="post" action="../">
+                                            <input style="opacity: 0;visibility: hidden;position:absolute" name="postid" value="<%=postInfo.id%>"/>
+                                            <button type="submit" name="satisfied" class="btn btn-success"><i class="fa-solid fa-thumbs-up"></i> Yes, Im Satisfied</button>
+                                            <button type="submit" name="notSatisfied" class="btn btn-danger"><i class="fa-solid fa-circle-xmark"></i> No</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
                         </div>
                         <br>
                     <%}%>
-                    
+
                     <!-- Post Comments -->
                     <div class="comment">
                         <p class="fs-5 text-muted">Comments</p>
                         <% if(postInfo.comment == 1){%>
 
-                        <% if(userInfo.isadmin == 0){%>
                         <div class="mb-3">
                             <label for="CommentArea-desktop" class="form-label">Post Your Comment</label>
                             <textarea class="form-control" id="CommentArea-desktop" rows="2"></textarea>
@@ -132,7 +152,6 @@
                             </div>
                         </div>
                         <br>
-                        <%}%>
 
                         <%for(let i = 0; i < comments.length; i++){%>
                             <div class="card" style="margin-top:5px;">
@@ -440,51 +459,51 @@
         <br>
         <div class="comment">
             <p class="fs-3 text-muted">Comments</p>
+            
             <% if(postInfo.comment == 1){%>
-            <% if(userInfo.isadmin == 0){%>
-            <div class="mb-3">
-                <label for="CommentArea-mobile" class="form-label">Post Your Comment</label>
-                <textarea class="form-control" id="CommentArea-mobile" rows="2"></textarea>
+                <div class="mb-3">
+                    <label for="CommentArea-mobile" class="form-label">Post Your Comment</label>
+                    <textarea class="form-control" id="CommentArea-mobile" rows="2"></textarea>
+                    <br>
+                    <div class="d-flex align-items-end justify-content-end">
+                        <button class="btn btn-sm btn-primary" id="postComment-mobile">Post Comment</button>
+                    </div>
+                </div>
                 <br>
-                <div class="d-flex align-items-end justify-content-end">
-                    <button class="btn btn-sm btn-primary" id="postComment-mobile">Post Comment</button>
-                </div>
-            </div>
-            <br>
-            <%}%>
 
-            <%for(let i = 0; i < comments.length; i++){%>
-                <div class="card" style="margin-top:5px;">
-                    <div class="card-body">
-                        <div class="d-flex text-muted">
-                            <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
-                                <div class="row">
-                                    <div class="col-1">
-                                        <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
+                <%for(let i = 0; i < comments.length; i++){%>
+                    <div class="card" style="margin-top:5px;">
+                        <div class="card-body">
+                            <div class="d-flex text-muted">
+                                <a href="" class="btn btn-sm btn-outline-secondary" style="border:0;">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            <img src="<%=comments[i].picture%>" class="rounded-circle" style="width:20px"/>
+                                        </div>
+                                        <div class="col-9 text-align-start"><%=comments[i].name%></div>
                                     </div>
-                                    <div class="col-9 text-align-start"><%=comments[i].name%></div>
-                                </div>
-                            </a>• <%=comments[i].datetime%>
+                                </a>• <%=comments[i].datetime%>
+                            </div>
+
+                            <p class="card-text"><%=comments[i].message%></p>
+                            <% if(comments[i].mail == userInfo['mail']){ %>
+                                <hr>
+                                <button class="btn btn-sm btn-primary"  <%-"onclick='editComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
+                                <button class="btn btn-sm btn-danger"   <%-"onclick='deleteComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
+                            <%}%>
                         </div>
-
-                        <p class="card-text"><%=comments[i].message%></p>
-                        <% if(comments[i].mail == userInfo['mail']){ %>
-                            <hr>
-                            <button class="btn btn-sm btn-primary"  <%-"onclick='editComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-solid fa-pen"></i> Edit Comment</button>
-                            <button class="btn btn-sm btn-danger"   <%-"onclick='deleteComment("+comments[i].sno+",`"+comments[i].message.trim()+"`)'"%>><i class="fa-regular fa-trash-can"></i> Delete Comment</button>
-                        <%}%>
                     </div>
-                </div>
-            <%}%>
+                <%}%>
 
-            <!-- Empty Comment -->
-            <%if(comments.length == 0){%>
-                <div class="card w-100" style="border:0px;">
-                    <div class="card-body text-muted text-align-center">
-                        <i class="fa-solid fa-inbox"></i> No Comments Yet!
+                <!-- Empty Comment -->
+                <%if(comments.length == 0){%>
+                    <div class="card w-100" style="border:0px;">
+                        <div class="card-body text-muted text-align-center">
+                            <i class="fa-solid fa-inbox"></i> No Comments Yet!
+                        </div>
                     </div>
-                </div>
-            <%}%>
+                <%}%>
+
             <%}else{%>
                 <p class="text-muted text-align-center">
                     <i class="fa-regular fa-circle-xmark"></i> User Have Disabled The Comments!

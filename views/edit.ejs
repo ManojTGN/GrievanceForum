@@ -125,11 +125,13 @@
             <div class="spinner-border text-primary" role="status" id="PreviewBoxSpinner">
                 <span class="visually-hidden">Loading...</span>
             </div>
-        </div><br>
+        </div>
 
         <!-- Post Settings -->
+        <%if(userInfo.anonymous != 1){%>
+        <br>
         <p class="fs-5">Post Settings</p>
-
+        <%}%>
         <!-- Post Categories -->
         <div>
             <label class="form-label">Post Category</label>
@@ -144,6 +146,30 @@
             </div>
         </div>
 
+        <%if(userInfo.anonymous == 1){%>
+            <br>
+            <div class="card">
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#postConfirmAnonymous">
+                        Post Your Grievance
+                    </button>
+                    <%if(postInfo.draft != 1){%>
+                        <button type="button" class="btn btn-success" onclick="SaveDraft(false,true)">
+                            Update Post
+                        </button>
+                    <%}%>
+                </div>
+            </div>
+            <br>
+
+            <div class="card text-bg-secondary">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fa-solid fa-circle-info"></i> Note</h5>
+                <h6 class="card-subtitle mb-2">You Are Posting As Anonymous. So, You Cant Use Other Post Options.</h6>
+            </div>
+            </div>
+            <br>
+        <%}else{%>
         <!-- Post Visibility -->
         <div>
             <label class="form-label">Post visibility</label>
@@ -235,7 +261,7 @@
                 </div>
             </div>
         </div>
-
+        <%}%>
     </div>
     <br><br><br>
 </div>
@@ -326,6 +352,45 @@
     </div>
 </div>
 
+<!-- Post Anonymous Modal -->
+<div class="modal fade" id="postConfirmAnonymous" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticPostConfirmBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticPostConfirmBackdropLabel"><i class="fa-solid fa-file-circle-check"></i> Post Confirmation</h1>
+        </div>
+        <div class="modal-body">
+            <div id="postTextAnonymous" style="opacity: 1;transition: opacity 0.3s linear;">
+            We Recommand To Review Your Post & Post Settings Before Posting.
+            Remember Admin Can View Your Post Even After Deletion.
+            By Posting You Are Accepting Our Terms And Condition.
+            <br><br>
+            <div class="alert alert-warning" role="alert">
+                <span class="text-muted"><i class="fa-solid fa-user-secret"></i> Anonymous Mode</span><br><br>
+                Use This ID To See This Post Anytime!<br>
+                <div style="color:black"><%=postInfo['id']%></div>
+            </div>
+            </div>
+            <div id="PostLoaderAnonymous" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="position:relative;left:155px;visibility:hidden;" id="PostOkContainerAnonymous">
+                <a href="../dashboard"  class="btn btn-success">Ok</a>
+            </div>
+            <div id="TwoPostButtonAnonymous">
+                <button type="button" class="btn btn-secondary" id="PostDismissAnonymous    " data-bs-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-success" onclick="PostDraft(true)">Post</button>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
 <script>
 $("#Preview").click(previewMarkdown);
 $("#DeletePost").click(DeletePost);
@@ -355,7 +420,8 @@ function previewMarkdown(){
     });
 }
 
-function PostDraft(){
+function PostDraft(anonymous=false){
+    console.log("POSTING DRAFT: anonymous:",anonymous);
     if(
         $("#title").val().replace('\'','').replace('\"','').replace('`','').replace('\n','').trim() == "" ||
         $("#description").val().replace('\'','').replace('\"','').replace('`','').trim() == "" ||
@@ -367,10 +433,14 @@ function PostDraft(){
     }
 
     $("#PostDismiss").prop('disabled', true);
+    $("#PostDismissAnonymous").prop('disabled', true);
     $("#postText").css("opacity","0");
+    $("#postTextAnonymous").css("opacity","0");
     $("#PostLoader").css("opacity","1");
+    $("#PostLoaderAnonymous").css("opacity","1");
     clearInterval(autoSaveInterval);
 
+    if(anonymous != true){
     $.ajax({
         type:"post",
         url:"/edit",
@@ -404,9 +474,46 @@ function PostDraft(){
             $("#PostOkContainer").css("visibility","visible");
         }
     });
+    }else{
+        $.ajax({
+        type:"post",
+        url:"/edit",
+        data:{
+            post:true,
+            id:"<%=postInfo['id']%>",
+            mail:"<%=postInfo['mail']%>",
+            title:$("#title").val().replace('\'','').replace('\"','').replace('`','').replace('\n','') || "",
+            description:$("#description").val().replace('\'','').replace('\"','').replace('`','') || "",
+            report:easyMDE.value().replace('\'','').replace('\"','').replace('`','') || "",
+            category:document.getElementById("categorySelect").value,
+            categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
+            visibility:1,
+            anonymous:1,
+            comment:0,
+            support:0,
+            draft:1
+        },
+        success: function(data){
+            $("#postTextAnonymous").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
+            $("#postTextAnonymous").css("opacity","1");
+            $("#PostLoaderAnonymous").css("opacity","0");
+            $("#TwoPostButtonAnonymous").css("visibility","hidden");
+            $("#PostOkContainerAnonymous").css("visibility","visible");
+        },
+        failed:function(data){
+            $("#postTextAnonymous").html("<i class='fa-regular fa-circle-check'></i> Posted Successfully!");
+            $("#postTextAnonymous").css("opacity","1");
+            $("#PostLoaderAnonymous").css("opacity","0");
+            $("#TwoPostButtonAnonymous").css("visibility","hidden");
+            $("#PostOkContainerAnonymous").css("visibility","visible");
+        }
+    });
+        
+    }
 }
 
-function SaveDraft(isAutoSave=false){
+function SaveDraft(isAutoSave=false,anonymous=false){
+    if(anonymous == false){
     $.ajax({
         type: 'POST',
         url: "/edit",
@@ -433,10 +540,40 @@ function SaveDraft(isAutoSave=false){
         error: function(xhrReq, textStatus, errorThrown) {
             if(isAutoSave==true)$("#failedSaveToastPara").html(`AutoSave Failed!`); 
             else $("#failedSaveToastPara").html(`Save Failed`);
-            
             $("#failedSaveToast").toast("show");
         }
     });
+    }else{
+        $.ajax({
+        type: 'POST',
+        url: "/edit",
+        data: {
+            save:true,
+            id:"<%=postInfo['id']%>",
+            mail:"<%=postInfo['mail']%>",
+            title:$("#title").val().replace('\'','').replace('\"','').replace('`','') || "",
+            description:$("#description").val().replace('\'','').replace('\"','').replace('`','') || "",
+            report:easyMDE.value().replace('\'','').replace('\"','').replace('`','') || "",
+            category:document.getElementById("categorySelect").value,
+            categoryName:document.getElementById("categorySelect")[ parseInt(document.getElementById("categorySelect").value)-1 ].text.split(" ")[0],
+            visibility:1,
+            anonymous:1,
+            comment:0,
+            support:0,
+            draft:1
+        },
+        success: function(data) {
+            if(isAutoSave==true) $("#saveToastPara").html(`AutoSave Successfull ${(new Date())}`); 
+            else $("#saveToastPara").html(`Save Successfull`);
+            $("#saveToast").toast("show");
+        },
+        error: function(xhrReq, textStatus, errorThrown) {
+            if(isAutoSave==true)$("#failedSaveToastPara").html(`AutoSave Failed!`); 
+            else $("#failedSaveToastPara").html(`Save Failed`);
+            $("#failedSaveToast").toast("show");
+        }
+    });
+    }
 
 }
 
@@ -458,10 +595,16 @@ function DeletePost(){
     });
 }
 
+</script>
+
+<%if(userInfo.anonymous != 1){%>
+<script>
 const startAutoSave = parseInt('<%=postInfo.draft%>');
 if(startAutoSave == 1) {
     autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);
 }
 </script>
+<%}%>
+
 </body>
 </html>

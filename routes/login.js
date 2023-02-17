@@ -17,7 +17,7 @@ router.post("/",(request,response) => {
 
     if("guest" in request.body){
         response.cookie('login',hash);
-        cookie[hash]={'mail':'@bitsathy.ac.in','name':'Anonymous','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0};
+        cookie[hash]={'mail':'@bitsathy.ac.in','name':'Anonymous','picture':'images/guestProfiles/'+Math.floor(Math.random() * 9)+'.jpg','isadmin':0,'anonymous':1};
         response.redirect("../");
         return;
     }
@@ -35,7 +35,7 @@ router.post("/",(request,response) => {
             admintype = result[0].admintype;
         }
         response.cookie('login',hash);
-        cookie[hash]={'mail':user['email'], 'name':user['name'], 'picture':user['picture'], 'isadmin':isadmin, 'admintype':admintype};
+        cookie[hash]={'mail':user['email'], 'name':user['name'], 'picture':user['picture'], 'isadmin':isadmin, 'admintype':admintype, 'anonymous':0};
         response.redirect("../");
     });
 });

@@ -446,7 +446,7 @@
                             <div class="col-3 text-align-end text-muted" style="font-size:12px;">${data[i]['datetime']}</div>
                         </div>
                         <p class="text-muted">${data[i]['description']}</p>
-                        `+((data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
+                        `+((data[i]['status'] == 2)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:(data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
                         <hr>
                         <a href="" class="btn btn-sm btn-outline-secondary">
                             <div class="row">

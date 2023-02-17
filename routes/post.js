@@ -35,7 +35,7 @@ router.get("/:id",(request,response) => {
         connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND type='1'",(err, result, fields) => {
             let markdown = dompurify.sanitize(marked(post[0].report));
             connection.query("SELECT * FROM `comments` WHERE postid='"+request.params.id+"'",(err,res,field)=>{
-                connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"' AND type='2'",(err, re, fields) => {
+                connection.query("SELECT * FROM `postinfo` WHERE `postid`='"+request.params.id+"' AND type='2'",(err, re, fields) => {
                     connection.query("SELECT * FROM `category` WHERE `sno`='"+post[0].category+"'",(err, r, fields) => {
                         connection.query("SELECT * FROM `postinfo` WHERE `type`='3' AND `postid`='"+request.params.id+"' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, bookmark, fields) => {
                         connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {

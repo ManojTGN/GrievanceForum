@@ -104,16 +104,34 @@ app.get('/', (request, response) => {
 });
 
 app.post('/', (request, response) => {
+
+      
+    if("satisfied" in request.body){
+        connection.query("UPDATE `posts` SET `status`=2 WHERE `id`='"+request.body.postid+"'",(err, result, fields)=>{
+            response.redirect("../post/"+request.body.postid);
+        });
+        return;
+    }
+
+    if("notSatisfied" in request.body){
+        connection.query("UPDATE `posts` SET `status`=0 WHERE `id`='"+request.body.postid+"'",(err, result, fields)=>{
+            response.redirect("../post/"+request.body.postid);
+        });
+        return;
+    }
+
     if("loadPost" in request.body){
         if(request.body.onload == 0){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' ORDER BY `sno` DESC",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' ORDER BY `sno` DESC",(err, result, fields) => {
+                //console.log("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' ORDER BY `sno` DESC")
                 response.send(result);
             });
             return;
         }
 
         if(request.body.onload == 2){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+                //console.log("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC")
                 response.send(result);
             });
             return;
@@ -121,14 +139,16 @@ app.post('/', (request, response) => {
 
         if(request.body.onload == 3){
             connection.query(
-            "SELECT * FROM `posts` WHERE `anonymous`="+request.body.anonymous+" AND `status`="+request.body.status+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+            "SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `anonymous`="+request.body.anonymous+" AND `status`="+request.body.status+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC",(err, result, fields) => {
+                //console.log("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `anonymous`="+request.body.anonymous+" AND `status`="+request.body.status+" AND `draft`='0' AND `category`='"+request.body.category+"' ORDER BY `sno` DESC")
                 response.send(result);
             });
             return;
         }
 
         if(request.body.filter == 0){
-            connection.query("SELECT * FROM `posts` WHERE `draft`='0' AND (`title` LIKE '%"+request.body.search+"%' OR `description` LIKE '%"+request.body.search+"%')",(err, result, fields) => {
+            connection.query("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' AND (`title` LIKE '%"+request.body.search+"%' OR `description` LIKE '%"+request.body.search+"%')",(err, result, fields) => {
+                //console.log("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' AND (`title` LIKE '%"+request.body.search+"%' OR `description` LIKE '%"+request.body.search+"%')")
                 response.send(result);
             });
             return
@@ -138,7 +158,7 @@ app.post('/', (request, response) => {
             
             let query = `
             SELECT * FROM posts WHERE draft=0`
-            + ((request.body.isadminview == 1)?` AND (visibility=0 OR visibility=1)`:` AND visibility=0`)
+            + ((cookie[request.cookies['login']]['isadmin'] == 1)?` AND (visibility=0 OR visibility=1)`:` AND visibility=0`)
             + ((request.body.search == '')?``:` AND (title LIKE '%${request.body.search}%' OR description LIKE '%${request.body.search}%')`)
             + ((request.body.category == 0)?``:` AND category='${request.body.category}'`)
             + ((request.body.canComment == 0)?``:` AND comment='${request.body.canComment}'`)
