@@ -18,8 +18,14 @@ router.get("/:id",(request,response) => {
     }
 
     connection.query(
-    "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"'",(err, result, fields)=>{
+    "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"' OR `short_id`='"+request.params.id+"'",(err, result, fields)=>{
         if(result.length == 0 || err != null){
+            response.render("edit404");
+            return;
+        }
+
+        request.params.id = result[0].id;
+        if(result[0].draft == 1){
             response.render("edit404");
             return;
         }

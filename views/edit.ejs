@@ -197,7 +197,7 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="anonymousCheck" <%if(postInfo['anonymous']== 1){%>checked<%}%>>
                         <label class="form-check-label" for="anonymousCheck">
-                        Post as anonymous
+                        Crendential Known Only To The Admin <code>(Anonymous)</code>
                         </label>
                     </div>
                     <div class="form-check">
@@ -370,7 +370,7 @@
             <div class="alert alert-warning" role="alert">
                 <span class="text-muted"><i class="fa-solid fa-user-secret"></i> Anonymous Mode</span><br><br>
                 Use This ID To See This Post Anytime!<br>
-                <div style="color:black"><%=postInfo['id']%></div>
+                <div style="color:black"><%=postInfo['short_id']%></div>
             </div>
             </div>
             <div id="PostLoaderAnonymous" class="d-flex justify-content-center" style="position:relative;bottom:20px;opacity: 0;transition: opacity 0.3s linear;">
@@ -603,7 +603,7 @@ function DeletePost(){
 <script>
 const startAutoSave = parseInt('<%=postInfo.draft%>');
 if(startAutoSave == 1) {
-    autoSaveInterval = setInterval(SaveDraft.bind(null,true), 30*1000);
+    autoSaveInterval = setInterval(SaveDraft.bind(null,true), 10*1000);
 }
 </script>
 <%}%>

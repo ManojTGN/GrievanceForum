@@ -25,6 +25,7 @@
             </li>
 
             <%if(userInfo.isadmin == 0){%>
+            <%if(userInfo.anonymous == 0){%>
             <!-- ManagePost Tabs -->
             <li class="nav-item">
                 <a class="nav-link manage-desktop" href="../manage">
@@ -50,6 +51,7 @@
                     <i class="fa-solid fa-user"></i> Profile
                 </a>
             </li>
+            <%}%>
             <%}else{%>
                 <%if(userInfo.admintype == 0){%>
             <!-- Settings Tabs -->

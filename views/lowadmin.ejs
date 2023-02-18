@@ -106,11 +106,118 @@
                     </div>
                 </div>
             </div>
-
             <br><hr><br>
+
+            <!-- Search Bar + Filter Search -->
+            <div class="card">
+                <div class="card-body" style="overflow:hidden">
+                    <div class="row">
+                        <div class="col-10">
+                            <div class="input-group mb-3">
+                                <input id="SearchBox-desktop" type="text" class="form-control" placeholder="Search GrievanceForum">
+                                <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-2" style="white-space: nowrap;">
+                            <button class="btn btn-primary w-100" style="overflow: hidden;" onclick="isdesktop = 1;getPostFeed(1)">Search</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm" data-bs-toggle="collapse" href="#collapsePostInfo" role="button" aria-expanded="false" aria-controls="collapsePostInfo">
+                        <input class="form-check-input" type="checkbox" id="FilterCheckBox-desktop">
+                        <label class="form-check-label" for="FilterCheckBox-desktop">
+                            <i class="fa-solid fa-filter"></i> Filter Search
+                        </label>
+                    </button>
+        
+                    <div class="collapse w-100" style="border:0" id="collapsePostInfo">
+                        <div class="card card-body">
+                            <br>
+                            <div>
+                                <label class="form-label">Sort Post By</label><br>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions-desktop" id="SortPostRadio1-desktop" value="0">
+                                            <label class="form-check-label" for="SortPostRadio1">Top</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions-desktop" id="SortPostRadio2-desktop" value="1" checked='checked'>
+                                            <label class="form-check-label" for="SortPostRadio2">New</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+                                        <select id="sortDate-desktop" class="form-select" aria-label="Default select example">
+                                            <option value="0">Today</option>
+                                            <option value="1">This Week</option>
+                                            <option value="2" selected>This Month</option>
+                                            <option value="3">This Year</option>
+                                            <option value="3">LifeTime</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <label class="form-label">Post Comment & Support</label><br>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="CanComment-desktop">
+                                            <label class="form-check-label" for="CanComment-desktop">
+                                            Can Comment
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="CanSupport-desktop">
+                                            <label class="form-check-label" for="CanSupport-desktop">
+                                            Can Support
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div>
+                                <label class="form-label">Post Status</label><br>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="bothPost" type="radio" name="postStatus-desktop" id="postStatus0-desktop" checked>
+                                            <label class="form-check-label" for="postStatus0-desktop">
+                                            Both
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="solvedPost" type="radio" name="postStatus-desktop" id="postStatus1-desktop">
+                                            <label class="form-check-label" for="postStatus1-desktop">
+                                            Solved Post
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="unSolvedPost" type="radio" name="postStatus-desktop" id="postStatus2-desktop">
+                                            <label class="form-check-label" for="postStatus2-desktop">
+                                            Unsolved Post
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
             <div class="card">
                 <div class="card-body" style="display:flex;">
                     <div style="display: flex;">
+                        QuickSearch:
+                    </div>
+                    <div style="display: flex;margin-left:20px;">
                         <div style="display:flex;">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="statusSU" id="flexRadioSolved">
@@ -150,7 +257,7 @@
             <div id="searchResultTextBox-desktop" style="position:absolute;visibility:hidden" class="alert alert-primary" role="alert">
                 <div class="row">
                 <div class="col-7" id="searchResultText-desktop">Showing Feed From Result</div>
-                <div class="col-5 d-flex justify-content-end align-items-end"><button class="btn btn-sm btn-outline-primary w-50" onclick="getPostFeed(0)" >Reset</button></div>
+                <div class="col-5 d-flex justify-content-end align-items-end"><button class="btn btn-sm btn-outline-primary w-50" onclick="refresh()" >Reset</button></div>
                 </div>
             </div>
             <div id="postFeed-desktop">
@@ -161,6 +268,7 @@
                   <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
+            <br><br>
         </div>
     </div>
 </div>
@@ -195,6 +303,10 @@
         $("#PostLoader-mobile").css("visibility","visible");
         $("#PostLoader-desktop").css("visibility","visible");
         
+        $("#searchResultTextBox").css("visibility","hidden");
+        $("#searchResultTextBox-desktop").css("visibility","hidden");
+        $("#searchResultTextBox-desktop").css("position","absolute");
+
         function postRes(data, status){
             
             if(data.length == 0){
@@ -337,6 +449,117 @@
     }
 
     $(document).ready(getPostFeed(3));
+</script>
+<script>
+function getPostFeed(PostLoadMode,categoryid=0){
+function postRes(data, status){
+    if(data.length == 0){
+        let postNF_ = `<br>
+        <div class="card mb-3" style="border:0;">
+            <div class="row g-0">
+                <div class="col-4">
+                <img  src="images/searchQuery/${parseInt(Math.random()*15)}.png" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-8 d-flex align-items-center justify-content-center">
+                    <div class="card-body">
+                        <h5 class="card-title">❌ No Post Found</h5>
+                        <p class="card-text">Click <code>Reset</code> To Reset Your Post Feed!.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        document.getElementById("postFeed-mobile").insertAdjacentHTML('beforeend', postNF_);
+        document.getElementById("postFeed-desktop").insertAdjacentHTML('beforeend', postNF_);
+    }
+
+    let post_;
+    for(let i = 0; i < data.length; i++){
+        post_ = `<a href="../post/${data[i]['id']}" style="color:black;text-decoration: none !important;">
+            <div class="alert alert-light" style="border:1px solid var(--bs-secondary);overflow:hidden" role="alert">
+                <div class="row">
+                    <div class="col-9"><p class="alert-heading fs-4">${data[i]['title']}</p></div>
+                    <div class="col-3 text-align-end text-muted" style="font-size:12px;">${data[i]['datetime']}</div>
+                </div>
+                <p class="text-muted">${data[i]['description']}</p>
+                `+((data[i]['status'] == 2)?`<button type="button" class="btn btn-sm btn-success"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:(data[i]['status'] == 1)?`<button type="button" class="btn btn-sm btn-secondary"> <i class="fa-solid fa-circle-check"></i> Post Is Solved</button>`:``)+`
+                <hr>
+                <a href="" class="btn btn-sm btn-outline-secondary">
+                    <div class="row">
+                        <div class="col-1">
+                            <img src="`+((data[i].anonymous==1)?"images/anonymous.webp":data[i]['picture'])+`" class="rounded-circle" style="width:20px"/>
+                        </div>
+                        <div class="col-9 text-align-start">`+((data[i].anonymous==1)?"Anonymous":data[i]['name'])+`</div>
+                    </div>
+                </a>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-eye"></i> ${data[i]['views']}</button>`
+                    + ((data[i]['comment'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-regular fa-message"></i> ${data[i]['comments']}</button>`:``)
+                    + ((data[i]['support'] == 1)?`<button type="button" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-hand-sparkles"></i> ${data[i]['likes']}</button>`:``)+
+                `</div>
+                <button type="button" class="btn btn-sm btn-outline-secondary">`+data[i]['cat_name']+`</button>
+            </div>
+        </a><br>`
+
+        document.getElementById("postFeed-mobile").insertAdjacentHTML( 'beforeend',post_);
+        document.getElementById("postFeed-desktop").insertAdjacentHTML( 'beforeend',post_);
+    }
+
+    $("#PostLoader-mobile").css("visibility","hidden");
+    $("#PostLoader-desktop").css("visibility","hidden");
+    if(PostLoadMode == 0){//ON LOAD
+        $("#searchResultTextBox").css("visibility","hidden");
+        $("#searchResultTextBox-desktop").css("visibility","hidden");
+        $("#searchResultTextBox-desktop").css("position","absolute");
+    }else if(PostLoadMode == 1){//NORMAL SEARCH
+        $("#searchResultText").html("From Search Result");
+        $("#searchResultText-desktop").html("From Search Result");
+        $("#searchResultTextBox").css("visibility","visible");
+        $("#searchResultTextBox-desktop").css("visibility","visible");
+        $("#searchResultTextBox-desktop").css("position","static");
+    }else if(PostLoadMode == 2){//CATEGORY
+        $("#searchResultText").html("From The Category "+cat_name);
+        $("#searchResultText-desktop").html("From The Category "+cat_name);
+        $("#searchResultTextBox").css("visibility","visible");
+        $("#searchResultTextBox-desktop").css("visibility","visible");
+        $("#searchResultTextBox-desktop").css("position","static");
+    }
+}
+
+$("#postFeed-mobile").empty();
+$("#postFeed-desktop").empty();
+$("#PostLoader-mobile").css("visibility","visible");
+$("#PostLoader-desktop").css("visibility","visible");
+
+if(isdesktop == 1){
+    $.post("",{
+        loadPost:true,
+        onload:PostLoadMode,
+        filter:document.getElementById("FilterCheckBox-desktop").checked?1:0,
+        search:document.getElementById("SearchBox-desktop").value,
+        category:<%=userInfo['admintype']%>,
+        sort:document.getElementById("SortPostRadio1-desktop").checked?0:1,
+        date:document.getElementById("sortDate-desktop").value,
+        status:document.getElementById("postStatus0-desktop").checked?2:(document.getElementById("postStatus1-desktop").checked?1:0),
+        canComment:document.getElementById("CanComment-desktop").checked?1:0,
+        canSupport:document.getElementById("CanSupport-desktop").checked?1:0
+    },postRes);
+}else{
+    $.post("",{
+        loadPost:true,
+        onload:PostLoadMode,
+        filter:document.getElementById("FilterCheckBox-mobile").checked?1:0,
+        search:document.getElementById("SearchBox-mobile").value,
+        category:<%=userInfo['admintype']%>,
+        sort:document.getElementById("SortPostRadio1-mobile").checked?0:1,
+        date:document.getElementById("sortDate-mobile").value,
+        status:document.getElementById("postStatus0-mobile").checked?2:(document.getElementById("postStatus1-mobile").checked?1:0),
+        canComment:document.getElementById("CanComment-mobile").checked?1:0,
+        canSupport:document.getElementById("CanSupport-mobile").checked?1:0
+    },postRes);
+}
+}
+
 </script>
 </body>
 </html>

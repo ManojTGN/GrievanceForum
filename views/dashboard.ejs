@@ -51,9 +51,11 @@
     <%- include('partials/desktopNavbar.ejs') %>
     <br>
 
-    <div class="row justify-content-center">
-        <div class="col-6">
 
+
+    <div class="row justify-content-center">
+        <div class="col-6 " style="height:100vh">
+            <%if(userInfo.anonymous == 1){%><div style="filter:blur(8px);"><%}%>
             <!-- Search Bar + Filter Search -->
             <div class="card">
                 <div class="card-body" style="overflow:hidden">
@@ -184,10 +186,86 @@
                   <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
+            <%if(userInfo.anonymous == 1){%></div><%}%>
+            <%if(userInfo.anonymous == 1){%>
+                <div style="position: absolute;top:50%;left:30%;">
+                    <div>
+                        <h2 style="color:var(--bs-warning);text-shadow: 1px 1px 2px rgba(0, 0, 0,.5);"><i class="fa-solid fa-lock"></i> Can't Be Viewed On</h2>
+                        <h2 style="color:var(--bs-warning);text-shadow: 1px 1px 2px rgba(0, 0, 0,.5);margin-left:25px;">Anonymous Mode</h2>
+                    </div>
+                </div>    
+            <%}%>
         </div>
 
         <div class="col-3">
+            <!-- Anonymous id -->
+            <%if(userInfo.anonymous == 1){%>
+            <div class="card border-warning mb-3">
+                <div class="card-header"><i class="fa-solid fa-user-secret"></i> Anonymous Post ID</div>
+                <div class="card-body">
+                  <h5 class="card-title">Want To Check Your Anonymous Post?</h5>
 
+                  <div class="mb-3">
+                    <input type="text"class="form-control" name="postID" id="postID" placeholder="Post ID"/>
+                  </div>
+                  <div class="row w-100">
+                    <div class="col w-100">
+                        <div class="row w-100">    
+                            <div class="col-3 text-start">
+                                <div id="findPostID" style="opacity: 0;" class="spinner-border text-warning" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div id="findPostResult"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <button class="btn btn-warning" onclick="findID()">Go To The Post</button>
+                    </div>
+                  </div>
+                </div>
+                <script>
+                    function findID(){
+                        let pstID = document.getElementById("postID").value ;
+                        $("#findPostID").css("opacity","100");
+                        $("#findPostResult").empty();
+                        
+                        if(pstID == ""){
+                            $("#findPostID").css("opacity","0");
+                            $("#findPostResult").empty();
+                            return;   
+                        }
+                        console.log(pstID);
+                        $.ajax({
+                        type:"post",
+                        url:"/",
+                        data:{
+                            findPost:true,
+                            id:document.getElementById("postID").value
+                        },
+                        success: function(data){
+                            if(data.length >= 1){
+                                $("#findPostID").css("opacity","0");
+                                $("#findPostResult").html("✅ Post Found");
+                                
+                                window.location.replace("../post/"+data[0].id);
+                            }else{
+                                $("#findPostID").css("opacity","0");
+                                $("#findPostResult").html("❌NotFound");
+                            }
+                        },
+                        failed:function(data){
+                            $("#findPostID").css("opacity","0");
+                            $("#findPostResult").html("Unable To Connect!");
+                        }
+                        });
+                    }
+                </script>
+            </div>
+            <%}%>
+        
             <!-- Create Post Card-->
             <div class="card">
                 <div class="card-body">
@@ -212,6 +290,7 @@
             <br>
 
             <!-- Select Category Card-->
+            <%if(userInfo.anonymous != 1){%>
             <div class="card">
                 <div class="card-body">
                     <p class="fs-5"><i class="fa-solid fa-layer-group"></i> Select Categories</p><hr>
@@ -226,6 +305,7 @@
                     <%}%>
                 </div>
             </div>
+            <%}%>
 
         </div>
     </div>

@@ -120,6 +120,15 @@ app.post('/', (request, response) => {
         return;
     }
 
+    if("findPost" in request.body){
+        connection.query("SELECT `id` FROM `posts` WHERE `id`='"+request.body.id+"' OR `short_id`='"+request.body.id+"'",(err, result, fields) => {
+
+        response.send(result);
+            
+        });
+        return;
+    }
+
     if("loadPost" in request.body){
         if(request.body.onload == 0){
             connection.query("SELECT * FROM `posts` WHERE "+ ((cookie[request.cookies['login']]['isadmin'] == 1)?` (visibility=0 OR visibility=1)`:` visibility=0`)+" AND `draft`='0' ORDER BY `sno` DESC",(err, result, fields) => {
