@@ -19,7 +19,7 @@ router.get("/:id",(request,response) => {
 
     connection.query(
     "SELECT * FROM `posts` WHERE `id`='"+request.params.id+"' OR `short_id`='"+request.params.id+"'",(err, result, fields)=>{
-        if(result.length == 0 || err != null){
+        if( err != null || result.length == 0){
             response.render("edit404");
             return;
         }
