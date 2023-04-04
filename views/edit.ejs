@@ -540,6 +540,7 @@ function SaveDraft(isAutoSave=false,anonymous=false){
             $("#saveToast").toast("show");
         },
         error: function(xhrReq, textStatus, errorThrown) {
+            console.log(errorThrown);
             if(isAutoSave==true)$("#failedSaveToastPara").html(`AutoSave Failed!`); 
             else $("#failedSaveToastPara").html(`Save Failed`);
             $("#failedSaveToast").toast("show");

@@ -32,7 +32,13 @@ router.get("/:id",(request,response) => {
         if( post['mail'] == cookie[request.cookies['login']]['mail'] || cookie[request.cookies['login']]['isadmin'] == 1){
             connection.query("SELECT * FROM `category`",(err, result, fields) => {
             connection.query("SELECT * FROM `notifications` WHERE `isread`='0' AND `mail`='"+cookie[request.cookies['login']]['mail']+"'",(err, urnotifications, fields) => {
-                response.render("edit",{userInfo:cookie[request.cookies['login']],postInfo:post,category:result,xnotifications:urnotifications.length});
+                response.render("edit",
+                {
+                    userInfo:cookie[request.cookies['login']],
+                    postInfo:post,
+                    category:result,
+                    xnotifications:urnotifications.length
+                });
             });
             });
             return;
@@ -59,6 +65,8 @@ router.post("/",(request,response) => {
 
     if("save" in request.body){
         connection.query(`UPDATE posts SET title='${request.body['title']}', description='${request.body['description']}', report='${request.body['report']}', category='${request.body['category']}', cat_name='${request.body['categoryName']}', visibility='${request.body['visibility']}', anonymous='${request.body['anonymous']}', comment='${request.body['comment']}', support='${request.body['support']}' WHERE id='${request.body['id']}';`,(err, result, fields)=>{
+            if(err) console.log(err);
+            
             if(err){response.status(500).send("error");}
             else response.sendStatus(200);
             return;
