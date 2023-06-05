@@ -8,6 +8,7 @@ BIT Grievance Forum is an online platform available to the College Students to l
 ![WebAppPortfolio](https://github.com/ManojTGN/GrievanceForum/blob/main/public/images/AppPortfolio.jpg?raw=true)
 
 ## Features
+    - Anonymous Mode
     - Customized Categories
     - Draft System With (AutoSave)
     - Notification For User
