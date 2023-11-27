@@ -200,4 +200,4 @@ app.post('/', (request, response) => {
 app.get('/logout', (request, response) => { delete cookie[request.cookies['login']];delete request.cookies['login'];response.redirect("/login"); });
 app.get('/index', (request, response) => { response.redirect("../"); });
 app.get('/dashboard', (request, response) => { response.redirect("../"); });
-app.listen(port,() => console.log(`GrievanceForum Server Started Successfully!\n`));
+app.listen(port,() => console.log(`BIT GrievanceForum Server Started Successfully!\n`));

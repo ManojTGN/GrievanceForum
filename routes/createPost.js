@@ -28,7 +28,8 @@ router.get("/",(request,response) => {
         }
 
         connection.query(
-        "INSERT INTO `posts`(`id`, `mail`, `title`, `description`, `report`, `category`, `cat_name`, `visibility`, `anonymous`, `comment`, `draft`, `datetime`, `name`, `picture`, `short_id`) VALUES ('"+hash+"','"+cookie[request.cookies['login']]["mail"]+"','','','','0','','0','0','0','1','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"','"+cookie[request.cookies['login']]["name"]+"','"+cookie[request.cookies['login']]["picture"]+"','"+short_id+"')",(err, result, fields)=>{
+        "INSERT INTO `posts`(`id`, `mail`, `title`, `description`, `report`, `category`, `cat_name`, `visibility`, `anonymous`, `comment`, `support`, `draft`, `datetime`, `views`, `likes`, `comments`, `name`, `picture`, `status`, `short_id`, `priority_level`) VALUES ('"+hash+"','"+cookie[request.cookies['login']]["mail"]+"','','','','0','','0','0','0','0','1','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"',0,0,0,'"+cookie[request.cookies['login']]["name"]+"','"+cookie[request.cookies['login']]["picture"]+"',0,'"+short_id+"',0)",(err, result, fields)=>{
+            if(err) throw err;
             response.redirect("../edit/"+hash);
         });
         connection.query("INSERT INTO `notifications`(`mail`, `title`, `message`, `button`, `icon`, `color`, `datetime`, `isread`) VALUES ('"+cookie[request.cookies['login']]["mail"]+"','Post Creation','Created A New Post, Saved In Draft.','"+'<a class="btn btn-sm btn-secondary" href="../edit/'+hash+'">Edit Post</a>'+"','fa-solid fa-file-pen','primary','"+(new Date()).toLocaleString(undefined,{timeZone: 'Asia/Kolkata'})+"','0')",(err, result, fields)=>{});
